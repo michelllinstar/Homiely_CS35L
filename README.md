@@ -1,2 +1,2 @@
-# Homely_CS35L
+# Homiely_CS35L
 simplify your roommate problems! 
