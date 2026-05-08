@@ -1,22 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+
+import Home from "./pages/Home/Home";
 
 function App() {
-  const [message, setMessage] = useState('');
+  const [showHome, setShowHome] = useState(false);
 
-  useEffect(() => {
-    fetch('/api/hello')
-      .then(response => response.json())
-      .then(data => setMessage(data.message))
-      .catch(error => console.error('Error:', error));
-  }, []);
+  if (showHome) {
+    return <Home />;
+  }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Welcome to Homiely</h1>
-        <p>{message}</p>
-      </header>
+    <div className="landing-page">
+      <h1 className="title">Welcome to Homiely</h1>
+
+      <button
+        className="enter-button"
+        onClick={() => setShowHome(true)}
+      >
+        Enter Home Page
+      </button>
     </div>
   );
 }
