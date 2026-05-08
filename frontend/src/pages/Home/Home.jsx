@@ -2,45 +2,21 @@ import "./Home.css";
 
 export default function Home() {
   return (
-    <div className="home-page">
-      <h1>Homily</h1>
+    <div className="landing-page">
+      <h1 className="title">Welcome to Homiely</h1>
 
-      <p>
-        A roommate management app for chores,
-        shared expenses, and household accountability.
+      <p className="subtitle">
+        Track chores, split expenses, and keep roommate life peaceful.
       </p>
 
       <div className="button-row">
-        <button className="home-button">
+        <button className="login-button">
           Login
         </button>
 
-        <button className="home-button signup-button">
+        <button className="signup-button">
           Sign Up
         </button>
-      </div>
-
-      <div className="card-row">
-        <div className="card">
-          <h2>Chores</h2>
-          <p>
-            Assign, schedule, and verify roommate responsibilities.
-          </p>
-        </div>
-
-        <div className="card">
-          <h2>Expenses</h2>
-          <p>
-            Track who paid for utilities, soap, groceries, and more.
-          </p>
-        </div>
-
-        <div className="card">
-          <h2>Household</h2>
-          <p>
-            Keep everyone on the same page without awkward reminders.
-          </p>
-        </div>
       </div>
     </div>
   );
