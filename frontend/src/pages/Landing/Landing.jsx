@@ -1,4 +1,5 @@
 import "./Landing.css";
+import Button from '../../components/Button';
 
 export default function Landing() {
   return (
@@ -11,12 +12,8 @@ export default function Landing() {
       </p>
 
       <div className="button-row">
-        <button className="login-button">
-          Login
-        </button>
-        <button className="signup-button">
-          Get Started!
-        </button>
+        <Button label="Sign in" to="/Signup"/>
+        <Button label="Log in" to="/login" />
       </div>
     </div>
   );
