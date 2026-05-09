@@ -1,0 +1,111 @@
+/* Login.css */
+
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    #f4ead5 0%,
+    #d8ecdb 55%,
+    #a9d2ec 100%
+  );
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+
+  color: #2d3a2e;
+  font-family: Arial, sans-serif;
+
+  padding: 40px;
+}
+
+.login-page h1 {
+  font-size: 48px;
+  font-weight: bold;
+  letter-spacing: -1.5px;
+  margin: 0 0 8px;
+}
+
+.login-page label {
+  display: block;
+  text-align: left;
+  font-size: 13px;
+  font-weight: bold;
+  color: #3e5240;
+  margin-bottom: 6px;
+}
+
+.login-page input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 16px;
+  border: none;
+  border-radius: 999px;
+  font-size: 15px;
+  font-family: Arial, sans-serif;
+  color: #2d3a2e;
+  background: white;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  outline: none;
+  margin-bottom: 1rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.login-page input:focus {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+}
+
+.login-page button {
+  width: 100%;
+  padding: 16px 34px;
+  border: none;
+  border-radius: 999px;
+  font-size: 18px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+  background: #5b8c5a;
+  color: white;
+  box-shadow: 0 12px 24px rgba(45, 58, 46, 0.2);
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.login-page button:hover {
+  background: #4f7d4e;
+  transform: translateY(-3px);
+}
+
+.login-page button:active {
+  transform: translateY(0);
+}
+
+.forest-link {
+  color: #3e5240;
+  font-weight: bold;
+  text-decoration: none;
+  border-bottom: 1.5px solid #5b8c5a;
+  transition: all 0.2s ease;
+}
+
+.forest-link:hover {
+  color: #5b8c5a;
+  border-bottom-color: transparent;
+}
+
+.login-error {
+  color: #7a3a2e;
+  background: rgba(255, 220, 210, 0.55);
+  border: 1px solid rgba(200, 120, 100, 0.3);
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  margin-bottom: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+}
