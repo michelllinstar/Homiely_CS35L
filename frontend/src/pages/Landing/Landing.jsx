@@ -2,6 +2,7 @@ import "./Landing.css";
 
 export default function Landing() {
   return (
+    
     <div className="landing-page">
       <h1 className="title">Welcome to Homiely</h1>
 
@@ -13,9 +14,8 @@ export default function Landing() {
         <button className="login-button">
           Login
         </button>
-
         <button className="signup-button">
-          Sign Up
+          Get Started!
         </button>
       </div>
     </div>
