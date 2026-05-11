@@ -1,0 +1,21 @@
+/*
+  BACKEND DATA FORMAT
+
+  const roommateData = [
+    {
+      id: 1,
+      name: "Alex",
+      availability: {
+        "2026-05-10": "available",
+        "2026-05-11": "busy",
+        "2026-05-12": "away",
+      },
+    },
+  ];
+
+  STATUS OPTIONS:
+  - available
+  - busy
+  - away
+  - unknown
+*/

@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import "./Button.css";
 
 function Button({ label, to, onClick, disabled = false }) {
-    //navigation
+  //navigation
   const navigate = useNavigate();
 
   //handle click
