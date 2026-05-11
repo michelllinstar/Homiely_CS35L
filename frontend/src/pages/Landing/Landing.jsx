@@ -12,9 +12,14 @@ export default function Landing() {
       <div className="landing-content">
         <h1 className="title">Welcome to Homiely</h1>
 
-        <p className="subtitle">
-          Track chores, split expenses, and keep roommate life peaceful.
+        <p style={{
+          fontSize: 19, maxWidth: 580, margin: '0 auto 36px',
+          lineHeight: 1.5
+        }}>
+          Homily is the cozy way to share a home. Track chores, split expenses, and stay in sync —
+          without the awkward group chat or the mystery of who bought soap last.
         </p>
+        
         {/* Middle Screen login and get started buttons */ }
         <div className="button-row">
           <Button label="Sign up" to="/Signup" />
