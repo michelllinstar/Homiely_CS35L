@@ -1,0 +1,15 @@
+.week-view {
+    display: flex;
+    gap: 12px;
+    margin-top: 2rem;
+}
+
+.day-column {
+    flex: 1;
+}
+
+.no-chores {
+    font-size: 0.75rem;
+    color: #ccc;
+    font-style: italic;
+}
