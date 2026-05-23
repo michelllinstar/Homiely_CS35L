@@ -88,6 +88,7 @@
   text-align: left;
 }
 
+
 .login-button {
   background: rgba(255,255,255,0.85);
 
@@ -122,4 +123,175 @@
 
 .demo-button:hover {
   background: #cfddc5;
+}
+
+/* ── Shared section base ── */
+.section {
+  scroll-margin-top: 70px;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.section-pink { background: #fdf5f5; }
+.section-green { background: #f5faf7; }
+
+/* ── Section header ── */
+.section-label {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 14px;
+  border-radius: 999px;
+  margin-bottom: 1rem;
+}
+
+.section h2 {
+  font-size: 2rem;
+  font-weight: 500;
+  margin: 0 0 0.5rem;
+}
+
+.section-subtitle {
+  font-size: 15px;
+  color: #888;
+  max-width: 520px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.6;
+}
+
+/* ── Feature cards ── */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  text-align: left;
+}
+
+.feature-card {
+  background: #fff;
+  border: 0.5px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.feature-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.feature-card h3 {
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0 0 6px;
+}
+
+.feature-card p {
+  font-size: 13px;
+  color: #888;
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ── How it works steps ── */
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.step {
+  display: flex;
+  gap: 14px;
+  padding: 1.25rem;
+}
+
+.step-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.step h3 {
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0 0 4px;
+}
+
+.step p {
+  font-size: 13px;
+  color: #888;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── About stats ── */
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.about-stat {
+  background: #fff;
+  border: 0.5px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.about-stat-number {
+  font-size: 2rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.about-stat p {
+  font-size: 13px;
+  color: #888;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.about-footnote {
+  font-size: 13px;
+  color: #aaa;
+  margin-top: 2.5rem;
+}
+
+/* Make sure the page stacks vertically */
+.landing-page {
+  display: flex;
+  flex-direction: column; /* ← this is the key fix */
+}
+
+/* Sections wrapper takes full width */
+.sections-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Move the hero subtitle out of inline styles */
+.hero-subtitle {
+  font-size: 19px;
+  max-width: 580px;
+  margin: 0 auto 36px;
+  line-height: 1.5;
 }
