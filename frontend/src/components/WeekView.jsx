@@ -3,7 +3,7 @@ import "./WeekView.css";
 
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-export default function WeekView({chores = {}}) {
+export default function WeekView({chores = {}, onToggle}) {
     return (
         <div className="week-view">
             {DAYS.map((day) => (
@@ -16,6 +16,8 @@ export default function WeekView({chores = {}}) {
                         assignee={chore.assignee}
                         description={chore.description}
                         timeOfDay={chore.timeOfDay}
+                        checked={chore.checked}
+                        onToggle={() => onToggle(day, i)}
                     />
                 ))}
 
