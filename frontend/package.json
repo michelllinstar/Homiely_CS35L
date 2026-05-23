@@ -1,5 +1,6 @@
 {
   "name": "homiely-frontend",
+  "proxy": "http://backend:5000",
   "version": "1.0.0",
   "description": "Frontend for Homiely app",
   "main": "index.js",
