@@ -15,7 +15,8 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy   # ✅ wait until postgres is actually ready
     environment:
       - FLASK_ENV=development
 
@@ -29,6 +30,11 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:                                        # ✅ add this
+      test: ["CMD-SHELL", "pg_isready -U user -d homiely"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
 volumes:
   postgres_data:
