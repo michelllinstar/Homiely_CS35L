@@ -12,10 +12,8 @@ export default function Calendar() {
         <div className="calendar-page">
             <header>
                 <h1 className="calendar-title">Availability</h1>
-                
-                <CalendarAvailMo />
-                <CalendarChoreMo />
             </header>
+              <CalendarAvailMo />
         </div>
     );
 }

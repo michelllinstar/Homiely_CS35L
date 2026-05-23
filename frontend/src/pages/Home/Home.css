@@ -1,4 +1,15 @@
 /* Home.css */
+@font-face {
+    font-family: 'Homiely'; 
+    src: url('../../assets/qlarendon.otf') format('opentype'); 
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'Homiely', 'Helvetica', 'Arial', sans-serif; 
+}
+
 
 .home-page {
   min-height: 100vh;
@@ -17,7 +28,6 @@
   text-align: center;
 
   color: #2d3a2e;
-  font-family: Arial, sans-serif;
 
   padding: 40px;
 }
@@ -65,7 +75,6 @@
   border-radius: 999px;
   font-size: 18px;
   font-weight: bold;
-  font-family: Arial, sans-serif;
   cursor: pointer;
   background: #5b8c5a;
   color: white;
