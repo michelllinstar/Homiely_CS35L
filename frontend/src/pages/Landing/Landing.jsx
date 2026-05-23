@@ -1,6 +1,8 @@
 import "./Landing.css";
 import Button from "../../components/Button";
 import Navbar from "../../components/Navbar";
+import { useEffect, useState } from "react";
+
 
 const features = [
   { bg: '#EAF3DE', icon: '🧹', title: 'Smart chore charts', desc: 'Auto-rotating weekly assignments, reminders, and a one-tap check-off everyone can see.' },
@@ -22,12 +24,19 @@ const stats = [
   { num: '12k',    color: '#534AB7', desc: "Chores checked off. That's a lot of clean kitchens and taken-out trash." },
 ];
 export default function Landing() {
+  const [isNight, setIsNight] = useState(false);
+
+  useEffect(() => {
+    const hour = new Date().getHours();
+    setIsNight(hour >= 20 || hour < 6); // night = 8pm to 6am
+  }, []);
+
   return (
     <div className="landing-page">
       <Navbar />
-      <div className="landing-content">
+      <div className={`landing-content landing-hero ${isNight ? "night" : ""}`}>
         <h1 className="title">Welcome to Homiely</h1>
-        <p style={{ fontSize: 19, maxWidth: 580, margin: '0 auto 36px', lineHeight: 1.5 }}>
+        <p className="hero-subtitle">
           Homily is the cozy way to share a home. Track chores, split expenses, and stay in sync —
           without the awkward group chat or the mystery of who bought soap last.
         </p>

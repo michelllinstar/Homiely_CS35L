@@ -1,20 +1,29 @@
 .landing-page {
   min-height: 100vh;
-
   background: linear-gradient(
     135deg,
     #f4ead5 0%,
     #d8ecdb 55%,
     #a9d2ec 100%
   );
-
   display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  overflow-x: hidden;
+  font-family: Arial, sans-serif;
+}
+
+.landing-content {
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 120px 40px 40px;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  padding: 40px;
-
-  font-family: Arial, sans-serif;
+  text-align: center;
 }
 
 .demo-card {
@@ -40,12 +49,9 @@
 
 .title {
   font-size: 48px;
-
   color: #2d3a2e;
-
   margin-bottom: 8px;
-
-  letter-spacing: -1.5px;
+  letter-spacing: 0;
 }
 
 .subtitle {
@@ -124,12 +130,27 @@
 .demo-button:hover {
   background: #cfddc5;
 }
+/* ── Hero background variations ── */
+.landing-hero {
+  background: linear-gradient(160deg, #c9a8d4 0%, #e0b8c8 60%, #f0d4c0 100%);
+  transition: background 1s ease;
+}
 
+.landing-hero.night {
+  background: linear-gradient(160deg, #1a1035 0%, #2d1b4e 50%, #1a2a4a 100%);
+}
 /* ── Shared section base ── */
 .section {
-  scroll-margin-top: 70px;
-  padding: 4rem 2rem;
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+  scroll-margin-top: 0px;
+  padding: 120px 2rem 4rem;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .section-pink { background: #fdf5f5; }
@@ -164,6 +185,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 16px;
+  width: min(100%, 900px);
   text-align: left;
 }
 
@@ -202,7 +224,7 @@
 .steps-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  max-width: 680px;
+  width: min(100%, 680px);
   margin: 0 auto;
   text-align: left;
 }
@@ -244,7 +266,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
-  max-width: 700px;
+  width: min(100%, 700px);
   margin: 0 auto;
   text-align: left;
 }
@@ -275,23 +297,26 @@
   margin-top: 2.5rem;
 }
 
-/* Make sure the page stacks vertically */
-.landing-page {
-  display: flex;
-  flex-direction: column; /* ← this is the key fix */
-}
-
-/* Sections wrapper takes full width */
-.sections-wrapper {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
 /* Move the hero subtitle out of inline styles */
 .hero-subtitle {
   font-size: 19px;
   max-width: 580px;
   margin: 0 auto 36px;
   line-height: 1.5;
+}
+
+@media (max-width: 760px) {
+  .landing-content,
+  .section {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .title {
+    font-size: 40px;
+  }
+
+  .button-row {
+    width: min(100%, 320px);
+  }
 }
