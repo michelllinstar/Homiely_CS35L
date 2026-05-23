@@ -7,12 +7,15 @@ import Signup from "./pages/Signup/Signup";
 import Home from "./pages/Home/Home";
 import { AuthProvider } from "./pages/AuthContext";
 import Chores from "./pages/Chores/Chores";
+import GroupSetup from "./pages/GroupSetup/GroupSetup";
+
 
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          <Route path="/group-setup" element={<GroupSetup />} />
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
