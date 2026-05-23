@@ -25,8 +25,8 @@ export default function Navbar() {
           About
         </button>
 
-        <Button label="Log in" to="/login" />
-        <Button label="Get started" to="/signup" />
+        <Button label="Log in" to="/login" className="nav-auth-button nav-auth-login" />
+        <Button label="Get started" to="/signup" className="nav-auth-button nav-auth-signup" />
       </div>
     </nav>
   );

@@ -35,14 +35,15 @@ export default function Landing() {
     <div className="landing-page">
       <Navbar />
       <div className={`landing-content landing-hero ${isNight ? "night" : ""}`}>
+        <p className="hero-eyebrow">Roommate life, beautifully organized</p>
         <h1 className="title">Welcome to Homiely</h1>
         <p className="hero-subtitle">
-          Homily is the cozy way to share a home. Track chores, split expenses, and stay in sync —
-          without the awkward group chat or the mystery of who bought soap last.
+          Homiely keeps chores, shared expenses, and house plans in one calm place,
+          so your home feels easier to run and nicer to live in.
         </p>
         <div className="button-row">
-          <Button label="Sign up" to="/Signup" />
-          <Button label="Log in" to="/login" />
+          <Button label="Sign up" to="/Signup" className="hero-button hero-signup" />
+          <Button label="Log in" to="/login" className="hero-button hero-login" />
         </div>
       </div>
 

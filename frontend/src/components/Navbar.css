@@ -94,6 +94,62 @@
     0 8px 18px rgba(45, 58, 46, 0.12);
 }
 
+.navbar .nav-auth-button {
+  min-width: 104px;
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 800;
+  transition:
+    min-width 180ms ease,
+    transform 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.navbar .nav-auth-login {
+  background-color: rgba(255, 255, 255, 0.82);
+  color: #2d3a2e;
+  border-color: rgba(45, 58, 46, 0.12);
+  box-shadow: 0 6px 16px rgba(45, 58, 46, 0.08);
+}
+
+.navbar .nav-auth-signup {
+  background-color: #3f6f3d;
+  color: #ffffff;
+  border-color: #3f6f3d;
+  box-shadow: 0 8px 18px rgba(63, 111, 61, 0.28);
+}
+
+.navbar .nav-auth-button:hover {
+  min-width: 118px;
+  transform: translateY(-2px);
+}
+
+.navbar .nav-auth-login:hover {
+  background-color: #ffffff;
+  border-color: rgba(45, 58, 46, 0.2);
+  box-shadow: 0 10px 22px rgba(45, 58, 46, 0.13);
+}
+
+.navbar .nav-auth-signup:hover {
+  background-color: #315b30;
+  border-color: #315b30;
+  box-shadow: 0 12px 24px rgba(49, 91, 48, 0.32);
+}
+
+.navbar .nav-auth-button:active {
+  transform: translateY(0);
+}
+
+.navbar .nav-auth-button:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(91, 140, 90, 0.28),
+    0 10px 22px rgba(45, 58, 46, 0.13);
+}
+
 .nav-login {
   background: rgba(255, 255, 255, 0.55);
   padding: 14px 24px;
