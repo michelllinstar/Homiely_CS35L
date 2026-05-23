@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import WeekView from "../../components/WeekView";
 import YourWeek from "../../components/YourWeek";
+import AddChore from "../../components/AddChores";
 
 
 // [GenAI Use] Prompt: "How can I use React's built in time/day functions to write a function getWeekRange() to return the start and end of the current week we're on, formatted as month (in words) and day (number)?"
@@ -29,7 +30,7 @@ function getWeekRange() {
     const today = new Date();
     const day = today.getDay();
     const sunday = new Date(today);
-    sunday.setDate(today.getDate() - day);      // Math to figure out how many days ago was Monday
+    sunday.setDate(today.getDate() - day);      // Math to figure out how many days ago was Sunday
     const saturday = new Date(sunday);
     saturday.setDate(sunday.getDate() + 6);
 
@@ -70,6 +71,13 @@ export default function Chores() {
         }));
     }
 
+    function handleAddChore(newChore) {
+        setChores((prev) => ({
+            ...prev,
+            [newChore.day]: [...(prev[newChore.day] || []), newChore],
+        }));
+    }
+
     return (
         <div className="chores-page">
             <header>
@@ -77,7 +85,10 @@ export default function Chores() {
                 <p className="chores-week">Week of {start} to {end}</p>
             </header>
             <WeekView chores={chores} onToggle={handleToggle} />
-            <YourWeek chores={chores} currentUser={currentUser} onToggle={handleToggle} />
+            <div className="chores-bottom">
+                <YourWeek chores={chores} currentUser={currentUser} onToggle={handleToggle} />
+                <AddChore onAddChore={handleAddChore} />
+            </div>
         </div>
     );
 }
