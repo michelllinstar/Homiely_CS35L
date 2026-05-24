@@ -13,6 +13,9 @@ export default function Home() {
         <>
           <h1>Welcome, {user.name}!</h1>
           <p>Email: {user.email}</p>
+          <Button to="/expenses" label="Expenses" />
+          <Button to="/chores" label="Chores" />
+          <Button to="/calendar" label="Calendar" />
           <Button onClick={logout} label="Logout" />
         </>
       ) : (
