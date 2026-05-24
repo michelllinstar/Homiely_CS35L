@@ -6,6 +6,7 @@ import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import Home from "./pages/Home/Home";
 import Calendar from "./pages/Calendar/Calendar";
+import Expenses from "./pages/Expenses/Expenses"
 import { AuthProvider } from "./pages/AuthContext";
 import Chores from "./pages/Chores/Chores";
 import GroupSetup from "./pages/GroupSetup/GroupSetup";
@@ -23,6 +24,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/chores" element={<Chores />} />
           <Route path="/calendar" element={<Calendar />} />
+          <Route path="/expenses" element={<Expenses />} />
         </Routes>
         <DemoFlow />
       </BrowserRouter>
