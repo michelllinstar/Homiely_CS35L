@@ -49,9 +49,12 @@ python app.py
 ### Docker Deployment
 ```bash
 docker-compose up --build
+
+To deploy (remove database info): 
+docker compose down -v
 ```
 
 Frontend will be at http://localhost:3000
-Backend API at http://localhost:5000
+Backend API at http://localhost:5001
 Database at localhost:5432 
 >>>>>>> d99e550 (update local files)
