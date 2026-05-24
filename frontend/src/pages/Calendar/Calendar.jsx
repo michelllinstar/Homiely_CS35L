@@ -2,23 +2,19 @@ import "./Calendar.css";
 import Button from "../../components/Button";
 import CalendarAvailMo from "../../components/CalendarAvailMo";
 
-import {useState} from "react";
-import {useNavigate} from 'react-router-dom'
-import {Link} from 'react-router-dom'
-
-
+import { useState } from "react";
 
 export default function Calendar() {
-    //display current month and year
     const now = new Date();
     const monthYear = now.toLocaleString('default', { month: 'long', year: 'numeric' });
 
     const [activeView, setActiveView] = useState('Month');
+
     const statuses = [
-    { label: 'Available', description: 'Knock anytime', color: '#86c98e' },
-    { label: 'Busy', description: 'In a class or meeting', color: '#f0958a' },
-    { label: 'Private', description: "Don't disturb me", color: '#a07850' },
-];
+        { label: 'Available', description: 'Knock anytime',         color: '#86c98e' },
+        { label: 'Busy',      description: 'In a class or meeting', color: '#f0958a' },
+        { label: 'Private',   description: "Don't disturb me",      color: '#8E3251;' },
+    ];
 
     return (
         <div className="calendar-page">
@@ -27,8 +23,8 @@ export default function Calendar() {
                 <p className="calendar-subtitle">Shared schedule · {monthYear}</p>
             </div>
 
+             <div className="vstack">
             <div className="hstack">
-
                 <div className="toggleview">
                     {['Day', 'Week', 'Month'].map((label) => (
                         <button
@@ -41,13 +37,15 @@ export default function Calendar() {
                     ))}
                 </div>
             </div>
+
             <div className="hstack">
-                    <CalendarAvailMo />
+                <CalendarAvailMo activeView={activeView} />
+
                 <div className="vstack">
                     <div className="status-panel">
                         <h2 className="status-panel-title">Set my status</h2>
                         <p className="status-panel-subtitle">Tap below to enable click-to-edit on the calendar.</p>
-                        <Button label="Edit My Status" className="edit-status-btn"/>
+                        <Button label="Edit My Status" className="edit-status-btn" />
                         <p className="status-types-label">Status Types</p>
                         <div className="status-list">
                             {statuses.map(s => (
@@ -61,11 +59,11 @@ export default function Calendar() {
                             ))}
                         </div>
                     </div>
-                    <Button label="Connect to Google Calendar"/>
+                    <Button label="Connect to Google Calendar" />
                 </div>
             </div>
+            </div>
 
-            
         </div>
     );
 }
