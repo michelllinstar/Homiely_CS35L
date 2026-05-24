@@ -1,4 +1,14 @@
 /* Login.css */
+@font-face {
+    font-family: 'Homiely'; 
+    src: url('../../assets/qlarendon.otf') format('opentype'); 
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'Homiely', 'Helvetica', 'Arial', sans-serif; 
+}
 
 .login-page {
   min-height: 100vh;
@@ -17,7 +27,6 @@
   text-align: center;
 
   color: #2d3a2e;
-  font-family: Arial, sans-serif;
 
   padding: 40px;
 }

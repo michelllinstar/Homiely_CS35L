@@ -1,3 +1,22 @@
+/* Global styles for the Homiely app */
+@font-face {
+    font-family: 'Homiely'; 
+    src: url('../assets/qlarendon.ttf') format('opentype'); 
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+
+
+body {
+    font-family: 'Homiely', 'Helvetica', 'Arial', sans-serif; 
+}
+
+h2, h3, p {
+    font-family: 'HomielySubfont', 'Helvetica', 'Arial', sans-serif;
+}
+
 .landing-page {
   min-height: 100vh;
   background: linear-gradient(135deg, #f4ead5 0%, #d8ecdb 55%, #a9d2ec 100%);
@@ -48,3 +67,4 @@
 .enter-button:active {
   transform: translateY(0);
 }
+

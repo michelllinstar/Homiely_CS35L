@@ -1,0 +1,201 @@
+@font-face {
+    font-family: 'Homiely'; 
+    src: url('../../assets/qlarendon.otf') format('opentype'); 
+    font-weight: normal;
+    font-style: normal;
+    color: #3d2e13;
+}
+
+body {
+    font-family: 'Homiely', 'Helvetica', 'Arial', sans-serif; 
+    color: #3d2e13;
+}
+
+@font-face {
+    font-family: 'HomielySubfont';
+    src: url('../../assets/FinkHeavyR.ttf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    color: #3d2e13;
+}
+
+* {
+    font-family: 'HomielySubfont', 'Helvetica', 'Arial', sans-serif;
+    color: #3d2e13;
+}
+
+.calendar-page {
+  height: 100vh;
+  background: linear-gradient(
+    0deg,
+    #f4ead5 0%,
+    #d8ecdb 55%,
+    #a9d2ec 100%
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  padding: 80px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.toggleview {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: #faefd8;
+    border-radius: 999px;
+    padding: 4px;
+    gap: 2px;
+}
+
+.toggleview-btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #4a5f4c;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.toggleview-btn.active {
+    background: #ffffff;
+    color: #2d3a2e;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.vstack {
+    display: flex;
+    flex-direction: column;
+    align-items: top;
+}
+
+.hstack {
+    display: flex;
+    flex-direction: row;
+    align-items: center; 
+    gap: 8px;
+    justify-content: space-between;
+}
+
+.calendar-container {
+    flex: 1;
+    max-width: 70%;    
+    overflow-y: auto;
+    align-self: center;
+}
+.calendar-title {
+    margin: 0;
+    line-height: 1;
+}
+
+.calendar-subtitle {
+    margin: 0;
+    line-height: 3;
+}
+.status-panel {
+    background: #faefd8;
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 24px;
+    width: 280;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.status-panel-title {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2d3a2e;
+}
+
+.status-panel-subtitle {
+    margin: 0;
+    font-size: 0.88rem;
+    color: #5a6b5c;
+    line-height: 1.45;
+}
+
+.edit-mode-btn {
+    width: 100%;
+    padding: 14px 20px;
+    background: #3f6f3d;
+    color: white;
+    border: none;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #2a4e29;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.edit-mode-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 0 #2a4e29;
+}
+
+.edit-mode-btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 #2a4e29;
+}
+
+.status-types-label {
+    margin: 0;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #4a5f4c;
+}
+
+.status-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.status-item {
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.status-item:hover {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 12px rgba(45, 58, 46, 0.08);
+}
+
+.status-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.status-item-title {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #2d3a2e;
+    line-height: 1;
+}
+
+.status-item-desc {
+    margin: 0;
+    font-size: 0.78rem;
+    color: #6b7a6c;
+    line-height: 1;
+}

@@ -1,3 +1,14 @@
+@font-face {
+    font-family: 'Homiely'; 
+    src: url('../assets/qlarendon.otf') format('opentype'); 
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'Homiely', 'Helvetica', 'Arial', sans-serif; 
+}
+
 /* ===================================================================
    SHARED CONTAINER
    =================================================================== */
@@ -6,11 +17,10 @@
     max-width: 1000px;
     margin: 2rem auto;
     padding: 1.5rem;
-    background: #ffffff;
+    background: #faefd8;
     border-radius: 12px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    color: #1f2937;
+    color: #956c28;
 }
 
 /* ===================================================================
@@ -36,7 +46,7 @@
     background: transparent;
     border: none;
     font-size: 1.1rem;
-    color: #4b5563;
+    color: #956c28;
     cursor: pointer;
     padding: 0.4rem 0.7rem;
     border-radius: 6px;
@@ -60,7 +70,7 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: #6b7280;
+    color: #956c28;
     margin-bottom: 0.5rem;
 }
 
@@ -97,8 +107,8 @@
 /* Populated cells get the visible background and border */
 .day,
 .calendar-cell {
-    background: #f9fafb;
-    border-color: #e5e7eb;
+    background: #FFF9EC;
+    border-color: #D4C7B2;
     overflow: hidden;
     transition: background 0.15s ease, border-color 0.15s ease;
 }
@@ -125,7 +135,7 @@
 .date-number {
     font-size: 0.85rem;
     font-weight: 600;
-    color: #374151;
+    color: #956c28;
     margin-bottom: 4px;
 }
 

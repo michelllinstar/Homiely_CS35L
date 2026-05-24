@@ -1,3 +1,16 @@
+@font-face {
+    font-family: 'Homiely'; 
+    src: url('../assets/qlarendon.otf') format('opentype'); 
+    font-weight: normal;
+    font-style: normal;
+    color: #3d2e13;
+}
+
+body {
+    font-family: 'Homiely', 'Helvetica', 'Arial', sans-serif; 
+    color: #3d2e13;
+}
+
 .button {
   /* Layout */
   display: inline-flex;
@@ -5,12 +18,6 @@
   justify-content: center;
   padding: 0.625rem 1.25rem;
   min-width: 6rem;
-
-  /* Typography */
-  font-family: inherit;
-  font-size: 0.95rem;
-  font-weight: 600;
-  line-height: 1.2;
 
   /* Appearance */
   background-color: #557c4a;
@@ -25,12 +32,12 @@
 }
 
 .button:hover {
-  background-color: #1d4ed8;
+  background-color: #204809;
 }
 
 .button:active {
   transform: translateY(1px);
-  background-color: #1e40af;
+  background-color: #204809;
 }
 
 .button:focus-visible {
