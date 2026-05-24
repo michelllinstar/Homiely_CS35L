@@ -1,0 +1,93 @@
+import { useState } from "react";
+import "./AddChores.css";
+
+const ROOMMATES = ["HD", "SM", "AA"];
+const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+function generateTimes() {
+    const times = ["Due anytime"];
+    for (let hour = 7; hour <= 23; hour++) {
+        const period = hour < 12 ? "AM" : "PM";
+        const displayHour = hour <= 12 ? hour : hour - 12;
+        times.push(`Due ${displayHour}:00 ${period}`);
+        if (hour < 23) times.push(`Due ${displayHour}:30 ${period}`);
+    }
+    return times;
+}
+
+const TIMES = generateTimes();
+
+export default function AddChores({ onAddChore }) {
+    const [open, setOpen] = useState(false);
+    const [description, setDescription] = useState("");
+    const [assignee, setAssignee] = useState(ROOMMATES[0]);
+    const [day, setDay] = useState("Sunday");
+    const [timeOfDay, setTimeOfDay] = useState("Due anytime");
+
+    function handleSubmit() {
+        if (!description) return;
+        onAddChore({ description, assignee, day, timeOfDay, checked: false });
+        // Reset form
+        setDescription("");
+        setAssignee(ROOMMATES[0]);
+        setDay("Sunday");
+        setTimeOfDay("Due anytime");
+        setOpen(false);
+    }
+
+    return (
+        <div>
+            <button onClick={() => setOpen(!open)}>Add Chore</button>
+
+            {open && (
+                <div>
+                    <h3>Add a new chore</h3>
+
+                    {/* Chore name */}
+                    <div>
+                        <label>Chore</label>
+                        <input
+                            type="text"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="e.g. Vacuum living room"
+                        />
+                    </div>
+
+                    {/* Roommate dropdown */}
+                    <div>
+                        <label>Assign to</label>
+                        <select value={assignee} onChange={(e) => setAssignee(e.target.value)}>
+                            {ROOMMATES.map((r) => (
+                                <option key={r} value={r}>{r}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Day dropdown */}
+                    <div>
+                        <label>Day</label>
+                        <select value={day} onChange={(e) => setDay(e.target.value)}>
+                            {DAYS.map((d) => (
+                                <option key={d} value={d}>{d}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Time dropdown */}
+                    <div>
+                        <label>Time</label>
+                        <select value={timeOfDay} onChange={(e) => setTimeOfDay(e.target.value)}>
+                            {TIMES.map((t) => (
+                                <option key={t} value={t}>{t}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <button onClick={handleSubmit}>Add</button>
+                    <button onClick={() => setOpen(false)}>Cancel</button>
+                </div>
+            )}
+        </div>
+    );
+}

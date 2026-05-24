@@ -1,0 +1,36 @@
+.chore-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 8px;
+}
+
+.chore-card-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.chore-checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.chore-assignee {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.chore-description {
+    font-size: 0.95rem;
+    margin: 0 0 4px 0;
+}
+
+.chore-time {
+    font-size: 0.75rem;
+    color: #999;
+    margin: 0;
+}
