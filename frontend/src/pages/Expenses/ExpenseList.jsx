@@ -1,9 +1,5 @@
 import "./Expenses.css";
-import { useAuth } from "../AuthContext"
 import Button from "../../components/Button";
-import { useState } from "react";
-
-import setExpenses from "./Expenses"
 
 export default function ExpenseList({expenses, roommates, onDelete}) {
   

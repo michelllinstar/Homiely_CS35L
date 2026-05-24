@@ -1,32 +1,48 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../AuthContext";
+import Button from "../../components/Button";
 import AddExpenseForm from "./AddExpenseForm";
 import ExpenseList from "./ExpenseList";
 import BalanceSummary from "./BalanceSummary";
 import ExpensesSlider from "./ExpensesSlider";
+import "./Expenses.css";
 
 export default function Expenses() {
   const { user } = useAuth();
   const [expenses, setExpenses] = useState([]);
   const [roommates, setRoommates] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const token = localStorage.getItem("access_token");
-  const groupId = user?.group_id; // make sure group_id is stored on user in AuthContext
+  const groupId = user?.roommate_group_id;
 
   useEffect(() => {
-    if (!groupId) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
+    if (!groupId) {
+      setLoading(false);
+      return;
+    }
 
     const fetchData = async () => {
       try {
         const [expensesRes, roommatesRes] = await Promise.all([
-          fetch(`http://localhost:5000/api/expenses/${groupId}`, {
+          fetch(`/api/expenses/${groupId}`, {
             headers: { Authorization: `Bearer ${token}` }
           }),
-          fetch(`http://localhost:5000/api/groups/${groupId}/members`, {
+          fetch(`/api/groups/${groupId}/members`, {
             headers: { Authorization: `Bearer ${token}` }
           })
         ]);
+
+        if (!expensesRes.ok || !roommatesRes.ok) {
+          setError("Could not load expenses. Please try logging in again.");
+          return;
+        }
 
         const expensesData = await expensesRes.json();
         const roommatesData = await roommatesRes.json();
@@ -41,10 +57,10 @@ export default function Expenses() {
     };
 
     fetchData();
-  }, [groupId]);
+  }, [groupId, token, user]);
 
   const addExpense = async (newExpense) => {
-    const res = await fetch("http://localhost:5000/api/expenses", {
+    const res = await fetch("/api/expenses", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -52,16 +68,22 @@ export default function Expenses() {
       },
       body: JSON.stringify({ ...newExpense, group_id: groupId })
     });
-    const data = await res.json();
+
+    if (!res.ok) {
+      const data = await res.json();
+      setError(data.message || data.error || "Could not add expense.");
+      return;
+    }
+
     // refetch expenses so splits are calculated server-side
-    const updated = await fetch(`http://localhost:5000/api/expenses/${groupId}`, {
+    const updated = await fetch(`/api/expenses/${groupId}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     setExpenses(await updated.json());
   };
 
   const deleteExpense = async (id) => {
-    await fetch(`http://localhost:5000/api/expenses/${id}`, {
+    await fetch(`/api/expenses/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -70,9 +92,30 @@ export default function Expenses() {
 
   if (loading) return <div className="expenses-page"><p>Loading...</p></div>;
 
+  if (!user) {
+    return (
+      <div className="expenses-page">
+        <h1>Expenses</h1>
+        <p>Please log in to view expenses.</p>
+        <Button to="/login" label="Log in" />
+      </div>
+    );
+  }
+
+  if (!groupId) {
+    return (
+      <div className="expenses-page">
+        <h1>Expenses</h1>
+        <p>You need to create or join a roommate group before tracking expenses.</p>
+        <Button to="/group-setup" label="Set up roommate group" />
+      </div>
+    );
+  }
+
   return (
     <div className="expenses-page">
       <h1>Expenses</h1>
+      {error && <p className="expenses-error">{error}</p>}
       <div className="expenses-grid">
         <div className="expenses-col">
           <AddExpenseForm roommates={roommates} onAdd={addExpense} />

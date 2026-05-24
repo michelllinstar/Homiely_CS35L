@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from datetime import timedelta
 import secrets
-import random, string
 
 from flask_jwt_extended import (
     JWTManager,
@@ -46,7 +45,7 @@ class Expense(db.Model):
     description = db.Column(db.String(100), nullable=False)
     amount = db.Column(db.Float, nullable=False)
     paid_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    group_id = db.Column(db.Integer, db.ForeignKey('group.id'), nullable=False)
+    group_id = db.Column(db.Integer, db.ForeignKey('roommate_group.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.now())
     splits = db.relationship('ExpenseSplit', backref='expense', lazy=True)
 
@@ -316,46 +315,57 @@ def seed_test_user():
         print("[SEED] Test user created: test@example.com / password123")
     else:
         print("[SEED] Test user already exists, skipping")
-def generate_invite_code():
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
 
-@app.route('/api/groups/create', methods=['POST'])
-@jwt_required()
-def create_group():
-    data = request.get_json()
-    user_id = int(get_jwt_identity())
-    user = User.query.get(user_id)
 
-    group = Group(name=data.get("name"), invite_code=generate_invite_code())
-    db.session.add(group)
-    db.session.flush()
+def seed_demo_group():
+    owner = User.query.filter_by(email="demo-owner@example.com").first()
 
-    user.group_id = group.id
-    db.session.commit()
+    if not owner:
+        owner = User(
+            email="demo-owner@example.com",
+            password_hash=generate_password_hash("password123"),
+            name="Demo Owner"
+        )
+        db.session.add(owner)
+        db.session.flush()
 
-    return jsonify({"group_id": group.id, "name": group.name, "invite_code": group.invite_code})
+    group = RoommateGroup.query.filter_by(join_code="DEMO123").first()
 
-@app.route('/api/groups/join', methods=['POST'])
-@jwt_required()
-def join_group():
-    data = request.get_json()
-    user_id = int(get_jwt_identity())
-    user = User.query.get(user_id)
-
-    group = Group.query.filter_by(invite_code=data.get("invite_code")).first()
     if not group:
-        return jsonify({"error": "Invalid invite code"}), 404
+        group = RoommateGroup(
+            name="Demo Apartment",
+            join_code="DEMO123"
+        )
+        db.session.add(group)
+        db.session.flush()
 
-    user.group_id = group.id
+    membership = RoommateGroupMember.query.filter_by(
+        group_id=group.id,
+        user_id=owner.id
+    ).first()
+
+    if not membership:
+        db.session.add(RoommateGroupMember(
+            group_id=group.id,
+            user_id=owner.id
+        ))
+
     db.session.commit()
-
-    return jsonify({"group_id": group.id, "name": group.name, "invite_code": group.invite_code})
+    print("[SEED] Demo roommate group ready. Join code: DEMO123")
 
 @app.route('/api/groups/<int:group_id>/members', methods=['GET'])
 @jwt_required()
 def get_group_members(group_id):
-    members = User.query.filter_by(group_id=group_id).all()
-    return jsonify([{"id": u.id, "name": u.name, "email": u.email, "group_id": u.group_id} for u in members])
+    members = RoommateGroupMember.query.filter_by(group_id=group_id).all()
+    return jsonify([
+        {
+            "id": member.user.id,
+            "name": member.user.name,
+            "email": member.user.email,
+            "group_id": member.group_id
+        }
+        for member in members
+    ])
 
 # ── Expense routes ───────────────────────────────────
 
@@ -412,63 +422,10 @@ def delete_expense(expense_id):
     db.session.commit()
     return jsonify({"message": "Deleted"})
 
-# ── Seed ─────────────────────────────────────────────
-
-def seed_demo():
-    # skip if already seeded
-    if User.query.filter_by(email="test@example.com").first():
-        print("[SEED] Demo data already exists, skipping")
-        return
-
-    # create group
-    group = Group(name="UCLA Apartment", invite_code="DEMO1234")
-    db.session.add(group)
-    db.session.flush()
-
-    # create 3 demo users all in the same group
-    users = [
-        User(name="Alice", email="alice@example.com",
-             password_hash=generate_password_hash("password123"), group_id=group.id),
-        User(name="Bob", email="bob@example.com",
-             password_hash=generate_password_hash("password123"), group_id=group.id),
-        User(name="Test User", email="test@example.com",
-             password_hash=generate_password_hash("password123"), group_id=group.id),
-    ]
-    for u in users:
-        db.session.add(u)
-    db.session.flush()
-
-    alice, bob, test_user = users
-
-    # create demo expenses
-    expenses = [
-        {"desc": "Groceries", "amount": 90, "paid_by": alice.id, "split": [alice.id, bob.id, test_user.id]},
-        {"desc": "Internet bill", "amount": 60, "paid_by": bob.id, "split": [alice.id, bob.id, test_user.id]},
-        {"desc": "Cleaning supplies", "amount": 30, "paid_by": test_user.id, "split": [bob.id, test_user.id]},
-    ]
-
-    for e in expenses:
-        expense = Expense(
-            description=e["desc"],
-            amount=e["amount"],
-            paid_by=e["paid_by"],
-            group_id=group.id
-        )
-        db.session.add(expense)
-        db.session.flush()
-
-        share = round(e["amount"] / len(e["split"]), 2)
-        for uid in e["split"]:
-            db.session.add(ExpenseSplit(expense_id=expense.id, owed_by=uid, amount=share))
-
-    db.session.commit()
-    print("[SEED] Demo group 'UCLA Apartment' created")
-    print("[SEED] Users: alice@example.com, bob@example.com, test@example.com (all password: password123)")
-    print(f"[SEED] Invite code: DEMO1234")
-
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
         seed_test_user()
+        seed_demo_group()
 
     app.run(debug=True, host="0.0.0.0")

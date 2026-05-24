@@ -1,8 +1,4 @@
 import "./Expenses.css";
-import { useAuth } from "../AuthContext"
-import Button from "../../components/Button";
-import { useState } from "react";
-
 
 export default function BalanceSummary({ expenses, roommates }) {
   const getName = (id) => roommates.find(r => r.id === id)?.name || "Unknown";

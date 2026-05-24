@@ -1,16 +1,17 @@
 import "./Expenses.css";
-import { useAuth } from "../AuthContext"
 import Button from "../../components/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function AddExpenseForm({roommates, onAdd}) {
-  
-
-  const { user, logout } = useAuth();
   const [ description, setDescription ] = useState("");
   const [ amount, setAmount ] = useState(0);
-  const [ paidBy, setPaidBy ] = useState(roommates[0].id);
-  const [ splitBetween, setSplitBetween ] = useState(roommates.map(r => r.id));
+  const [ paidBy, setPaidBy ] = useState("");
+  const [ splitBetween, setSplitBetween ] = useState([]);
+
+  useEffect(() => {
+    setPaidBy(roommates[0]?.id || "");
+    setSplitBetween(roommates.map(r => r.id));
+  }, [roommates]);
 
   // if the
   const toggleSplit = (id) => {
@@ -19,7 +20,7 @@ export default function AddExpenseForm({roommates, onAdd}) {
 
   // return early if details are invalid. else do onAdd and reset fields.
   const handleSubmit = () => {
-    if (!description || amount <= 0 || splitBetween.length === 0) {
+    if (!description || amount <= 0 || !paidBy || splitBetween.length === 0) {
         return;
     }
 
