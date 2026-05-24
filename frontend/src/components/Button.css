@@ -3,10 +3,12 @@
     src: url('../assets/qlarendon.otf') format('opentype'); 
     font-weight: normal;
     font-style: normal;
+    color: #3d2e13;
 }
 
 body {
     font-family: 'Homiely', 'Helvetica', 'Arial', sans-serif; 
+    color: #3d2e13;
 }
 
 .button {
@@ -30,12 +32,12 @@ body {
 }
 
 .button:hover {
-  background-color: #1d4ed8;
+  background-color: #204809;
 }
 
 .button:active {
   transform: translateY(1px);
-  background-color: #1e40af;
+  background-color: #204809;
 }
 
 .button:focus-visible {

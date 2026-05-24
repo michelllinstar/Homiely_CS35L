@@ -10,6 +10,16 @@ body {
     font-family: 'Homiely', 'Helvetica', 'Arial', sans-serif; 
 }
 
+@font-face {
+    font-family: 'HomielySubfont';
+    src: url('../../assets/FinkHeavyR.ttf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+h2, h3, p {
+    font-family: 'HomielySubfont', 'Helvetica', 'Arial', sans-serif;
+}
 
 .home-page {
   min-height: 100vh;
