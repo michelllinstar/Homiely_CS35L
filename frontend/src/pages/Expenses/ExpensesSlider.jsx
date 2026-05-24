@@ -1,0 +1,34 @@
+import "./Expenses.css";
+import { useAuth } from "../AuthContext"
+import Button from "../../components/Button";
+import { useState } from "react";
+
+
+export default function ExpensesSlider ({ expenses, roommates }) {
+
+  return (
+    <div className="expenses-slider">
+      <h2>Who Has Contributed What?</h2>
+        <div className="roommate-expense-bar">
+             <ul>
+                {roommates.map(roommate => (
+                  <li key={roommate.id}>
+                    <h3>{roommate.name}</h3>
+                    <p>{expenses.reduce((total, expense) => {
+                        if (expense.paid_by === roommate.id) {
+                            return total + expense.amount;
+                        } return total;
+                        }, 0)} / {expenses.reduce((total, expense) => total + expense.amount, 0)}</p>
+                    <progress value={expenses.reduce((total, expense) => {
+                        if (expense.paid_by === roommate.id) {
+                            return total + expense.amount;
+                        }
+                        return total;
+                    }, 0)} max={expenses.reduce((total, expense) => total + expense.amount, 0)}></progress>
+                  </li>
+                ))}
+             </ul>
+        </div>
+    </div>
+  );
+}
