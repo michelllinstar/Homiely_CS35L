@@ -19,9 +19,11 @@ export default function AppNavbar() {
         <Button label="Calendar" to="/calendar" />
       </div>
 
+      {/* 6/3 12:48 am: added user profile button to link to profile page */}
       <div className="nav-user">
         <span className="group-pill">● Sproutwood · 412B</span>
-        <span className="avatar">{user?.name?.[0] || "U"}</span>
+        <Button label={user?.name?.[0] || "U"} to="/profile" className="avatar-btn" />
+
       </div>
     </nav>
   );

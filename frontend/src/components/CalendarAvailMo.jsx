@@ -1,30 +1,56 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import './CalendarAvailMo.css';
 
-const USERS = [
-    { id: 1, name: 'Emma',   initials: 'EC', avatarColor: '#a8d5a8' },
-    { id: 2, name: 'Jerry',  initials: 'JH', avatarColor: '#8ab4d6' },
-    { id: 3, name: 'Thomas', initials: 'TL', avatarColor: '#f0a89e' },
-    { id: 4, name: 'You',    initials: 'ML', avatarColor: '#f4c542', isMe: true },
-];
+const AVATAR_COLORS = ['#a8d5a8','#8ab4d6','#f0a89e','#f4c542','#c9a8f0','#f0d08a'];
+
+function buildUsers(members, currentUserId) {
+    return members.map((m, i) => ({
+        id: m.id,
+        name: m.id === currentUserId ? 'You' : m.name,
+        initials: m.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase(),
+        avatarColor: AVATAR_COLORS[i % AVATAR_COLORS.length],
+        isMe: m.id === currentUserId,
+    }));
+}
 
 const DAY_NAMES  = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-const WEEK_TIMES = ['8a', '10a', '12p', '2p', '4p', '6p', '8p', '10p'];
-const DAY_TIMES  = ['8a','9a','10a','11a','12p','1p','2p','3p','4p','5p','6p','7p','8p','9p','10p'];
+const WEEK_TIMES = [
+    '8a','9a','10a','11a',
+    '12p','1p','2p','3p','4p','5p','6p','7p','8p','9p','10p','11p',
+    '12a','1a','2a','3a','4a','5a','6a','7a',
+];
+
+const DAY_TIMES = [
+    '8a','9a','10a','11a',
+    '12p','1p','2p','3p','4p','5p','6p','7p','8p','9p','10p','11p',
+    '12a','1a','2a','3a','4a','5a','6a','7a',
+];
 
 const HOUR_MAP = {
-    '8a': 8, '9a': 9, '10a': 10, '11a': 11, '12p': 12,
-    '1p': 13, '2p': 14, '3p': 15, '4p': 16, '5p': 17,
-    '6p': 18, '7p': 19, '8p': 20, '9p': 21, '10p': 22,
+    '12a': 0, '1a': 1,  '2a': 2,  '3a': 3,  '4a': 4,  '5a': 5,
+    '6a': 6,  '7a': 7,  '8a': 8,  '9a': 9,  '10a': 10, '11a': 11,
+    '12p': 12,'1p': 13, '2p': 14, '3p': 15, '4p': 16, '5p': 17,
+    '6p': 18, '7p': 19, '8p': 20, '9p': 21, '10p': 22, '11p': 23,
 };
 
 const STATUS_CYCLE = ['available', 'busy', 'private'];
 
-function getStatus(userId, dayIndex, timeIndex) {
-    const seed = (userId * 31 + dayIndex * 17 + timeIndex * 13 + 7) % 10;
-    if (seed < 6) return 'available';
-    if (seed < 9) return 'busy';
-    return 'private';
+function isSleepHour(hour, sleepRef) {
+    const schedule = sleepRef?.current;
+    if (!schedule) {
+        return hour >= 0 && hour <= 6;
+    }
+    const { start, end } = schedule;
+    if (start <= end) {
+        return hour >= start && hour < end;
+    }
+    // overnight wraparound e.g. 22 -> 7
+    return hour >= start || hour < end;
+}
+
+function defaultStatus(hour, sleepRef, isMe) {
+    if (isMe && isSleepHour(hour, sleepRef)) return 'private';
+    return 'available';
 }
 
 function dateForDayIndex(dayIndex) {
@@ -36,29 +62,96 @@ function dateForDayIndex(dayIndex) {
     return target.toISOString().slice(0, 10);
 }
 
-export default function CalendarAvailMo({ activeView = 'Month', editMode = false, confirmRef = null }) {
-    const [allAvailability, setAllAvailability] = useState({});
+export default function CalendarAvailMo({ activeView = 'Month', editMode = false, confirmRef = null, sleepRef = null, refreshRef = null }) {
     const [myAvailability, setMyAvailability] = useState({});
     const [pendingChanges, setPendingChanges] = useState({});
+    const [users, setUsers] = useState([]);
+    const [groupAvailability, setGroupAvailability] = useState({});
+
+    const token = localStorage.getItem('access_token');
+
+    const fetchDate = useCallback((dateStr) => {
+        if (!token) return;
+        fetch(`/api/availability/?date=${dateStr}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+            .then(r => r.json())
+            .then(data => setGroupAvailability(prev => ({
+                ...prev,
+                [dateStr]: Array.isArray(data) ? data : []
+            })))
+            .catch(() => setGroupAvailability(prev => ({ ...prev, [dateStr]: [] })));
+    }, [token]);
+
+    const fetchWeek = useCallback(() => {
+        if (!token) return;
+        const fetches = Array.from({ length: 7 }, (_, i) => {
+            const dateStr = dateForDayIndex(i);
+            return fetch(`/api/availability/?date=${dateStr}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+                .then(r => r.json())
+                .then(data => ({ dateStr, data: Array.isArray(data) ? data : [] }))
+                .catch(() => ({ dateStr, data: [] }));
+        });
+        Promise.all(fetches).then(results => {
+            const map = {};
+            results.forEach(({ dateStr, data }) => { map[dateStr] = data; });
+            setGroupAvailability(prev => ({ ...prev, ...map }));
+        });
+    }, [token]);
+
+    useEffect(() => {
+        if (!token) return;
+        const currentUserId = JSON.parse(localStorage.getItem('user'))?.id;
+        fetch('/api/groups/me', {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+            .then(r => r.json())
+            .then(data => {
+                if (!data.has_roommate_group) return;
+                return fetch(`/api/groups/${data.group.id}/members`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+            })
+            .then(r => r && r.json())
+            .then(data => {
+                if (!data) return;
+                setUsers(buildUsers(Array.isArray(data) ? data : [], currentUserId));
+            })
+            .catch(() => setUsers([]));
+    }, [token]);
+
+    useEffect(() => {
+        fetchWeek();
+        if (refreshRef) refreshRef.current = fetchWeek;
+    }, [fetchWeek, refreshRef]);
 
     if (activeView === 'Day') return (
         <DayView
             editMode={editMode}
             confirmRef={confirmRef}
-            allAvailability={allAvailability}
-            setAllAvailability={setAllAvailability}
             myAvailability={myAvailability}
             setMyAvailability={setMyAvailability}
             pendingChanges={pendingChanges}
             setPendingChanges={setPendingChanges}
+            users={users}
+            groupAvailability={groupAvailability}
+            fetchDate={fetchDate}
+            onSaved={fetchWeek}
+            sleepRef={sleepRef}
         />
     );
-    if (activeView === 'Week') return <WeekView />;
-    return <MonthView />;
+    if (activeView === 'Week') return (
+        <WeekView users={users} groupAvailability={groupAvailability} sleepRef={sleepRef} />
+    );
+    return (
+        <MonthView users={users} groupAvailability={groupAvailability} sleepRef={sleepRef} />
+    );
 }
 
 /* ---------- MONTH ---------- */
-function MonthView() {
+function MonthView({ users, groupAvailability, sleepRef }) {
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth();
@@ -83,8 +176,16 @@ function MonthView() {
                     if (date === null) {
                         return <div key={i} className="cam-month-cell cam-month-cell-empty" />;
                     }
+                    const dateStr = new Date(year, month, date).toISOString().slice(0, 10);
+                    const rows = groupAvailability[dateStr] || [];
+
                     const counts = { available: 0, busy: 0, private: 0 };
-                    USERS.forEach(u => { counts[getStatus(u.id, (date - 1) % 7, 4)]++; });
+                    users.forEach(u => {
+                        const row = rows.find(r => r.user_id === u.id && r.hour === 12);
+                        const s = row ? row.status : defaultStatus(12, sleepRef, u.isMe);
+                        counts[s]++;
+                    });
+
                     const dominant =
                         counts.available >= counts.busy && counts.available >= counts.private ? 'available'
                         : counts.busy >= counts.private ? 'busy' : 'private';
@@ -96,8 +197,9 @@ function MonthView() {
                         >
                             <div className="cam-month-date">{date}</div>
                             <div className="cam-month-summary">
-                                {USERS.map(u => {
-                                    const s = getStatus(u.id, (date - 1) % 7, 4);
+                                {users.map(u => {
+                                    const row = rows.find(r => r.user_id === u.id && r.hour === 12);
+                                    const s = row ? row.status : defaultStatus(12, sleepRef, u.isMe);
                                     return (
                                         <span
                                             key={u.id}
@@ -115,7 +217,7 @@ function MonthView() {
 }
 
 /* ---------- WEEK ---------- */
-function WeekView() {
+function WeekView({ users, groupAvailability, sleepRef }) {
     return (
         <div className="cam cam-week">
             <div className="cam-week-header">
@@ -128,20 +230,26 @@ function WeekView() {
                 {WEEK_TIMES.map((t, ti) => (
                     <div key={t} className="cam-week-row">
                         <div className="cam-week-time-label">{t}</div>
-                        {DAY_NAMES.map((d, di) => (
-                            <div key={d} className="cam-week-cell">
-                                {USERS.map(u => {
-                                    const s = getStatus(u.id, di, ti);
-                                    return (
-                                        <div
-                                            key={u.id}
-                                            className={`cam-week-pill cam-week-pill-${s} ${u.isMe ? 'cam-week-pill-me' : ''}`}
-                                            title={`${u.name}: ${s}`}
-                                        />
-                                    );
-                                })}
-                            </div>
-                        ))}
+                        {DAY_NAMES.map((d, di) => {
+                            const dateStr = dateForDayIndex(di);
+                            const rows = groupAvailability[dateStr] || [];
+                            return (
+                                <div key={d} className="cam-week-cell">
+                                    {users.map(u => {
+                                        const hour = HOUR_MAP[t];
+                                        const row = rows.find(r => r.user_id === u.id && r.hour === hour);
+                                        const s = row ? row.status : defaultStatus(hour, sleepRef, u.isMe);
+                                        return (
+                                            <div
+                                                key={u.id}
+                                                className={`cam-week-pill cam-week-pill-${s} ${u.isMe ? 'cam-week-pill-me' : ''}`}
+                                                title={`${u.name}: ${s}`}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                            );
+                        })}
                     </div>
                 ))}
             </div>
@@ -152,9 +260,9 @@ function WeekView() {
 /* ---------- DAY ---------- */
 function DayView({
     editMode, confirmRef,
-    allAvailability, setAllAvailability,
     myAvailability, setMyAvailability,
     pendingChanges, setPendingChanges,
+    users, groupAvailability, fetchDate, onSaved, sleepRef,
 }) {
     const [selectedDay, setSelectedDay] = useState((new Date().getDay() + 6) % 7);
 
@@ -162,17 +270,9 @@ function DayView({
     const dateStr = dateForDayIndex(selectedDay);
 
     useEffect(() => {
-        if (allAvailability[dateStr] !== undefined) return;
-        fetch(`/api/availability/?date=${dateStr}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        })
-            .then(r => r.json())
-            .then(data => setAllAvailability(prev => ({
-                ...prev,
-                [dateStr]: Array.isArray(data) ? data : []
-            })))
-            .catch(() => setAllAvailability(prev => ({ ...prev, [dateStr]: [] })));
-    }, [selectedDay, dateStr, token]);
+        if (groupAvailability[dateStr] !== undefined) return;
+        fetchDate(dateStr);
+    }, [selectedDay, dateStr, groupAvailability, fetchDate]);
 
     useEffect(() => {
         if (myAvailability[dateStr] !== undefined) return;
@@ -217,15 +317,16 @@ function DayView({
                 return next;
             });
             setPendingChanges({});
+            if (onSaved) onSaved();
         };
-    }, [pendingChanges, token, confirmRef]);
+    }, [pendingChanges, token, confirmRef, onSaved]);
 
     const handleCellClick = (hour) => {
         if (!editMode) return;
         const current =
             pendingChanges[dateStr]?.[hour] ??
             myAvailability[dateStr]?.[hour] ??
-            'available';
+            defaultStatus(hour, sleepRef, true);
         const next = STATUS_CYCLE[(STATUS_CYCLE.indexOf(current) + 1) % STATUS_CYCLE.length];
         setPendingChanges(prev => ({
             ...prev,
@@ -236,13 +337,13 @@ function DayView({
     const getMyStatus = (hour) =>
         pendingChanges[dateStr]?.[hour] ??
         myAvailability[dateStr]?.[hour] ??
-        'available';
+        defaultStatus(hour, sleepRef, true);
 
     const getStatusForUser = (userId, hour, isMe) => {
         if (isMe) return getMyStatus(hour);
-        const rows = allAvailability[dateStr] || [];
+        const rows = groupAvailability[dateStr] || [];
         const row = rows.find(r => r.user_id === userId && r.hour === hour);
-        return row ? row.status : 'available';
+        return row ? row.status : defaultStatus(hour, sleepRef, false);
     };
 
     const statusLabel = (s) =>
@@ -273,9 +374,13 @@ function DayView({
                 {DAY_TIMES.map((t) => {
                     const hour = HOUR_MAP[t];
                     return (
-                        <div key={t} className="cam-day-row">
+                        <div
+                            key={t}
+                            className="cam-day-row"
+                            style={{ gridTemplateColumns: `48px repeat(${users.length}, 1fr)` }}
+                        >
                             <div className="cam-day-time-label">{t}</div>
-                            {USERS.map(u => {
+                            {users.map(u => {
                                 const s = getStatusForUser(u.id, hour, u.isMe);
                                 const isPending = u.isMe && pendingChanges[dateStr]?.[hour] !== undefined;
                                 return (

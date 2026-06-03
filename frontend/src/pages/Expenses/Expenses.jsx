@@ -7,6 +7,10 @@ import BalanceSummary from "./BalanceSummary";
 import ExpensesSlider from "./ExpensesSlider";
 import "./Expenses.css";
 
+import AppNavbar from "../../components/Home_components/AppNavbar";
+// import App from "../../app";
+
+
 export default function Expenses() {
   const { user } = useAuth();
   const [expenses, setExpenses] = useState([]);
@@ -113,7 +117,11 @@ export default function Expenses() {
   }
 
   return (
+   <div>
+    {/* 6/3 12:48 am: added navbar to expenses page */}
+    <AppNavbar />
     <div className="expenses-page">
+      
       <h1>Expenses</h1>
       {error && <p className="expenses-error">{error}</p>}
       <div className="expenses-grid">
@@ -127,5 +135,6 @@ export default function Expenses() {
         </div>
       </div>
     </div>
+   </div>
   );
 }
