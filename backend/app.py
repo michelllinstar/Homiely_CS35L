@@ -9,6 +9,8 @@ from extensions import db, jwt
 from group_routes import groups_bp
 from seed import seed_demo_group, seed_test_user
 from test_routes import test_bp
+from signup_routes import signup_bp
+from availability import bp as availability_bp
 
 
 def create_app():
@@ -29,6 +31,8 @@ def create_app():
     app.register_blueprint(groups_bp)
     app.register_blueprint(expenses_bp)
     app.register_blueprint(test_bp)
+    app.register_blueprint(signup_bp)
+    app.register_blueprint(availability_bp)
 
     return app
 

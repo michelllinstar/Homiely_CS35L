@@ -1,0 +1,76 @@
+.cam {
+    flex: 1;
+    background: #f6ecd2;
+    border-radius: 16px;
+    padding: 20px;
+
+    --avail-fill:   #d3e6cf;
+    --avail-border: #86c98e;
+    --busy-fill:    #f5cdc4;
+    --busy-border:  #f0958a;
+    --priv-fill:    #8E3251;
+    --text-primary: #2d4a30;
+    --text-muted:   #5a6d5e;
+    --me-border:    #4a6d4e;
+}
+
+/* MONTH */
+.cam-month-header  { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 8px; }
+.cam-month-day-label { text-align: center; font-weight: 700; font-size: 11px; letter-spacing: 0.12em; color: var(--text-muted); padding: 6px 0; }
+.cam-month-grid    { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.cam-month-cell    { aspect-ratio: 1/1; background: #fbf7e6; border-radius: 10px; padding: 6px; display: flex; flex-direction: column; justify-content: space-between; border: 1.5px solid transparent; cursor: pointer; transition: transform .1s, border-color .15s; }
+.cam-month-cell:hover:not(.cam-month-cell-empty) { transform: translateY(-1px); border-color: var(--me-border); }
+.cam-month-cell-empty     { background: transparent; cursor: default; }
+.cam-month-cell-available { background: #e2efdd; }
+.cam-month-cell-busy      { background: #f8dcd5; }
+.cam-month-cell-private   { background: #d8c8b2; }
+.cam-month-cell-today     { border-color: var(--me-border); }
+.cam-month-date    { font-weight: 600; font-size: 13px; color: var(--text-primary); }
+.cam-month-summary { display: flex; gap: 3px; justify-content: flex-end; }
+.cam-month-dot     { width: 6px; height: 6px; border-radius: 50%; }
+.cam-month-dot-available { background: var(--avail-border); }
+.cam-month-dot-busy      { background: var(--busy-border); }
+.cam-month-dot-private   { background: var(--priv-fill); }
+.cam-month-dot-me  { width: 8px; height: 8px; outline: 1.5px solid var(--me-border); outline-offset: 1px; }
+
+/* WEEK */
+.cam-week-header, .cam-week-row { display: grid; grid-template-columns: 48px repeat(7, 1fr); gap: 6px; align-items: center; }
+.cam-week-header   { margin-bottom: 8px; }
+.cam-week-day-label { text-align: center; font-weight: 700; font-size: 11px; letter-spacing: 0.12em; color: var(--text-muted); }
+.cam-week-time-label { font-size: 13px; color: var(--text-muted); text-align: right; padding-right: 8px; }
+.cam-week-row      { padding: 4px 0; }
+.cam-week-cell     { display: flex; justify-content: center; gap: 4px; padding: 4px 0; }
+.cam-week-pill     { width: 10px; height: 30px; border-radius: 6px; }
+.cam-week-pill-available { background: var(--avail-fill); }
+.cam-week-pill-busy      { background: var(--busy-fill); }
+.cam-week-pill-private   { background: var(--priv-fill); }
+.cam-week-pill-me  { width: 14px; height: 34px; border: 2px solid var(--me-border); }
+
+/* DAY */
+.cam-day-selector  { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.cam-day-tab       { background: #e7dcb9; border: none; padding: 8px 18px; border-radius: 14px; font-size: 14px; font-weight: 500; color: var(--text-primary); cursor: pointer; transition: background .15s, color .15s; }
+.cam-day-tab:hover { background: #d8cba0; }
+.cam-day-tab.active { background: var(--me-border); color: #f6ecd2; }
+.cam-day-body      { display: flex; flex-direction: column; gap: 6px; }
+.cam-day-row       { display: grid; grid-template-columns: 48px repeat(4, 1fr); gap: 8px; align-items: center; }
+.cam-day-time-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+.cam-day-cell      { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 14px; background: var(--avail-fill); border: 1.5px solid transparent; }
+.cam-day-cell-available { background: var(--avail-fill); }
+.cam-day-cell-busy      { background: var(--busy-fill); }
+.cam-day-cell-private   { background: var(--priv-fill); color: #f6ecd2; }
+.cam-day-cell-me   { border-color: var(--me-border); }
+.cam-day-avatar    { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--text-primary); flex-shrink: 0; }
+.cam-day-cell-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.cam-day-cell-name { font-weight: 600; font-size: 14px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cam-day-cell-private .cam-day-cell-name   { color: #f6ecd2; }
+.cam-day-cell-status { font-size: 12px; color: var(--text-muted); opacity: .85; }
+.cam-day-cell-private .cam-day-cell-status { color: #e7d9aa; }
+
+.cam-day-cell-editable {
+    cursor: pointer;
+    outline: 2px dashed #888;
+}
+
+.cam-day-cell-editable:hover {
+    filter: brightness(0.92);
+}
