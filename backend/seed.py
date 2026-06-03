@@ -22,39 +22,53 @@ def seed_test_user():
 
     print("[SEED] Test user created: test@example.com / password123")
 
-
+# This function creates a demo roommate group. The group join code is "DEMO123".
 def seed_demo_group():
-    owner = User.query.filter_by(email="demo-owner@example.com").first()
+    demo_users = [
+        ("emma@example.com", "Emma Cao"),
+        ("jerry@example.com", "Jerry Huang"),
+        ("thomas@example.com", "Thomas Le"),
+        ("michelle@example.com", "Michelle Lin"),
+        ("kelvin@example.com", "Kelvin Xu"),
+    ]
 
-    if not owner:
-        owner = User(
-            email="demo-owner@example.com",
-            password_hash=generate_password_hash("password123"),
-            name="Demo Owner"
-        )
-        db.session.add(owner)
-        db.session.flush()
+    users = []
+
+    for email, name in demo_users:
+        user = User.query.filter_by(email=email).first()
+
+        if not user:
+            user = User(
+                email=email,
+                password_hash=generate_password_hash("password123"),
+                name=name
+            )
+            db.session.add(user)
+            db.session.flush()
+
+        users.append(user)
 
     group = RoommateGroup.query.filter_by(join_code="DEMO123").first()
 
     if not group:
         group = RoommateGroup(
-            name="Demo Apartment",
+            name="Sproutwood Hall · 412B",
             join_code="DEMO123"
         )
         db.session.add(group)
         db.session.flush()
 
-    membership = RoommateGroupMember.query.filter_by(
-        group_id=group.id,
-        user_id=owner.id
-    ).first()
-
-    if not membership:
-        db.session.add(RoommateGroupMember(
+    for user in users:
+        membership = RoommateGroupMember.query.filter_by(
             group_id=group.id,
-            user_id=owner.id
-        ))
+            user_id=user.id
+        ).first()
+
+        if not membership:
+            db.session.add(RoommateGroupMember(
+                group_id=group.id,
+                user_id=user.id
+            ))
 
     db.session.commit()
     print("[SEED] Demo roommate group ready. Join code: DEMO123")
