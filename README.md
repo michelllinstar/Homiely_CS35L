@@ -1,5 +1,4 @@
 # Homiely_CS35L
-<<<<<<< HEAD
 Simplify your roommate problems! 
 
 Project Description: 
