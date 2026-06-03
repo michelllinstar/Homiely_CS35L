@@ -74,3 +74,7 @@
 .cam-day-cell-editable:hover {
     filter: brightness(0.92);
 }
+
+.cam-day-cell-pending {
+    outline: 2px solid #f4c542;
+}
