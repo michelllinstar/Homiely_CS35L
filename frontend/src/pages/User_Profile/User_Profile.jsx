@@ -4,7 +4,7 @@ import { useAuth } from "../AuthContext";
 import { useNavigate } from 'react-router-dom';
 
 export default function UserProfile() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -14,23 +14,32 @@ export default function UserProfile() {
   const [groupmates, setGroupmates] = useState([]);
   const [loadingGroup, setLoadingGroup] = useState(false);
 
-  const [formData, setFormData] = useState({
-    firstName: user?.first_name || '',
-    lastName: user?.last_name || '',
-    email: user?.email || '',
+  // Parse full name into first and last name
+  const parseFullName = (fullName) => {
+    const parts = (fullName || '').trim().split(' ');
+    return {
+      firstName: parts[0] || '',
+      lastName: parts.slice(1).join(' ') || ''
+    };
+  };
+
+  const [formData, setFormData] = useState(() => {
+    const { firstName, lastName } = parseFullName(user?.name);
+    return {
+      firstName,
+      lastName,
+      email: user?.email || '',
+    };
   });
 
   useEffect(() => {
-    // if (!user) {
-    //   navigate('/login');
-    // } else {
-      setFormData({
-        firstName: user?.first_name || '',
-        lastName: user?.last_name || '',
-        email: user?.email || '',
-      });
-    // }
-  }, [user, navigate]);
+    const { firstName, lastName } = parseFullName(user?.name);
+    setFormData({
+      firstName,
+      lastName,
+      email: user?.email || '',
+    });
+  }, [user]);
 
   useEffect(() => {
     if (user) {
@@ -51,26 +60,12 @@ export default function UserProfile() {
       
       if (data.has_roommate_group && data.group) {
         setRoommateGroup(data.group);
-        fetchGroupMembers(data.group.id, token);
+        setGroupmates(data.group.members || []);
       }
     } catch (err) {
       console.log('Error fetching group:', err);
     } finally {
       setLoadingGroup(false);
-    }
-  };
-
-  const fetchGroupMembers = async (groupId, token) => {
-    try {
-      const res = await fetch(`/api/groups/${groupId}/members`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      const data = await res.json();
-      setGroupmates(data);
-    } catch (err) {
-      console.log('Error fetching group members:', err);
     }
   };
 
@@ -89,9 +84,13 @@ export default function UserProfile() {
     setLoading(true);
 
     try {
+      const token = localStorage.getItem('access_token');
       const res = await fetch('/api/profile/update', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({
           first_name: formData.firstName,
           last_name: formData.lastName,
@@ -117,13 +116,19 @@ export default function UserProfile() {
   };
 
   const handleCancel = () => {
+    const { firstName, lastName } = parseFullName(user?.name);
     setFormData({
-      firstName: user.first_name || '',
-      lastName: user.last_name || '',
-      email: user.email || '',
+      firstName,
+      lastName,
+      email: user?.email || '',
     });
     setIsEditing(false);
     setError('');
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
   };
 
   return (
@@ -171,6 +176,13 @@ export default function UserProfile() {
                 onClick={() => setIsEditing(true)}
               >
                 Edit Profile
+              </button>
+
+              <button
+                className="logout-btn"
+                onClick={handleLogout}
+              >
+                Logout
               </button>
             </div>
           ) : (

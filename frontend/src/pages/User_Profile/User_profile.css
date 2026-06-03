@@ -133,7 +133,8 @@
 
 .edit-btn,
 .save-btn,
-.cancel-btn {
+.cancel-btn,
+.logout-btn {
   padding: 14px 28px;
   border: none;
   border-radius: 999px;
@@ -149,6 +150,7 @@
   background: linear-gradient(135deg, #a9d2ec, #d8ecdb);
   color: #2d3a2e;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  margin-bottom: 12px;
 }
 
 .edit-btn:hover {
@@ -157,6 +159,23 @@
 }
 
 .edit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.logout-btn {
+  grid-column: 1 / -1;
+  background: #e0e0e0;
+  color: #2d3a2e;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.logout-btn:hover {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+  transform: translateY(-2px);
+}
+
+.logout-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
