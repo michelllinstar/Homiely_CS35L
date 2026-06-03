@@ -2,6 +2,7 @@ import "./Calendar.css";
 import Button from "../../components/Button";
 import CalendarAvailMo from "../../components/CalendarAvailMo";
 import { useState, useRef } from "react";
+import AppNavbar from "../../components/Home_components/AppNavbar";
 
 function dateForDayIndex(dayIndex) {
     const now = new Date();
@@ -97,6 +98,7 @@ export default function Calendar() {
 
     return (
         <div className="calendar-page">
+            <AppNavbar />
             <div className="vstack">
                 <h1 className="calendar-title">Availability</h1>
                 <p className="calendar-subtitle">Shared schedule · {monthYear}</p>
