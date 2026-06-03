@@ -3,13 +3,27 @@ import Button from "../../components/Button";
 import CalendarAvailMo from "../../components/CalendarAvailMo";
 import { useState, useRef } from "react";
 
+function dateForDayIndex(dayIndex) {
+    const now = new Date();
+    const currentDay = (now.getDay() + 6) % 7;
+    const diff = dayIndex - currentDay;
+    const target = new Date(now);
+    target.setDate(now.getDate() + diff);
+    return target.toISOString().slice(0, 10);
+}
+
 export default function Calendar() {
     const now = new Date();
     const monthYear = now.toLocaleString('default', { month: 'long', year: 'numeric' });
 
     const [activeView, setActiveView] = useState('Month');
     const [editMode, setEditMode] = useState(false);
-    const confirmRef = useRef(null); // DayView will register its confirm function here
+    const [sleepStart, setSleepStart] = useState('22');
+    const [sleepEnd, setSleepEnd] = useState('8');
+    const [sleepSaved, setSleepSaved] = useState(false);
+    const confirmRef = useRef(null);
+    const sleepRef = useRef(null);
+    const refreshRef = useRef(null); // CalendarAvailMo registers fetchWeek here
 
     const statuses = [
         { label: 'Available', description: 'Knock anytime',         color: '#86c98e' },
@@ -24,9 +38,61 @@ export default function Calendar() {
 
     const handleConfirm = async () => {
         if (confirmRef.current) {
-            await confirmRef.current();  // flush pending changes to backend
+            await confirmRef.current();
         }
         setEditMode(false);
+    };
+
+    const handleSaveSleep = async () => {
+        const start = parseInt(sleepStart);
+        const end = parseInt(sleepEnd);
+        sleepRef.current = { start, end };
+
+        const token = localStorage.getItem('access_token');
+
+        // Build list of sleep hours handling overnight wraparound
+        const sleepHours = [];
+        if (start <= end) {
+            for (let h = start; h < end; h++) sleepHours.push(h);
+        } else {
+            for (let h = start; h < 24; h++) sleepHours.push(h);
+            for (let h = 0; h < end; h++) sleepHours.push(h);
+        }
+
+        // Write private for each sleep hour for every day this week
+        // POST /api/availability/me only writes for the JWT identity —
+        // the backend enforces that no other user's data can be modified
+        const writes = [];
+        for (let i = 0; i < 7; i++) {
+            const dateStr = dateForDayIndex(i);
+            sleepHours.forEach(hour => {
+                writes.push(
+                    fetch('/api/availability/me', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${token}`,
+                        },
+                        body: JSON.stringify({ date: dateStr, hour, status: 'private' }),
+                    })
+                );
+            });
+        }
+
+        await Promise.all(writes);
+
+        // Re-fetch group availability so all views update immediately
+        if (refreshRef.current) refreshRef.current();
+
+        setSleepSaved(true);
+        setTimeout(() => setSleepSaved(false), 2000);
+    };
+
+    const hours = Array.from({ length: 24 }, (_, i) => i);
+    const formatHour = (h) => {
+        if (h === 0) return '12 AM';
+        if (h === 12) return '12 PM';
+        return h < 12 ? `${h} AM` : `${h - 12} PM`;
     };
 
     return (
@@ -54,14 +120,8 @@ export default function Calendar() {
                     </div>
                 </div>
 
-                <div className="hstack">
-                    <CalendarAvailMo
-                        activeView={activeView}
-                        editMode={editMode}
-                        confirmRef={confirmRef}
-                    />
-
-                    <div className="vstack">
+                <div className="hstack" style={{ alignItems: 'flex-start' }}>
+                    <div className="vstack" style={{ alignSelf: 'flex-start' }}>
                         <div className="status-panel">
                             <h2 className="status-panel-title">Set my status</h2>
                             <p className="status-panel-subtitle">Tap below to enable click-to-edit on the calendar.</p>
@@ -91,8 +151,49 @@ export default function Calendar() {
                                 ))}
                             </div>
                         </div>
-                        <Button label="Connect to Google Calendar" />
+
+                        <div className="status-panel">
+                            <h2 className="status-panel-title">Sleep schedule</h2>
+                            <p className="status-panel-subtitle">Hours marked private automatically.</p>
+                            <div className="sleep-row">
+                                <div className="sleep-field">
+                                    <label className="sleep-label">Bedtime</label>
+                                    <select
+                                        className="sleep-select"
+                                        value={sleepStart}
+                                        onChange={e => setSleepStart(e.target.value)}
+                                    >
+                                        {hours.map(h => (
+                                            <option key={h} value={h}>{formatHour(h)}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="sleep-field">
+                                    <label className="sleep-label">Wake up</label>
+                                    <select
+                                        className="sleep-select"
+                                        value={sleepEnd}
+                                        onChange={e => setSleepEnd(e.target.value)}
+                                    >
+                                        {hours.map(h => (
+                                            <option key={h} value={h}>{formatHour(h)}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                            <button className="sleep-save-btn" onClick={handleSaveSleep}>
+                                {sleepSaved ? 'Saved ✓' : 'Apply to calendar'}
+                            </button>
+                        </div>
                     </div>
+
+                    <CalendarAvailMo
+                        activeView={activeView}
+                        editMode={editMode}
+                        confirmRef={confirmRef}
+                        sleepRef={sleepRef}
+                        refreshRef={refreshRef}
+                    />
                 </div>
             </div>
         </div>
