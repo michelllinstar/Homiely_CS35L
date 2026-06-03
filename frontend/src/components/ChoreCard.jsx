@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./ChoreCard.css";
 
 // Default time if not explicitly set should be any time of day
-export default function ChoreCard({ assignee, description, timeOfDay = "Due anytime", checked, onToggle }) {
+export default function ChoreCard({ assignee, description, timeOfDay = "Due anytime", checked, onToggle, onDelete }) {
     return (
         <div className="chore-card" style={{ background: checked ? "#f0f0f0" : "#fff" }}>
 
@@ -15,6 +15,10 @@ export default function ChoreCard({ assignee, description, timeOfDay = "Due anyt
                     className="chore-checkbox"
                 />
                 <span className="chore-assignee">{assignee}</span>
+                {/* Delete button */}
+                {onDelete && (
+                    <button className="chore-delete" onClick={onDelete}>✕</button>
+                )}
             </div>
 
             {/* Chore description */}

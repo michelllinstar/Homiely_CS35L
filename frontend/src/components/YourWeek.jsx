@@ -39,6 +39,7 @@ export default function YourWeek({ chores = {}, currentUser, onToggle }) {
                                     timeOfDay={chore.timeOfDay}
                                     checked={chore.checked}
                                     onToggle={() => onToggle(day, realIndex)}
+                                    onDelete={() => onDelete(day, realIndex, chore.id)}
                                 />
                             );
                         })}
