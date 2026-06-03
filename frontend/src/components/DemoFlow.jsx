@@ -5,6 +5,7 @@ export default function DemoFlow() {
   const demoPages = [
     { name: "Landing", route: "/" },
     { name: "Signup", route: "/signup" },
+    { name: "Verification", route: "/verification" },
     { name: "Login", route: "/login" },
     { name: "Home", route: "/home" },
     { name: "Chores", route: "/chores" },

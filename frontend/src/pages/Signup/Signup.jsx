@@ -57,7 +57,7 @@ export default function Signup() {
 
       console.log('signup successful');
       login(data.user, data.access_token, data.refresh_token);
-      navigate('/home');
+      navigate('/verification', { state: { email: email } });
     } catch (err) {
       setError('Network error. Please try again.');
       console.log(err);
