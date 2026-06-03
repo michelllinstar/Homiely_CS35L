@@ -142,3 +142,23 @@
   box-sizing: border-box;
   text-align: center;
 }
+
+.signup-dropdowns-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.signup-dropdown-half {
+  margin-bottom: 0;
+}
+
+.signup-custom-inputs-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+.signup-custom-inputs-container input {
+  margin-bottom: 0;
+}

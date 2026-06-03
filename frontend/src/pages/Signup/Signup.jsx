@@ -10,7 +10,8 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [dropdown, setDropdown] = useState('');
+  const [dropdown1, setDropdown1] = useState('');
+  const [dropdown2, setDropdown2] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -118,8 +119,8 @@ export default function Signup() {
         <div className="signup-form-full">
           <label>Residence Building</label>
           <select
-            value={dropdown}
-            onChange={(e) => setDropdown(e.target.value)}
+            value={dropdown1}
+            onChange={(e) => setDropdown1(e.target.value)}
             className="signup-dropdown"
           >
             <option value="">Select your residence</option>
@@ -130,6 +131,19 @@ export default function Signup() {
             <option value="Dykstra">Dykstra</option>
             <option value="Covel">Covel</option>
             <option value="Hitch">Hitch</option>
+          </select>
+        </div>
+        <div className="signup-form-full">
+          <label>Restroom Type</label>
+          <select
+            value={dropdown2}
+            onChange={(e) => setDropdown2(e.target.value)}
+            className="signup-dropdown"
+          >
+            <option value="">Select restroom type</option>
+            <option value="Single">Single</option>
+            <option value="Shared">Shared</option>
+            <option value="Communal">Communal</option>
           </select>
         </div>
       </div>
