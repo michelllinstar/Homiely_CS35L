@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./Calendar.css";
 
 const MONTH_NAMES = [
     "January", "February", "March", "April", "May", "June",
