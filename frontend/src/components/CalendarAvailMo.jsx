@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './CalendarAvailMo.css';
 
 const USERS = [
@@ -20,8 +20,8 @@ function getStatus(userId, dayIndex, timeIndex) {
 }
 
 // THIS is the prop-driven switch. Page passes activeView; component picks a view.
-export default function CalendarAvailMo({ activeView = 'Month' }) {
-    if (activeView === 'Day')  return <DayView />;
+export default function CalendarAvailMo({ activeView = 'Month', editMode = false }) {
+    if (activeView === 'Day')  return <DayView editMode={editMode} />;
     if (activeView === 'Week') return <WeekView />;
     return <MonthView />;
 }
@@ -119,11 +119,88 @@ function WeekView() {
 }
 
 /* ---------- DAY ---------- */
-function DayView() {
-    const [selectedDay, setSelectedDay] = useState(2);
+const HOUR_MAP = {
+    '8a': 8, '9a': 9, '10a': 10, '11a': 11, '12p': 12,
+    '1p': 13, '2p': 14, '3p': 15, '4p': 16, '5p': 17,
+    '6p': 18, '7p': 19, '8p': 20, '9p': 21, '10p': 22,
+};
+
+const STATUS_CYCLE = ['available', 'busy', 'private'];
+
+function todayDateString() {
+    return new Date().toISOString().slice(0, 10);
+}
+
+function dateForDayIndex(dayIndex) {
+    // Returns the date of the upcoming/current week's day (0=Mon, 6=Sun)
+    const now = new Date();
+    const currentDay = (now.getDay() + 6) % 7; // convert Sun=0 to Mon=0
+    const diff = dayIndex - currentDay;
+    const target = new Date(now);
+    target.setDate(now.getDate() + diff);
+    return target.toISOString().slice(0, 10);
+}
+
+function DayView({ editMode }) {
+    const [selectedDay, setSelectedDay] = useState((new Date().getDay() + 6) % 7);
+    const [allAvailability, setAllAvailability] = useState([]);  // all users
+    const [myAvailability, setMyAvailability] = useState({});    // hour -> status
+
+    const token = localStorage.getItem('access_token');
+    const dateStr = dateForDayIndex(selectedDay);
+
+    // Fetch all users' availability for selected day
+    useEffect(() => {
+        fetch(`/api/availability/?date=${dateStr}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+            .then(r => r.json())
+            .then(data => setAllAvailability(Array.isArray(data) ? data : []))
+            .catch(() => setAllAvailability([]));
+    }, [selectedDay, dateStr, token]);
+
+    // Fetch current user's availability for selected day
+    useEffect(() => {
+        fetch(`/api/availability/me?date=${dateStr}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+            .then(r => r.json())
+            .then(data => {
+                const map = {};
+                if (Array.isArray(data)) {
+                    data.forEach(row => { map[row.hour] = row.status; });
+                }
+                setMyAvailability(map);
+            })
+            .catch(() => setMyAvailability({}));
+    }, [selectedDay, dateStr, token]);
+
+    const handleCellClick = async (hour) => {
+        if (!editMode) return;
+        const current = myAvailability[hour] || 'available';
+        const next = STATUS_CYCLE[(STATUS_CYCLE.indexOf(current) + 1) % STATUS_CYCLE.length];
+
+        // Optimistic update
+        setMyAvailability(prev => ({ ...prev, [hour]: next }));
+
+        await fetch('/api/availability/me', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ date: dateStr, hour, status: next }),
+        });
+    };
 
     const statusLabel = (s) =>
         s === 'available' ? 'Available' : s === 'busy' ? 'Busy' : 'Private';
+
+    const getStatusForUser = (userId, hour, isMe) => {
+        if (isMe) return myAvailability[hour] || 'available';
+        const row = allAvailability.find(r => r.user_id === userId && r.hour === hour);
+        return row ? row.status : 'available';
+    };
 
     return (
         <div className="cam cam-day">
@@ -138,31 +215,40 @@ function DayView() {
                     </button>
                 ))}
             </div>
+            {editMode && (
+                <p style={{ fontSize: 12, color: '#888', marginBottom: 4 }}>
+                    Click your row to cycle status: Available → Busy → Private
+                </p>
+            )}
             <div className="cam-day-body">
-                {DAY_TIMES.map((t, ti) => (
-                    <div key={t} className="cam-day-row">
-                        <div className="cam-day-time-label">{t}</div>
-                        {USERS.map(u => {
-                            const s = getStatus(u.id, selectedDay, ti);
-                            return (
-                                <div
-                                    key={u.id}
-                                    className={`cam-day-cell cam-day-cell-${s} ${u.isMe ? 'cam-day-cell-me' : ''}`}
-                                >
-                                    <span className="cam-day-avatar" style={{ background: u.avatarColor }}>
-                                        {u.initials}
-                                    </span>
-                                    <div className="cam-day-cell-text">
-                                        <div className="cam-day-cell-name">
-                                            {u.name}{u.isMe ? ' (you)' : ''}
+                {DAY_TIMES.map((t) => {
+                    const hour = HOUR_MAP[t];
+                    return (
+                        <div key={t} className="cam-day-row">
+                            <div className="cam-day-time-label">{t}</div>
+                            {USERS.map(u => {
+                                const s = getStatusForUser(u.id, hour, u.isMe);
+                                return (
+                                    <div
+                                        key={u.id}
+                                        className={`cam-day-cell cam-day-cell-${s} ${u.isMe ? 'cam-day-cell-me' : ''} ${u.isMe && editMode ? 'cam-day-cell-editable' : ''}`}
+                                        onClick={() => u.isMe && handleCellClick(hour)}
+                                    >
+                                        <span className="cam-day-avatar" style={{ background: u.avatarColor }}>
+                                            {u.initials}
+                                        </span>
+                                        <div className="cam-day-cell-text">
+                                            <div className="cam-day-cell-name">
+                                                {u.name}{u.isMe ? ' (you)' : ''}
+                                            </div>
+                                            <div className="cam-day-cell-status">{statusLabel(s)}</div>
                                         </div>
-                                        <div className="cam-day-cell-status">{statusLabel(s)}</div>
                                     </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                ))}
+                                );
+                            })}
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );

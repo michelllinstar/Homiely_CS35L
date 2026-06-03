@@ -65,3 +65,12 @@
 .cam-day-cell-private .cam-day-cell-name   { color: #f6ecd2; }
 .cam-day-cell-status { font-size: 12px; color: var(--text-muted); opacity: .85; }
 .cam-day-cell-private .cam-day-cell-status { color: #e7d9aa; }
+
+.cam-day-cell-editable {
+    cursor: pointer;
+    outline: 2px dashed #888;
+}
+
+.cam-day-cell-editable:hover {
+    filter: brightness(0.92);
+}
