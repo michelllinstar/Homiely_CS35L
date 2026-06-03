@@ -3,7 +3,7 @@ import "./YourWeek.css";
 
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-export default function YourWeek({ chores = {}, currentUser, onToggle }) {
+export default function YourWeek({ chores = {}, currentUser, onToggle, onDelete }) {
     // Filter down to only days that have chores assigned to the current user
     const myChores = {};
     DAYS.forEach((day) => {
