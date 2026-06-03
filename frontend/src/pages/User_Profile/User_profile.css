@@ -133,8 +133,7 @@
 
 .edit-btn,
 .save-btn,
-.cancel-btn,
-.logout-btn {
+.cancel-btn {
   padding: 14px 28px;
   border: none;
   border-radius: 999px;
@@ -165,14 +164,15 @@
 
 .logout-btn {
   grid-column: 1 / -1;
-  background: #e0e0e0;
-  color: #2d3a2e;
+  background: #c41c3b;
+  color: white;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
 }
 
 .logout-btn:hover {
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
   transform: translateY(-2px);
+  background: #a41530;
 }
 
 .logout-btn:disabled {
