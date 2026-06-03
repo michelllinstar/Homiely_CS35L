@@ -36,7 +36,7 @@ body {
   flex-direction: column;
   align-items: stretch;
   width: 100%;
-  padding: 80px;
+  padding: 120px;
   box-sizing: border-box;
   overflow-x: hidden;
   overflow-y: auto;
@@ -201,4 +201,67 @@ body {
     font-size: 0.78rem;
     color: #6b7a6c;
     line-height: 1;
+}
+
+/* SLEEP SCHEDULE */
+.sleep-row {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.sleep-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.sleep-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #4a5f4c;
+}
+
+.sleep-select {
+    background: rgba(255, 255, 255, 0.75);
+    border: 1.5px solid #c8deca;
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 0.88rem;
+    color: #2d3a2e;
+    cursor: pointer;
+    appearance: none;
+    text-align: center;
+}
+
+.sleep-select:focus {
+    outline: none;
+    border-color: #4a6d4e;
+}
+
+.sleep-save-btn {
+    width: 100%;
+    padding: 12px;
+    background: #3f6f3d;
+    color: #f6ecd2;
+    border: none;
+    border-radius: 999px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #2a4e29;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.sleep-save-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #2a4e29;
+}
+
+.sleep-save-btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #2a4e29;
 }
