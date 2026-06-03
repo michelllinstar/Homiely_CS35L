@@ -1,5 +1,6 @@
 import "./Navbar.css";
 import Button from "./Button";
+import jerry from "../assets/jerry.png";
 
 function scrollTo(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -9,7 +10,7 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
-        🏠 Homiely
+                    <img src={jerry} alt="House" style={{ width: '40px', height: '60px', objectFit: 'contain', borderRadius: '12px' }} />
       </div>
 
       <div className="navbar-links">

@@ -8,8 +8,8 @@ services:
       - backend
     environment:
       - REACT_APP_API_URL=http://backend:5000
-    # volumes:
-    #   - ./frontend/src:/app/src
+    volumes:
+      - ./frontend/src:/app/src
 
   backend:
     build: ./backend
@@ -20,8 +20,8 @@ services:
         condition: service_healthy
     environment:
       - FLASK_ENV=development
-    # volumes:
-    #   - ./backend/app:/app/app
+    volumes:
+      - ./backend/app:/app/app
 
   db:
     image: postgres:13

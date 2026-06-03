@@ -2,6 +2,7 @@ import "./User_profile.css";
 import { useState, useEffect } from 'react';
 import { useAuth } from "../AuthContext";
 import { useNavigate } from 'react-router-dom';
+import AppNavbar from "../../components/Home_components/AppNavbar";
 
 export default function UserProfile() {
   const { user, logout } = useAuth();
@@ -132,7 +133,9 @@ export default function UserProfile() {
   };
 
   return (
-    <div className="profile-page">
+    <div>
+      <AppNavbar />
+      <div className="profile-page">
       <div className="profile-container">
         <h1>My Profile</h1>
 
@@ -242,5 +245,7 @@ export default function UserProfile() {
         </div>
       </div>
     </div>
+    </div>
+    
   );
 }

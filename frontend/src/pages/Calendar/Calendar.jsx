@@ -17,7 +17,7 @@ export default function Calendar() {
     const now = new Date();
     const monthYear = now.toLocaleString('default', { month: 'long', year: 'numeric' });
 
-    const [activeView, setActiveView] = useState('Month');
+    const [activeView, setActiveView] = useState('Day');
     const [editMode, setEditMode] = useState(false);
     const [sleepStart, setSleepStart] = useState('22');
     const [sleepEnd, setSleepEnd] = useState('8');
