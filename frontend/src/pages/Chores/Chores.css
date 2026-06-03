@@ -1,5 +1,29 @@
+.chores-page {
+    padding: 2rem 3rem;
+    padding-top: calc(80px + 2rem); /* navbar height + original top padding */
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
 .chores-bottom {
     display: flex;
     gap: 2rem;
     margin-top: 2rem;
+}
+
+.chores-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.chores-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+}
+
+.chores-week {
+    font-size: 0.95rem;
+    color: #666;
+    margin: 0;
 }

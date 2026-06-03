@@ -11,6 +11,7 @@ from seed import seed_demo_group, seed_test_user
 from test_routes import test_bp
 from signup_routes import signup_bp
 from availability import bp as availability_bp
+from chore_routes import chores_bp
 
 
 def create_app():
@@ -33,6 +34,7 @@ def create_app():
     app.register_blueprint(test_bp)
     app.register_blueprint(signup_bp)
     app.register_blueprint(availability_bp)
+    app.register_blueprint(chores_bp)
 
     return app
 
