@@ -10,6 +10,9 @@ export default function UserProfile() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [roommateGroup, setRoommateGroup] = useState(null);
+  const [groupmates, setGroupmates] = useState([]);
+  const [loadingGroup, setLoadingGroup] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: user?.first_name || '',
@@ -18,16 +21,58 @@ export default function UserProfile() {
   });
 
   useEffect(() => {
-    if (!user) {
-      navigate('/login');
-    } else {
+    // if (!user) {
+    //   navigate('/login');
+    // } else {
       setFormData({
-        firstName: user.first_name || '',
-        lastName: user.last_name || '',
-        email: user.email || '',
+        firstName: user?.first_name || '',
+        lastName: user?.last_name || '',
+        email: user?.email || '',
       });
-    }
+    // }
   }, [user, navigate]);
+
+  useEffect(() => {
+    if (user) {
+      fetchUserGroup();
+    }
+  }, [user]);
+
+  const fetchUserGroup = async () => {
+    setLoadingGroup(true);
+    try {
+      const token = localStorage.getItem('access_token');
+      const res = await fetch('/api/groups/me', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await res.json();
+      
+      if (data.has_roommate_group && data.group) {
+        setRoommateGroup(data.group);
+        fetchGroupMembers(data.group.id, token);
+      }
+    } catch (err) {
+      console.log('Error fetching group:', err);
+    } finally {
+      setLoadingGroup(false);
+    }
+  };
+
+  const fetchGroupMembers = async (groupId, token) => {
+    try {
+      const res = await fetch(`/api/groups/${groupId}/members`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await res.json();
+      setGroupmates(data);
+    } catch (err) {
+      console.log('Error fetching group members:', err);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -106,6 +151,20 @@ export default function UserProfile() {
                 <label>Email</label>
                 <p className="info-value">{formData.email}</p>
               </div>
+
+              {user && roommateGroup && (
+                <div className="info-group full-width">
+                  <label>Roommate Group: {roommateGroup.name}</label>
+                  <div className="roommates-list">
+                    {groupmates.map((roommate) => (
+                      <div key={roommate.id} className="roommate-card">
+                        <p className="roommate-name">{roommate.name}</p>
+                        <p className="roommate-email">{roommate.email}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <button
                 className="edit-btn"

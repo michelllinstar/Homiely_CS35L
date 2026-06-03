@@ -10,6 +10,7 @@ import Expenses from "./pages/Expenses/Expenses"
 import { AuthProvider } from "./pages/AuthContext";
 import Chores from "./pages/Chores/Chores";
 import GroupSetup from "./pages/GroupSetup/GroupSetup";
+import User_Profile from "./pages/User_Profile/User_Profile";
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route path="/chores" element={<Chores />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/expenses" element={<Expenses />} />
+          <Route path="/profile" element={<User_Profile />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
