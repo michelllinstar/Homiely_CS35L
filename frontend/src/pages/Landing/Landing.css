@@ -208,7 +208,13 @@ body {
 }
 
 .landing-hero.night {
-  background: linear-gradient(160deg, #1a1035 0%, #2d1b4e 50%, #1a2a4a 100%);
+  background: linear-gradient(
+    160deg,
+    #4f6fa8 0%,
+    #7f82c8 42%,
+    #b49bcf 72%,
+    #e7b9b2 100%
+  );
 }
 /* ── Shared section base ── */
 .section {

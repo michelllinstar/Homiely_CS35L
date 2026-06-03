@@ -1,0 +1,61 @@
+.home-tabs {
+  background: rgba(255, 252, 244, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 14px 30px rgba(45, 58, 46, 0.1);
+}
+
+.tabs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tabs-header h2 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.tabs-header p {
+  margin: 0;
+  color: #3e5240;
+}
+
+.roommate-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.roommate-card {
+  background: rgba(255, 252, 244, 0.7);
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.circle {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #a8d5a2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+}
+
+.roommate-card h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.roommate-card p {
+  margin: 4px 0 0;
+  font-size: 13px;
+}
