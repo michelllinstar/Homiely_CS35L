@@ -1,7 +1,7 @@
 import "./Calendar.css";
 import Button from "../../components/Button";
 import CalendarAvailMo from "../../components/CalendarAvailMo";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 export default function Calendar() {
     const now = new Date();
@@ -9,6 +9,7 @@ export default function Calendar() {
 
     const [activeView, setActiveView] = useState('Month');
     const [editMode, setEditMode] = useState(false);
+    const confirmRef = useRef(null); // DayView will register its confirm function here
 
     const statuses = [
         { label: 'Available', description: 'Knock anytime',         color: '#86c98e' },
@@ -19,6 +20,13 @@ export default function Calendar() {
     const handleEditMyStatus = () => {
         setActiveView('Day');
         setEditMode(true);
+    };
+
+    const handleConfirm = async () => {
+        if (confirmRef.current) {
+            await confirmRef.current();  // flush pending changes to backend
+        }
+        setEditMode(false);
     };
 
     return (
@@ -47,17 +55,29 @@ export default function Calendar() {
                 </div>
 
                 <div className="hstack">
-                    <CalendarAvailMo activeView={activeView} editMode={editMode} />
+                    <CalendarAvailMo
+                        activeView={activeView}
+                        editMode={editMode}
+                        confirmRef={confirmRef}
+                    />
 
                     <div className="vstack">
                         <div className="status-panel">
                             <h2 className="status-panel-title">Set my status</h2>
                             <p className="status-panel-subtitle">Tap below to enable click-to-edit on the calendar.</p>
-                            <Button
-                                label={editMode ? "Editing..." : "Edit My Status"}
-                                className="edit-status-btn"
-                                onClick={handleEditMyStatus}
-                            />
+                            {editMode ? (
+                                <Button
+                                    label="Confirm Changes"
+                                    className="edit-status-btn"
+                                    onClick={handleConfirm}
+                                />
+                            ) : (
+                                <Button
+                                    label="Edit My Status"
+                                    className="edit-status-btn"
+                                    onClick={handleEditMyStatus}
+                                />
+                            )}
                             <p className="status-types-label">Status Types</p>
                             <div className="status-list">
                                 {statuses.map(s => (
