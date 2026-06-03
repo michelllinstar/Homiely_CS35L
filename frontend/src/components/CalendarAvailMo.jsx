@@ -37,7 +37,22 @@ function dateForDayIndex(dayIndex) {
 }
 
 export default function CalendarAvailMo({ activeView = 'Month', editMode = false, confirmRef = null }) {
-    if (activeView === 'Day')  return <DayView editMode={editMode} confirmRef={confirmRef} />;
+    const [allAvailability, setAllAvailability] = useState({});
+    const [myAvailability, setMyAvailability] = useState({});
+    const [pendingChanges, setPendingChanges] = useState({});
+
+    if (activeView === 'Day') return (
+        <DayView
+            editMode={editMode}
+            confirmRef={confirmRef}
+            allAvailability={allAvailability}
+            setAllAvailability={setAllAvailability}
+            myAvailability={myAvailability}
+            setMyAvailability={setMyAvailability}
+            pendingChanges={pendingChanges}
+            setPendingChanges={setPendingChanges}
+        />
+    );
     if (activeView === 'Week') return <WeekView />;
     return <MonthView />;
 }
@@ -135,16 +150,17 @@ function WeekView() {
 }
 
 /* ---------- DAY ---------- */
-function DayView({ editMode, confirmRef }) {
+function DayView({
+    editMode, confirmRef,
+    allAvailability, setAllAvailability,
+    myAvailability, setMyAvailability,
+    pendingChanges, setPendingChanges,
+}) {
     const [selectedDay, setSelectedDay] = useState((new Date().getDay() + 6) % 7);
-    const [allAvailability, setAllAvailability] = useState({});   // { dateStr: [...] }
-    const [myAvailability, setMyAvailability] = useState({});     // { dateStr: { hour: status } }
-    const [pendingChanges, setPendingChanges] = useState({});     // { dateStr: { hour: status } }
 
     const token = localStorage.getItem('access_token');
     const dateStr = dateForDayIndex(selectedDay);
 
-    // Fetch all users' availability for selected day (only if not already fetched)
     useEffect(() => {
         if (allAvailability[dateStr] !== undefined) return;
         fetch(`/api/availability/?date=${dateStr}`, {
@@ -158,7 +174,6 @@ function DayView({ editMode, confirmRef }) {
             .catch(() => setAllAvailability(prev => ({ ...prev, [dateStr]: [] })));
     }, [selectedDay, dateStr, token]);
 
-    // Fetch current user's saved availability for selected day (only if not already fetched)
     useEffect(() => {
         if (myAvailability[dateStr] !== undefined) return;
         fetch(`/api/availability/me?date=${dateStr}`, {
@@ -175,7 +190,6 @@ function DayView({ editMode, confirmRef }) {
             .catch(() => setMyAvailability(prev => ({ ...prev, [dateStr]: {} })));
     }, [selectedDay, dateStr, token]);
 
-    // Register flush function — writes all pending changes across all days
     useEffect(() => {
         if (!confirmRef) return;
         confirmRef.current = async () => {
@@ -195,8 +209,6 @@ function DayView({ editMode, confirmRef }) {
                 });
             });
             await Promise.all(writes);
-
-            // Merge all pending into saved state
             setMyAvailability(prev => {
                 const next = { ...prev };
                 Object.entries(pendingChanges).forEach(([date, hours]) => {
