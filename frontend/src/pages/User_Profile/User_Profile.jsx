@@ -18,15 +18,15 @@ export default function UserProfile() {
   });
 
   useEffect(() => {
-    if (!user) {
-      navigate('/login');
-    } else {
+    // if (!user) {
+    //   navigate('/login');
+    // } else {
       setFormData({
-        firstName: user.first_name || '',
-        lastName: user.last_name || '',
-        email: user.email || '',
+        firstName: user?.first_name || '',
+        lastName: user?.last_name || '',
+        email: user?.email || '',
       });
-    }
+    // }
   }, [user, navigate]);
 
   const handleInputChange = (e) => {
