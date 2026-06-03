@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import DemoFlow from "./components/DemoFlow";
 
 import Landing from "./pages/Landing/Landing";
 import Login from "./pages/Login/Login";
@@ -28,7 +27,6 @@ function App() {
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/expenses" element={<Expenses />} />
         </Routes>
-        <DemoFlow />
       </BrowserRouter>
     </AuthProvider>
   );

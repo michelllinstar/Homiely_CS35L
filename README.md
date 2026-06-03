@@ -58,3 +58,7 @@ Frontend will be at http://localhost:3000
 Backend API at http://localhost:5001
 Database at localhost:5432 
 >>>>>>> d99e550 (update local files)
+### Test User Info
+email: test@example.com 
+password: password123
+

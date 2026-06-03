@@ -55,3 +55,18 @@ class ExpenseSplit(db.Model):
     owed_by = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     amount = db.Column(db.Float, nullable=False)
     is_paid = db.Column(db.Boolean, default=False)
+
+class Availability(db.Model):
+    __tablename__ = 'availability'
+
+    id         = db.Column(db.Integer, primary_key=True)
+    user_id    = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    date       = db.Column(db.Date, nullable=False)
+    hour       = db.Column(db.Integer, nullable=False)  # 0–23
+    status     = db.Column(db.String(20), nullable=False)  # 'available', 'busy', 'private'
+
+    user = db.relationship('User', backref='availability')
+
+    __table_args__ = (
+        db.UniqueConstraint('user_id', 'date', 'hour', name='uq_user_date_hour'),
+    )
