@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import WeekView from "../../components/WeekView";
 import YourWeek from "../../components/YourWeek";
 import AddChore from "../../components/AddChores";
+import Navbar from "../../components/Navbar";
 
 
 // [GenAI Use] Prompt: "How can I use React's built in time/day functions to write a function getWeekRange() to return the start and end of the current week we're on, formatted as month (in words) and day (number)?"
@@ -80,7 +81,8 @@ export default function Chores() {
 
     return (
         <div className="chores-page">
-            <header>
+            <Navbar />
+            <header className="chores-header">
                 <h1 className="chores-title">Chores</h1>
                 <p className="chores-week">Week of {start} to {end}</p>
             </header>
