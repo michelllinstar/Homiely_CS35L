@@ -53,14 +53,15 @@ function getWeekStartDate() {
 }
 
 /* Since the backend returns a flat array, group by day for the WeekView component. */
-function groupChoresByDay(choresArray) {
+function groupChoresByDay(choresArray, roommates) {
     const grouped = {};
     DAYS.forEach((day) => (grouped[day] = []));
     choresArray.forEach((chore) => {
         if (grouped[chore.day_of_week] !== undefined) {
+            const roommate = roommates.find((r) => r.id === chore.assigned_to);
             grouped[chore.day_of_week].push({
                 id: chore.id,
-                assignee: chore.assigned_to,
+                assignee: roommate ? roommate.name: "Unassigned",
                 description: chore.description,
                 timeOfDay: chore.time_of_day,
                 checked: chore.is_completed
@@ -122,7 +123,7 @@ export default function Chores() {
                 }
                 const choresData = await choresRes.json();
                 const roommatesData = await roommatesRes.json();
-                setChores(groupChoresByDay(choresData));
+                setChores(groupChoresByDay(choresData, roommatesData));
                 setRoommates(roommatesData);
             } 
             catch (err) {
