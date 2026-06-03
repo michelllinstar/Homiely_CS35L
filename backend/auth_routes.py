@@ -8,7 +8,7 @@ from flask_jwt_extended import (
 )
 from werkzeug.security import check_password_hash
 
-from extensions import blocklist
+from extensions import blocklist, db
 from helpers import user_to_json
 from models import User
 
@@ -62,3 +62,38 @@ def me():
         return jsonify({"message": "User not found"}), 404
 
     return jsonify(user_to_json(user))
+
+
+@auth_bp.route("/api/profile/update", methods=["PUT"])
+@jwt_required()
+def update_profile():
+    user_id = int(get_jwt_identity())
+    user = User.query.get(user_id)
+
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    data = request.get_json()
+    first_name = data.get("first_name", "").strip()
+    last_name = data.get("last_name", "").strip()
+    email = data.get("email", "").lower().strip()
+
+    # Combine names the same way signup does
+    name = f"{first_name} {last_name}".strip()
+    
+    if name:
+        user.name = name
+    
+    if email:
+        # Check if email is already taken by another user
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user and existing_user.id != user.id:
+            return jsonify({"error": "Email already in use"}), 400
+        user.email = email
+    
+    db.session.commit()
+    
+    return jsonify({
+        "message": "Profile updated successfully",
+        "user": user_to_json(user)
+    })
