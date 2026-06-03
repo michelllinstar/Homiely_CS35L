@@ -14,6 +14,8 @@ import User_Profile from "./pages/User_Profile/User_Profile";
 
 // 6/3 1:24 am: import protected routes component to wrap protected pages
 import ProtectedRoute from "./components/ProtectedRoutes";
+// 6/3 2:52 am: import logged in protected route to wrap login/signup pages
+import LoggedInProtectedRoutes from "./components/LoggedInProtectedRoutes";
 
 
 function App() {
@@ -26,9 +28,21 @@ function App() {
               <GroupSetup />
             </ProtectedRoute>
           } />
-          <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/" element={
+            <LoggedInProtectedRoutes>
+              <Landing />
+            </LoggedInProtectedRoutes>
+            } />
+          <Route path="/login" element={
+            <LoggedInProtectedRoutes>
+              <Login />
+            </LoggedInProtectedRoutes>
+          } />
+          <Route path="/signup" element={
+            <LoggedInProtectedRoutes>
+              <Signup />
+            </LoggedInProtectedRoutes>
+          } />
           <Route path="/verification" element={<Verification />} />
           <Route path="/home" element={
             <ProtectedRoute>
