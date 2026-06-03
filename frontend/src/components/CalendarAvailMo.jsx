@@ -1,12 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import './CalendarAvailMo.css';
 
-const USERS = [
-    { id: 1, name: 'Emma',   initials: 'EC', avatarColor: '#a8d5a8' },
-    { id: 2, name: 'Jerry',  initials: 'JH', avatarColor: '#8ab4d6' },
-    { id: 3, name: 'Thomas', initials: 'TL', avatarColor: '#f0a89e' },
-    { id: 4, name: 'You',    initials: 'ML', avatarColor: '#f4c542', isMe: true },
-];
+const AVATAR_COLORS = ['#a8d5a8','#8ab4d6','#f0a89e','#f4c542','#c9a8f0','#f0d08a'];
+
+function buildUsers(members, currentUserId) {
+    return members.map((m, i) => ({
+        id: m.id,
+        name: m.id === currentUserId ? 'You' : m.name,
+        initials: m.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase(),
+        avatarColor: AVATAR_COLORS[i % AVATAR_COLORS.length],
+        isMe: m.id === currentUserId,
+    }));
+}
 
 const DAY_NAMES  = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const WEEK_TIMES = ['8a', '10a', '12p', '2p', '4p', '6p', '8p', '10p'];
@@ -40,6 +45,56 @@ export default function CalendarAvailMo({ activeView = 'Month', editMode = false
     const [allAvailability, setAllAvailability] = useState({});
     const [myAvailability, setMyAvailability] = useState({});
     const [pendingChanges, setPendingChanges] = useState({});
+    const [users, setUsers] = useState([]);
+    const [groupAvailability, setGroupAvailability] = useState({});
+
+    const token = localStorage.getItem('access_token');
+
+    const fetchWeekAvailability = useCallback(() => {
+        if (!token) return;
+        const fetches = Array.from({ length: 7 }, (_, i) => {
+            const dateStr = dateForDayIndex(i);
+            return fetch(`/api/availability/?date=${dateStr}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+                .then(r => r.json())
+                .then(data => ({ dateStr, data: Array.isArray(data) ? data : [] }))
+                .catch(() => ({ dateStr, data: [] }));
+        });
+        Promise.all(fetches).then(results => {
+            const map = {};
+            results.forEach(({ dateStr, data }) => { map[dateStr] = data; });
+            setGroupAvailability(map);
+        });
+    }, [token]);
+
+    // Fetch group members
+    useEffect(() => {
+        if (!token) return;
+        const currentUserId = JSON.parse(localStorage.getItem('user'))?.id;
+
+        fetch('/api/groups/me', {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+            .then(r => r.json())
+            .then(data => {
+                if (!data.has_roommate_group) return;
+                return fetch(`/api/groups/${data.group.id}/members`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+            })
+            .then(r => r && r.json())
+            .then(data => {
+                if (!data) return;
+                setUsers(buildUsers(Array.isArray(data) ? data : [], currentUserId));
+            })
+            .catch(() => setUsers([]));
+    }, [token]);
+
+    // Fetch current week availability on mount
+    useEffect(() => {
+        fetchWeekAvailability();
+    }, [fetchWeekAvailability]);
 
     if (activeView === 'Day') return (
         <DayView
@@ -51,14 +106,17 @@ export default function CalendarAvailMo({ activeView = 'Month', editMode = false
             setMyAvailability={setMyAvailability}
             pendingChanges={pendingChanges}
             setPendingChanges={setPendingChanges}
+            users={users}
+            groupAvailability={groupAvailability}
+            onSaved={fetchWeekAvailability}
         />
     );
-    if (activeView === 'Week') return <WeekView />;
-    return <MonthView />;
+    if (activeView === 'Week') return <WeekView users={users} groupAvailability={groupAvailability} />;
+    return <MonthView users={users} groupAvailability={groupAvailability} />;
 }
 
 /* ---------- MONTH ---------- */
-function MonthView() {
+function MonthView({ users, groupAvailability }) {
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth();
@@ -83,8 +141,17 @@ function MonthView() {
                     if (date === null) {
                         return <div key={i} className="cam-month-cell cam-month-cell-empty" />;
                     }
+
+                    const dateStr = new Date(year, month, date).toISOString().slice(0, 10);
+                    const rows = groupAvailability[dateStr] || [];
+
                     const counts = { available: 0, busy: 0, private: 0 };
-                    USERS.forEach(u => { counts[getStatus(u.id, (date - 1) % 7, 4)]++; });
+                    users.forEach(u => {
+                        const row = rows.find(r => r.user_id === u.id && r.hour === 12);
+                        const s = row ? row.status : getStatus(u.id, (date - 1) % 7, 4);
+                        counts[s]++;
+                    });
+
                     const dominant =
                         counts.available >= counts.busy && counts.available >= counts.private ? 'available'
                         : counts.busy >= counts.private ? 'busy' : 'private';
@@ -96,8 +163,9 @@ function MonthView() {
                         >
                             <div className="cam-month-date">{date}</div>
                             <div className="cam-month-summary">
-                                {USERS.map(u => {
-                                    const s = getStatus(u.id, (date - 1) % 7, 4);
+                                {users.map(u => {
+                                    const row = rows.find(r => r.user_id === u.id && r.hour === 12);
+                                    const s = row ? row.status : getStatus(u.id, (date - 1) % 7, 4);
                                     return (
                                         <span
                                             key={u.id}
@@ -115,7 +183,7 @@ function MonthView() {
 }
 
 /* ---------- WEEK ---------- */
-function WeekView() {
+function WeekView({ users, groupAvailability }) {
     return (
         <div className="cam cam-week">
             <div className="cam-week-header">
@@ -128,20 +196,25 @@ function WeekView() {
                 {WEEK_TIMES.map((t, ti) => (
                     <div key={t} className="cam-week-row">
                         <div className="cam-week-time-label">{t}</div>
-                        {DAY_NAMES.map((d, di) => (
-                            <div key={d} className="cam-week-cell">
-                                {USERS.map(u => {
-                                    const s = getStatus(u.id, di, ti);
-                                    return (
-                                        <div
-                                            key={u.id}
-                                            className={`cam-week-pill cam-week-pill-${s} ${u.isMe ? 'cam-week-pill-me' : ''}`}
-                                            title={`${u.name}: ${s}`}
-                                        />
-                                    );
-                                })}
-                            </div>
-                        ))}
+                        {DAY_NAMES.map((d, di) => {
+                            const dateStr = dateForDayIndex(di);
+                            const rows = groupAvailability[dateStr] || [];
+                            return (
+                                <div key={d} className="cam-week-cell">
+                                    {users.map(u => {
+                                        const row = rows.find(r => r.user_id === u.id && r.hour === HOUR_MAP[t]);
+                                        const s = row ? row.status : getStatus(u.id, di, ti);
+                                        return (
+                                            <div
+                                                key={u.id}
+                                                className={`cam-week-pill cam-week-pill-${s} ${u.isMe ? 'cam-week-pill-me' : ''}`}
+                                                title={`${u.name}: ${s}`}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                            );
+                        })}
                     </div>
                 ))}
             </div>
@@ -155,6 +228,7 @@ function DayView({
     allAvailability, setAllAvailability,
     myAvailability, setMyAvailability,
     pendingChanges, setPendingChanges,
+    users, groupAvailability, onSaved,
 }) {
     const [selectedDay, setSelectedDay] = useState((new Date().getDay() + 6) % 7);
 
@@ -217,8 +291,10 @@ function DayView({
                 return next;
             });
             setPendingChanges({});
+            // Refresh group availability so Week/Month views reflect saved changes
+            if (onSaved) onSaved();
         };
-    }, [pendingChanges, token, confirmRef]);
+    }, [pendingChanges, token, confirmRef, onSaved]);
 
     const handleCellClick = (hour) => {
         if (!editMode) return;
@@ -240,7 +316,7 @@ function DayView({
 
     const getStatusForUser = (userId, hour, isMe) => {
         if (isMe) return getMyStatus(hour);
-        const rows = allAvailability[dateStr] || [];
+        const rows = groupAvailability[dateStr] || allAvailability[dateStr] || [];
         const row = rows.find(r => r.user_id === userId && r.hour === hour);
         return row ? row.status : 'available';
     };
@@ -273,9 +349,13 @@ function DayView({
                 {DAY_TIMES.map((t) => {
                     const hour = HOUR_MAP[t];
                     return (
-                        <div key={t} className="cam-day-row">
+                        <div
+                            key={t}
+                            className="cam-day-row"
+                            style={{ gridTemplateColumns: `48px repeat(${users.length}, 1fr)` }}
+                        >
                             <div className="cam-day-time-label">{t}</div>
-                            {USERS.map(u => {
+                            {users.map(u => {
                                 const s = getStatusForUser(u.id, hour, u.isMe);
                                 const isPending = u.isMe && pendingChanges[dateStr]?.[hour] !== undefined;
                                 return (
