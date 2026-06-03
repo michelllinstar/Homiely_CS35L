@@ -9,8 +9,9 @@ services:
       - backend
     environment:
       - REACT_APP_API_URL=http://localhost:5000
-    volumes:
-      - ./frontend/src:/app/src  # hot reload source changes
+
+    # volumes:
+      # - ./frontend/src:/app/src  # hot reload source changes
 
   backend:
     build: ./backend
@@ -21,8 +22,8 @@ services:
         condition: service_healthy
     environment:
       - FLASK_ENV=development
-    volumes:
-      - ./backend/app:/app  # mount source into container
+    # volumes:
+    #   - ./backend/app:/app  # mount source into container
 
   db:
     image: postgres:13
