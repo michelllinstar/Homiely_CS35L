@@ -23,6 +23,9 @@ def seed_test_user():
     print("[SEED] Test user created: test@example.com / password123")
 
 # This function creates a demo roommate group. The group join code is "DEMO123".
+# It includes 5 demo users: Emma, Jerry, Thomas, Michelle, and Kelvin. 
+# The test user is not included in this group, so you can use the test user to create your own group and test the app's features without affecting the demo group. 
+# The demo group is meant for testing and demonstration purposes, so feel free to join it with the provided join code and explore its features!
 def seed_demo_group():
     demo_users = [
         ("emma@example.com", "Emma Cao"),
