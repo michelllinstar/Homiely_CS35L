@@ -4,67 +4,54 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import AppNavbar from "../../components/Home_components/AppNavbar";
 import HomeTabs from "../../components/Home_components/HomeTabs";
+import { getAmountOwedToUser } from "../../utils/balances";
+import { getOpenChoresCount, getWeekStartDate } from "../../utils/chores";
 import jerry from "../../assets/jerry.png";
 
-function getWeekStartDate() {
-  const today = new Date();
-  const sunday = new Date(today);
-  sunday.setDate(today.getDate() - today.getDay());
-  return sunday.toISOString().split("T")[0];
-}
-
-function calculateAmountOwedToUser(expenses, userId) {
-  const balances = {};
-
-  expenses.forEach((expense) => {
-    expense.splits.forEach((split) => {
-      if (split.is_paid || split.owed_by === expense.paid_by) return;
-
-      const key = `${split.owed_by}-${expense.paid_by}`;
-      const reverseKey = `${expense.paid_by}-${split.owed_by}`;
-
-      if (balances[reverseKey]) {
-        balances[reverseKey] -= split.amount;
-      } else {
-        balances[key] = (balances[key] || 0) + split.amount;
-      }
-    });
-  });
-
-  return Object.entries(balances).reduce((total, [key, amount]) => {
-    const [, owedId] = key.split("-").map(Number);
-    return owedId === userId && amount > 0 ? total + amount : total;
-  }, 0);
-}
-
+// -----------------------------------------------------------------------------------------------------------------------
+// Home is the main dashboard page after login
+// Whenever React loads /home, it will check if the user is authenticated (via ProtectedRoute in app.jsx). If so, this component will render and pull in the user's group and home stats to display.
+// -----------------------------------------------------------------------------------------------------------------------
 export default function Home() {
+  // ProtectedRoute makes sure user exists before this page renders.
   const { user, accessToken } = useAuth();
   const navigate = useNavigate();
-
+  // -----------------------------------------------------------------------------------------------------------------------
+  // useState to track the main pieces of data we need: group info and the stats for the cards. Each has its own loading state so we can show partial data as it comes in.
+  // Group data controls most of the page.
+  // -----------------------------------------------------------------------------------------------------------------------
   const [group, setGroup] = useState(null);
   const [loadingGroup, setLoadingGroup] = useState(true);
+
+  // These cards come from chores and expenses.
   const [homeStats, setHomeStats] = useState({
+    // Initial value
     openChores: 0,
     owedToMe: 0,
   });
   const [loadingStats, setLoadingStats] = useState(false);
 
+  // Get the user's roommate group first. Other home data depends on it
+  // useEffect runs code when component loads or when dependencies change
   useEffect(() => {
     async function fetchGroup() {
+      // If there's no user or access token, we can't fetch group data
       if (!user || !accessToken) {
         setLoadingGroup(false);
         return;
       }
 
+      // Call to backend
+      // If the user is in a group, we'll get the group data. If not, we'll just show the empty state.
       try {
         const res = await fetch("/api/groups/me", {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-
+        // Backend sends group data if user is in a group, or 404 if not. Both are expected, so we handle them gracefully
         const data = await res.json();
-
+        // If the user is in a group, store it. Otherwise we'll show the empty state 
         if (data.has_roommate_group) {
           setGroup(data.group);
         }
@@ -74,29 +61,29 @@ export default function Home() {
         setLoadingGroup(false);
       }
     }
-
     fetchGroup();
   }, [user, accessToken]);
 
+  // Pull the current week's chores and current expense balances for the cards
   useEffect(() => {
     async function fetchHomeStats() {
       if (!user || !accessToken || !group) return;
-
       setLoadingStats(true);
 
       try {
-        const [choresRes, expensesRes] = await Promise.all([
-          fetch(`/api/groups/${group.id}/chores?week_start=${getWeekStartDate()}`, {
+        const choresRes = await fetch(
+          `/api/groups/${group.id}/chores?week_start=${getWeekStartDate()}`,
+          {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
-          }),
-          fetch(`/api/expenses/${group.id}`, {
+          }
+        );
+        const expensesRes = await fetch(`/api/expenses/${group.id}`, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
-          }),
-        ]);
+        });
 
         if (!choresRes.ok || !expensesRes.ok) {
           console.log("Could not load home stats.");
@@ -107,11 +94,10 @@ export default function Home() {
         const expenses = await expensesRes.json();
         const userId = Number(user.id);
 
+        // Only count chores assigned to this user that are not done yet.
         setHomeStats({
-          openChores: chores.filter(
-            (chore) => chore.assigned_to === userId && !chore.is_completed
-          ).length,
-          owedToMe: calculateAmountOwedToUser(expenses, userId),
+          openChores: getOpenChoresCount(chores, userId),
+          owedToMe: getAmountOwedToUser(expenses, userId),
         });
       } catch (err) {
         console.log("Failed to fetch home stats:", err);
@@ -123,17 +109,7 @@ export default function Home() {
     fetchHomeStats();
   }, [user, accessToken, group]);
 
-  if (!user) {
-    return (
-      <div className="home-page">
-        <AppNavbar />
-        <main className="home-shell">
-          <h1>No user is currently logged in!</h1>
-        </main>
-      </div>
-    );
-  }
-
+  // The user can be logged in but still not have a roommate group.
   return (
     <div className="home-page">
       <AppNavbar />
@@ -150,6 +126,7 @@ export default function Home() {
             </h1>
 
             <p className="hero-subtitle">
+              {/* Show the right message for loading, grouped, and no-group states. Nested If-statements*/}
               {loadingGroup
                 ? "Loading your roommate group..."
                 : group
@@ -165,6 +142,7 @@ export default function Home() {
           </div>
         </section>
 
+        {/* These cards only make sense after a group exists. */}
         {group && (
           <section className="stats-grid">
             <div className="stat-card green">
@@ -184,7 +162,7 @@ export default function Home() {
               <h2>{group.members.length}</h2>
               <span>in your group</span>
             </div>
-
+ 
             <div className="stat-card orange">
               <p>Join code</p>
               <h2>{group.join_code}</h2>
@@ -193,6 +171,7 @@ export default function Home() {
           </section>
         )}
 
+        {/* Main content area: loading, roommate list, or setup prompt. */}
         {loadingGroup ? (
           <div className="panel">
             <h2>Loading roommate group...</h2>
