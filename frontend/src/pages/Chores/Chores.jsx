@@ -61,6 +61,31 @@ function groupChoresByDay(choresArray, roommates) {
             const roommate = roommates.find((r) => r.id === chore.assigned_to);
             grouped[chore.day_of_week].push({
                 id: chore.id,
+                assignee: roommate ? roommate.name : "Unassigned",
+                description: chore.description,
+                timeOfDay: chore.time_of_day,
+                checked: chore.is_completed,
+            });
+        }
+    });
+
+    // Sort each day's chores by time due, with "Due anytime" last
+    DAYS.forEach((day) => {
+        grouped[day].sort((a, b) => timeToMinutes(a.timeOfDay) - timeToMinutes(b.timeOfDay));
+    });
+
+    return grouped;
+}
+
+/* [GenAI Use] Prompt: "Here is my function that turns a flat array of chore information into chores grouped by day:
+function groupChoresByDay(choresArray, roommates) {
+    const grouped = {};
+    DAYS.forEach((day) => (grouped[day] = []));
+    choresArray.forEach((chore) => {
+        if (grouped[chore.day_of_week] !== undefined) {
+            const roommate = roommates.find((r) => r.id === chore.assigned_to);
+            grouped[chore.day_of_week].push({
+                id: chore.id,
                 assignee: roommate ? roommate.name: "Unassigned",
                 description: chore.description,
                 timeOfDay: chore.time_of_day,
@@ -70,26 +95,62 @@ function groupChoresByDay(choresArray, roommates) {
     });
     return grouped;
 }
+Is there a way to reorder each day's chores by time due? due anytime could be last on the list. */
+// [GenAI Use] LLM Response Start
+/* Yes, sort the chores array after pushing them all in, inside groupChoresByDay. Add a helper function to convert the time string to a sortable number:
+jsx// "Due anytime" sorts last; "Due 7:00 AM" etc. convert to minutes since midnight
+function timeToMinutes(timeOfDay) {
+    if (!timeOfDay || timeOfDay === "Due anytime") return Infinity;
+    const match = timeOfDay.match(/Due (\d+):(\d+) (AM|PM)/);
+    if (!match) return Infinity;
+    let [_, hour, minutes, period] = match;
+    hour = parseInt(hour);
+    minutes = parseInt(minutes);
+    if (period === "PM" && hour !== 12) hour += 12;
+    if (period === "AM" && hour === 12) hour = 0;
+    return hour * 60 + minutes;
+}
+Then sort at the end of groupChoresByDay:
+jsxfunction groupChoresByDay(choresArray, roommates) {
+    const grouped = {};
+    DAYS.forEach((day) => (grouped[day] = []));
+    choresArray.forEach((chore) => {
+        if (grouped[chore.day_of_week] !== undefined) {
+            const roommate = roommates.find((r) => r.id === chore.assigned_to);
+            grouped[chore.day_of_week].push({
+                id: chore.id,
+                assignee: roommate ? roommate.name : "Unassigned",
+                description: chore.description,
+                timeOfDay: chore.time_of_day,
+                checked: chore.is_completed,
+            });
+        }
+    });
 
-/* Dummy data */
-// const initialChores = {
-//     Sunday: [
-//         { assignee: "HD", description: "Take out trash", timeOfDay: "Due anytime", checked: false },
-//     ],
-//     Monday: [
-//         { assignee: "HD", description: "Vacuum living room", timeOfDay: "Due anytime", checked: false },
-//         { assignee: "SM", description: "Do laundry", timeOfDay: "Due 2:00 PM", checked: false },
-//     ],
-//     Wednesday: [
-//         { assignee: "SM", description: "Clean bathrooms", timeOfDay: "Due 10:00 AM", checked: false },
-//     ],
-//     Friday: [
-//         { assignee: "HD", description: "Mop kitchen floor", timeOfDay: "Due 6:00 PM", checked: false },
-//         { assignee: "AA", description: "Clean stovetop", timeOfDay: "Due anytime", checked: false },
-//     ],
-// };
-// 
-// const currentUser = "HD";
+    // Sort each day's chores by time due, with "Due anytime" last
+    DAYS.forEach((day) => {
+        grouped[day].sort((a, b) => timeToMinutes(a.timeOfDay) - timeToMinutes(b.timeOfDay));
+    });
+
+    return grouped;
+}
+*/
+// [GenAI Use] LLM Response End
+// [GenAI Use] Reflection: When visually testing my work, I realized that the chores only show up below each day in the order they were created, not in the order they are due (earliest to latest), which is less user-friendly. Given this is mostly a visual change, I have more pressing things to work on, and I was a little stuck on how to implement this, I asked Claude to help out with this one. I think I understand the code after looking through it, and I will test it before using it for certain.
+
+
+// "Due anytime" sorts last; "Due 7:00 AM" etc. convert to minutes since midnight
+function timeToMinutes(timeOfDay) {
+    if (!timeOfDay || timeOfDay === "Due anytime") return Infinity;
+    const match = timeOfDay.match(/Due (\d+):(\d+) (AM|PM)/);
+    if (!match) return Infinity;
+    let [_, hour, minutes, period] = match;
+    hour = parseInt(hour);
+    minutes = parseInt(minutes);
+    if (period === "PM" && hour !== 12) hour += 12;
+    if (period === "AM" && hour === 12) hour = 0;
+    return hour * 60 + minutes;
+}
 
 export default function Chores() {
     const { start, end } = getWeekRange();      // Week label for header
@@ -217,7 +278,7 @@ export default function Chores() {
                     assigned_to: newChore.assignee,
                     day_of_week: newChore.day,
                     time_of_day: newChore.timeOfDay,
-                    week_start_date: getWeekStartDate()
+                    week_start_date: getWeekStartDate(),
                 })
             });
             if (!response.ok) {
@@ -225,16 +286,17 @@ export default function Chores() {
                 return;
             }
             const created = await response.json();
-            setChores((prev) => ({
-                ...prev,
-                [newChore.day]: [...(prev[newChore.day] || []), {
+            const roommate = roommates.find((r) => r.id === parseInt(created.assigned_to));
+            setChores((prev) => {
+                const updatedDay = [...(prev[newChore.day] || []), {
                     id: created.id,
-                    assignee: created.assigned_to,
+                    assignee: roommate ? roommate.name : "Unassigned",
                     description: created.description,
                     timeOfDay: created.time_of_day,
-                    checked: created.is_completed
-                }],
-            }));
+                    checked: created.is_completed,
+                }].sort((a, b) => timeToMinutes(a.timeOfDay) - timeToMinutes(b.timeOfDay));
+                return { ...prev, [newChore.day]: updatedDay };
+            });
         } catch (err) {
             console.error("Failed to create chore:", err);
         }
@@ -274,7 +336,7 @@ export default function Chores() {
             {error && <p className="chores-error">{error}</p>}
             <WeekView chores={chores} onToggle={handleToggle} onDelete={handleDelete} />
             <div className="chores-bottom">
-                <YourWeek chores={chores} currentUser={user?.id} onToggle={handleToggle} onDelete={handleDelete} />
+            <YourWeek chores={chores} currentUser={user?.name} onToggle={handleToggle} onDelete={handleDelete} />
                 <AddChore onAddChore={handleAddChore} roommates={roommates} />
             </div>
         </div>
