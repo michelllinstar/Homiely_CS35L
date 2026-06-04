@@ -1,7 +1,6 @@
 import { useState } from "react";
 import "./AddChores.css";
 
-const ROOMMATES = ["HD", "SM", "AA"];
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 function generateTimes() {
@@ -17,19 +16,19 @@ function generateTimes() {
 
 const TIMES = generateTimes();
 
-export default function AddChores({ onAddChore }) {
+export default function AddChores({ onAddChore, roommates = [] }) {
     const [open, setOpen] = useState(false);
     const [description, setDescription] = useState("");
-    const [assignee, setAssignee] = useState(ROOMMATES[0]);
+    const [assignee, setAssignee] = useState("");
     const [day, setDay] = useState("Sunday");
     const [timeOfDay, setTimeOfDay] = useState("Due anytime");
 
     function handleSubmit() {
-        if (!description) return;
+        if (!description || !assignee) return;
         onAddChore({ description, assignee, day, timeOfDay, checked: false });
         // Reset form
         setDescription("");
-        setAssignee(ROOMMATES[0]);
+        setAssignee("");
         setDay("Sunday");
         setTimeOfDay("Due anytime");
         setOpen(false);
@@ -58,8 +57,9 @@ export default function AddChores({ onAddChore }) {
                     <div>
                         <label>Assign to</label>
                         <select value={assignee} onChange={(e) => setAssignee(e.target.value)}>
-                            {ROOMMATES.map((r) => (
-                                <option key={r} value={r}>{r}</option>
+                            <option value="">Select a roommate</option>
+                            {roommates.map((r) => (
+                                <option key={r.id} value={r.id}>{r.name}</option>
                             ))}
                         </select>
                     </div>
