@@ -71,7 +71,7 @@
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
   margin-bottom: 22px;
 }
@@ -106,10 +106,30 @@
   background: rgba(218, 230, 255, 0.55);
 }
 
+.green {
+  background: rgba(216, 236, 219, 0.62);
+}
+
+.peach {
+  background: rgba(255, 214, 195, 0.58);
+}
+
 .orange {
   background: rgba(255, 224, 188, 0.55);
 }
 
 .empty-group-panel p {
   margin: 8px 0 0;
+}
+
+@media (max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
 }

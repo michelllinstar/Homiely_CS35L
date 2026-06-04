@@ -6,12 +6,48 @@ import AppNavbar from "../../components/Home_components/AppNavbar";
 import HomeTabs from "../../components/Home_components/HomeTabs";
 import jerry from "../../assets/jerry.png";
 
+function getWeekStartDate() {
+  const today = new Date();
+  const sunday = new Date(today);
+  sunday.setDate(today.getDate() - today.getDay());
+  return sunday.toISOString().split("T")[0];
+}
+
+function calculateAmountOwedToUser(expenses, userId) {
+  const balances = {};
+
+  expenses.forEach((expense) => {
+    expense.splits.forEach((split) => {
+      if (split.is_paid || split.owed_by === expense.paid_by) return;
+
+      const key = `${split.owed_by}-${expense.paid_by}`;
+      const reverseKey = `${expense.paid_by}-${split.owed_by}`;
+
+      if (balances[reverseKey]) {
+        balances[reverseKey] -= split.amount;
+      } else {
+        balances[key] = (balances[key] || 0) + split.amount;
+      }
+    });
+  });
+
+  return Object.entries(balances).reduce((total, [key, amount]) => {
+    const [, owedId] = key.split("-").map(Number);
+    return owedId === userId && amount > 0 ? total + amount : total;
+  }, 0);
+}
+
 export default function Home() {
   const { user, accessToken } = useAuth();
   const navigate = useNavigate();
 
   const [group, setGroup] = useState(null);
   const [loadingGroup, setLoadingGroup] = useState(true);
+  const [homeStats, setHomeStats] = useState({
+    openChores: 0,
+    owedToMe: 0,
+  });
+  const [loadingStats, setLoadingStats] = useState(false);
 
   useEffect(() => {
     async function fetchGroup() {
@@ -41,6 +77,51 @@ export default function Home() {
 
     fetchGroup();
   }, [user, accessToken]);
+
+  useEffect(() => {
+    async function fetchHomeStats() {
+      if (!user || !accessToken || !group) return;
+
+      setLoadingStats(true);
+
+      try {
+        const [choresRes, expensesRes] = await Promise.all([
+          fetch(`/api/groups/${group.id}/chores?week_start=${getWeekStartDate()}`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }),
+          fetch(`/api/expenses/${group.id}`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }),
+        ]);
+
+        if (!choresRes.ok || !expensesRes.ok) {
+          console.log("Could not load home stats.");
+          return;
+        }
+
+        const chores = await choresRes.json();
+        const expenses = await expensesRes.json();
+        const userId = Number(user.id);
+
+        setHomeStats({
+          openChores: chores.filter(
+            (chore) => chore.assigned_to === userId && !chore.is_completed
+          ).length,
+          owedToMe: calculateAmountOwedToUser(expenses, userId),
+        });
+      } catch (err) {
+        console.log("Failed to fetch home stats:", err);
+      } finally {
+        setLoadingStats(false);
+      }
+    }
+
+    fetchHomeStats();
+  }, [user, accessToken, group]);
 
   if (!user) {
     return (
@@ -86,6 +167,18 @@ export default function Home() {
 
         {group && (
           <section className="stats-grid">
+            <div className="stat-card green">
+              <p>My open chores</p>
+              <h2>{loadingStats ? "..." : homeStats.openChores}</h2>
+              <span>for this week</span>
+            </div>
+
+            <div className="stat-card peach">
+              <p>Owed to me</p>
+              <h2>{loadingStats ? "..." : `$${homeStats.owedToMe.toFixed(2)}`}</h2>
+              <span>unpaid group balance</span>
+            </div>
+
             <div className="stat-card blue">
               <p>Roommates</p>
               <h2>{group.members.length}</h2>

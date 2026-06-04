@@ -22,10 +22,6 @@ export default function Navbar() {
           How it works
         </button>
 
-        <button className="nav-text-button" onClick={() => scrollTo("about")}>
-          About
-        </button>
-
         <Button label="Log in" to="/login" className="nav-auth-button nav-auth-login" />
         <Button label="Get started" to="/signup" className="nav-auth-button nav-auth-signup" />
       </div>
