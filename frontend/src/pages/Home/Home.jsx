@@ -1,5 +1,6 @@
 import "./Home.css";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import AppNavbar from "../../components/Home_components/AppNavbar";
 import HomeTabs from "../../components/Home_components/HomeTabs";
@@ -7,6 +8,7 @@ import jerry from "../../assets/jerry.png";
 
 export default function Home() {
   const { user, accessToken } = useAuth();
+  const navigate = useNavigate();
 
   const [group, setGroup] = useState(null);
   const [loadingGroup, setLoadingGroup] = useState(true);
@@ -67,15 +69,13 @@ export default function Home() {
             </h1>
 
             <p className="hero-subtitle">
-              {group
-                ? `${group.name} is cozy — ${group.members.length} roommates are in your group.`
-                : "Loading your roommate group..."}
+              {loadingGroup
+                ? "Loading your roommate group..."
+                : group
+                  ? `${group.name} is cozy — ${group.members.length} roommates are in your group.`
+                  : "Join or create a roommate group to set up your home."}
             </p>
 
-            <div className="hero-buttons">
-              <button>See my chores</button>
-              <button className="secondary-button">$49.10 owed to you</button>
-            </div>
           </div>
 
           <div className="house-card">
@@ -84,54 +84,41 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="stats-grid">
-          <div className="stat-card">
-            <p>Today's chores</p>
-            <h2>3</h2>
-            <span>2 still open</span>
-          </div>
+        {group && (
+          <section className="stats-grid">
+            <div className="stat-card blue">
+              <p>Roommates</p>
+              <h2>{group.members.length}</h2>
+              <span>in your group</span>
+            </div>
 
-          <div className="stat-card peach">
-            <p>Group balance</p>
-            <h2>$49.10</h2>
-            <span>owed to you</span>
-          </div>
-
-          <div className="stat-card blue">
-            <p>Roommates</p>
-            <h2>{group ? group.members.length : "..."}</h2>
-            <span>{group ? "in your group" : "loading"}</span>
-          </div>
-
-          <div className="stat-card orange">
-            <p>Join code</p>
-            <h2>{group ? group.join_code : "..."}</h2>
-            <span>share with roommates</span>
-          </div>
-        </section>
+            <div className="stat-card orange">
+              <p>Join code</p>
+              <h2>{group.join_code}</h2>
+              <span>share with roommates</span>
+            </div>
+          </section>
+        )}
 
         {loadingGroup ? (
           <div className="panel">
             <h2>Loading roommate group...</h2>
           </div>
-        ) : (
+        ) : group ? (
           <HomeTabs group={group} />
+        ) : (
+          <div className="panel empty-group-panel">
+            <h2>No roommate group yet</h2>
+            <p>Create a new group or join an existing one with an invite code.</p>
+            <button
+              className="group-setup-button"
+              type="button"
+              onClick={() => navigate("/group-setup")}
+            >
+              Join or create a group
+            </button>
+          </div>
         )}
-
-        <section className="bottom-grid">
-          <div className="panel">
-            <h2>Around the house</h2>
-            <p>✅ Emma checked off Take out kitchen trash</p>
-            <p>🧾 Thomas added $24.00 — Toilet paper</p>
-            <p>🧹 Jerry completed Vacuum living room</p>
-          </div>
-
-          <div className="panel">
-            <h2>Up next</h2>
-            <p>🧹 Mop kitchen floor</p>
-            <p>Today · 7:00 PM · You</p>
-          </div>
-        </section>
       </main>
     </div>
   );
