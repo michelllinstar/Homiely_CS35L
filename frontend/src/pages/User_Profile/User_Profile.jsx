@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import AppNavbar from "../../components/Home_components/AppNavbar";
 
 export default function UserProfile() {
-  const { user, logout } = useAuth();
+  const { user, logout, updateUser } = useAuth();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -62,6 +62,9 @@ export default function UserProfile() {
       if (data.has_roommate_group && data.group) {
         setRoommateGroup(data.group);
         setGroupmates(data.group.members || []);
+      } else {
+        setRoommateGroup(null);
+        setGroupmates([]);
       }
     } catch (err) {
       console.log('Error fetching group:', err);
@@ -106,6 +109,7 @@ export default function UserProfile() {
         return;
       }
 
+      updateUser(data.user);
       setSuccess('Profile updated successfully!');
       setIsEditing(false);
     } catch (err) {
@@ -130,6 +134,39 @@ export default function UserProfile() {
   const handleLogout = async () => {
     await logout();
     navigate('/');
+  };
+
+  const handleLeaveGroup = async () => {
+    setError('');
+    setSuccess('');
+    setLoadingGroup(true);
+
+    try {
+      const token = localStorage.getItem('access_token');
+      const res = await fetch('/api/groups/me', {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || 'Could not leave group.');
+        return;
+      }
+
+      updateUser(data.user);
+      setRoommateGroup(null);
+      setGroupmates([]);
+      setSuccess('You left the roommate group.');
+    } catch (err) {
+      setError('Network error. Please try again.');
+      console.log(err);
+    } finally {
+      setLoadingGroup(false);
+    }
   };
 
   return (
@@ -171,6 +208,13 @@ export default function UserProfile() {
                       </div>
                     ))}
                   </div>
+                  <button
+                    className="leave-group-btn"
+                    onClick={handleLeaveGroup}
+                    disabled={loadingGroup}
+                  >
+                    {loadingGroup ? 'Leaving...' : 'Leave Group'}
+                  </button>
                 </div>
               )}
 
