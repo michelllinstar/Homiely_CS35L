@@ -3,15 +3,15 @@ from datetime import timedelta
 from flask import Flask
 from flask_cors import CORS
 
-from auth_routes import auth_bp
-from expense_routes import expenses_bp
+from backend.routes.auth_routes import auth_bp
+from backend.routes.expense_routes import expenses_bp
 from extensions import db, jwt
-from group_routes import groups_bp
+from backend.routes.group_routes import groups_bp
 from seed import seed_demo_group, seed_test_user
-from test_routes import test_bp
-from signup_routes import signup_bp
+from backend.routes.test_routes import test_bp
+from backend.routes.signup_routes import signup_bp
 from availability import bp as availability_bp
-from chore_routes import chores_bp
+from backend.routes.chore_routes import chores_bp
 
 
 def create_app():
