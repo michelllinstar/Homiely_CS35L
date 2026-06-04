@@ -171,6 +171,7 @@ A test user and demo group are seeded on first startup (`python app.py` or the `
 ```
 Email:    test@example.com
 Password: password123
+Demo group code: DEMO123
 ```
 
 ---
