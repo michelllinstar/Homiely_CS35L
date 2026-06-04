@@ -5,23 +5,17 @@ import { useEffect, useState } from "react";
 
 
 const features = [
-  { bg: '#EAF3DE', icon: '🧹', title: 'Smart chore charts', desc: 'Auto-rotating weekly assignments, reminders, and a one-tap check-off everyone can see.' },
-  { bg: '#fbeaf0', icon: '🧾', title: 'Group expense tab', desc: 'Log shared purchases by photo or amount. Homiely figures out who owes whom — no math.' },
-  { bg: '#E6F1FB', icon: '📅', title: 'Shared availability', desc: "See at a glance who's home, in class, or heads-down. Plan dinners and movie nights easily." },
-  { bg: '#FAEEDA', icon: '🔔', title: 'Gentle reminders', desc: 'No more passive-aggressive sticky notes. Homiely nudges the right person at the right time.' },
+  { bg: '#EAF3DE', icon: '🧹', title: 'Chores', desc: 'Add chores for the week and mark them done when someone finishes them.' },
+  { bg: '#fbeaf0', icon: '🧾', title: 'Expenses', desc: 'Keep track of shared stuff like groceries, paper towels, or rent extras.' },
+  { bg: '#E6F1FB', icon: '📅', title: 'Calendar', desc: "See when people are free, busy, or just don't want to be bothered." },
+  { bg: '#FAEEDA', icon: '🔔', title: 'House info', desc: 'Keep the important roommate things in one place instead of losing them in texts.' },
 ];
 
 const steps = [
-  { num: '1', bg: '#f5c4b3', color: '#712B13', title: 'Create your home', desc: 'Sign up with your email and give your place a name. Takes about 30 seconds.' },
-  { num: '2', bg: '#9FE1CB', color: '#085041', title: 'Invite your roommates', desc: 'Send a link or enter their emails. They join in one tap — no account needed to start.' },
-  { num: '3', bg: '#B5D4F4', color: '#0C447C', title: 'Set up your home', desc: "Add chores, recurring expenses, and each person's schedule. Homiely handles the rest." },
-  { num: '4', bg: '#FAEEDA', color: '#633806', title: 'Live in harmony', desc: "Check off tasks, log groceries, and stop wondering whose turn it is to take out the trash." },
-];
-
-const stats = [
-  { num: '2,400+', color: '#D4537E', desc: 'Shared homes using Homiely to stay organized and drama-free.' },
-  { num: '$180k',  color: '#1D9E75', desc: 'In shared expenses tracked and split fairly — without a single argument.' },
-  { num: '12k',    color: '#534AB7', desc: "Chores checked off. That's a lot of clean kitchens and taken-out trash." },
+  { num: '1', bg: '#f5c4b3', color: '#712B13', title: 'Make an account', desc: 'Sign up and log in with your email.' },
+  { num: '2', bg: '#9FE1CB', color: '#085041', title: 'Create or join a group', desc: 'Start a roommate group or join one with a code.' },
+  { num: '3', bg: '#B5D4F4', color: '#0C447C', title: 'Add your house stuff', desc: 'Put in chores, expenses, and availability.' },
+  { num: '4', bg: '#FAEEDA', color: '#633806', title: 'Use it during the week', desc: "Check things off and update the group when something changes." },
 ];
 export default function Landing() {
   const [isNight, setIsNight] = useState(false);
@@ -35,11 +29,11 @@ export default function Landing() {
     <div className="landing-page">
       <Navbar />
       <div className={`landing-content landing-hero ${isNight ? "night" : ""}`}>
-        <p className="hero-eyebrow">Roommate life, beautifully organized</p>
+        <p className="hero-eyebrow">For shared apartments and dorms</p>
         <h1 className="title">Welcome to Homiely</h1>
         <p className="hero-subtitle">
-          Homiely keeps chores, shared expenses, and house plans in one calm place,
-          so your home feels easier to run and nicer to live in.
+          A simple place for roommates to keep track of chores, money, and schedules
+          without digging through the group chat.
         </p>
         <div className="button-row">
           <Button label="Sign up" to="/Signup" className="hero-button hero-signup" />
@@ -49,8 +43,8 @@ export default function Landing() {
 
       <section id="features" className="section section-pink">
         <span className="section-label" style={{ background: '#f5c4b3', color: '#712B13' }}>Features</span>
-        <h2>Everything a shared home needs.</h2>
-        <p className="section-subtitle">Four roommates, one tidy app. Less arguing, more game nights.</p>
+        <h2>The main roommate stuff.</h2>
+        <p className="section-subtitle">Chores, expenses, and schedules in one spot.</p>
         <div className="feature-grid">
           {features.map(({ bg, icon, title, desc }) => (
             <div key={title} className="feature-card">
@@ -64,8 +58,8 @@ export default function Landing() {
 
       <section id="how-it-works" className="section section-green">
         <span className="section-label" style={{ background: '#9FE1CB', color: '#085041' }}>How it works</span>
-        <h2>Up and running in 60 seconds.</h2>
-        <p className="section-subtitle">No spreadsheets, no group chats, no drama.</p>
+        <h2>How to get started.</h2>
+        <p className="section-subtitle">Make a group, invite roommates, and start adding what your home needs.</p>
         <div className="steps-grid">
           {steps.map(({ num, bg, color, title, desc }) => (
             <div key={num} className="step">
@@ -74,21 +68,6 @@ export default function Landing() {
             </div>
           ))}
         </div>
-      </section>
-
-      <section id="about" className="section section-pink">
-        <span className="section-label" style={{ background: '#CECBF6', color: '#3C3489' }}>About</span>
-        <h2>Built by roommates, for roommates.</h2>
-        <p className="section-subtitle">We got tired of the awkward Venmo requests and forgotten dish duties. So we built the app we always wished existed.</p>
-        <div className="about-grid">
-          {stats.map(({ num, color, desc }) => (
-            <div key={num} className="about-stat">
-              <div className="about-stat-number" style={{ color }}>{num}</div>
-              <p>{desc}</p>
-            </div>
-          ))}
-        </div>
-        <p className="about-footnote">Made with love in Los Angeles. Started at UCLA.</p>
       </section>
     </div>
   );
