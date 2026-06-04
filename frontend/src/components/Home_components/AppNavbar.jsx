@@ -1,5 +1,6 @@
 import "./AppNavbar.css";
 import Button from "../Button";
+import jerry from "../../assets/jerry.png";
 import { useAuth } from "../../pages/AuthContext";
 
 export default function AppNavbar() {
@@ -8,7 +9,7 @@ export default function AppNavbar() {
   return (
     <nav className="app-navbar">
       <div className="brand">
-        <span>🏠</span>
+          <img src={jerry} alt="House" style={{ width: '40px', height: '60px', objectFit: 'contain', borderRadius: '12px' }} />
         <h2>Homily</h2>
       </div>
 

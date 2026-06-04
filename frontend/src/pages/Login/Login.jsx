@@ -2,6 +2,7 @@ import "./Login.css";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../AuthContext";
+import Navbar from "../../components/Navbar";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -50,7 +51,9 @@ export default function Login() {
   };
 
   return (
-    <div className="login-page">
+    <div>
+      <Navbar />
+      <div className="login-page">
       <h1>Log In to Homiely</h1>
 
       <form onSubmit={handleSubmit}>
@@ -89,5 +92,7 @@ export default function Login() {
         </Link>
       </p>
     </div>
+    </div>
+    
   );
 }

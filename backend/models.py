@@ -79,8 +79,8 @@ class Chore(db.Model):
     day_of_week = db.Column(db.String(10), nullable=False)      # "Sunday", "Monday", etc.
     time_of_day = db.Column(db.String(50), default="Due anytime")
     week_start_date = db.Column(db.Date, nullable=False)        # The Sunday of that week
-    is_completed = db.Column(db.Integer, default=False)
-    completed_by = db.Column(db.Integer, db.ForeginKey("user.id"), nullable=True)
+    is_completed = db.Column(db.Boolean, default=False)  # correct
+    completed_by = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
     completed_at = db.Column(db.DateTime, nullable=True)
     created_at = db.Column(db.DateTime, default=db.func.now())
 

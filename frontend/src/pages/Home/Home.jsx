@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../AuthContext";
 import AppNavbar from "../../components/Home_components/AppNavbar";
 import HomeTabs from "../../components/Home_components/HomeTabs";
+import jerry from "../../assets/jerry.png";
 
 export default function Home() {
   const { user, accessToken } = useAuth();
@@ -78,7 +79,7 @@ export default function Home() {
           </div>
 
           <div className="house-card">
-            🏡
+            <img src={jerry} alt="House" style={{ width: '180px', height: '200px', objectFit: 'contain', borderRadius: '12px' }} />
             <p>{group ? group.name : "Homily House"}</p>
           </div>
         </section>

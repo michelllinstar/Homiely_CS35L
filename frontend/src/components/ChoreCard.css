@@ -34,3 +34,17 @@
     color: #999;
     margin: 0;
 }
+
+.chore-delete {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: #ccc;
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 0 4px;
+}
+
+.chore-delete:hover {
+    color: #e57373;
+}

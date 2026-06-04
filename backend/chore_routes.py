@@ -12,7 +12,7 @@ def is_group_member(group_id, user_id):
         group_id=group_id, user_id=user_id
     ).first() is not None
 
-@chores_bp.route("/groups/<int:group_id>/chores", methods=["GET"])
+@chores_bp.route("/api/groups/<int:group_id>/chores", methods=["GET"])
 @jwt_required()
 def get_chores(group_id):
     user_id = get_jwt_identity()
@@ -31,7 +31,7 @@ def get_chores(group_id):
 
     return jsonify([c.to_dict() for c in query.all()])
 
-@chores_bp.route("/groups/<int:group_id>/chores", methods=["POST"])
+@chores_bp.route("/api/groups/<int:group_id>/chores", methods=["POST"])
 @jwt_required()
 def create_chore(group_id):
     user_id = get_jwt_identity()
@@ -52,7 +52,7 @@ def create_chore(group_id):
     return jsonify(chore.to_dict()), 201    # Created; a new resource was made (used after POST)
 
 
-@chores_bp.route("/chores/<int:chore_id>", methods=["PATCH"])
+@chores_bp.route("/api/chores/<int:chore_id>", methods=["PATCH"])
 @jwt_required()
 def update_chore(chore_id):
     user_id = get_jwt_identity()
@@ -79,7 +79,7 @@ def update_chore(chore_id):
     return jsonify(chore.to_dict())
 
 
-@chores_bp.route("/chores/<int:chore_id>", methods=["DELETE"])
+@chores_bp.route("/api/chores/<int:chore_id>", methods=["DELETE"])
 @jwt_required()
 def delete_chore(chore_id):
     user_id = get_jwt_identity()
@@ -92,7 +92,7 @@ def delete_chore(chore_id):
     return jsonify({"message": "Chore deleted"})
 
 
-@chores_bp.route("/groups/<int:group_id>/stats", methods=["GET"])
+@chores_bp.route("/api/groups/<int:group_id>/stats", methods=["GET"])
 @jwt_required()
 def get_group_stats(group_id):
     user_id = get_jwt_identity()
