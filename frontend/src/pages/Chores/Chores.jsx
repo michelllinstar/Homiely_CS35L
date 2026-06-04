@@ -95,9 +95,9 @@ function groupChoresByDay(choresArray, roommates) {
     });
     return grouped;
 }
-Is there a way to reorder each day's chores by time due? due anytime could be last on the list. */
+Is there a way to reorder each day's chores by time due? due anytime could be last on the list."" */
 // [GenAI Use] LLM Response Start
-/* Yes, sort the chores array after pushing them all in, inside groupChoresByDay. Add a helper function to convert the time string to a sortable number:
+/* "Yes, sort the chores array after pushing them all in, inside groupChoresByDay. Add a helper function to convert the time string to a sortable number:
 jsx// "Due anytime" sorts last; "Due 7:00 AM" etc. convert to minutes since midnight
 function timeToMinutes(timeOfDay) {
     if (!timeOfDay || timeOfDay === "Due anytime") return Infinity;
@@ -133,8 +133,7 @@ jsxfunction groupChoresByDay(choresArray, roommates) {
     });
 
     return grouped;
-}
-*/
+}" */
 // [GenAI Use] LLM Response End
 // [GenAI Use] Reflection: When visually testing my work, I realized that the chores only show up below each day in the order they were created, not in the order they are due (earliest to latest), which is less user-friendly. Given this is mostly a visual change, I have more pressing things to work on, and I was a little stuck on how to implement this, I asked Claude to help out with this one. I think I understand the code after looking through it, and I will test it before using it for certain.
 
@@ -196,29 +195,6 @@ export default function Chores() {
         };
         fetchData();
     }, [groupId, token, user]);
-
-    /* Fetch all chores for this group and week from backend and group by day. */
-    // async function fetchChores() {
-    //     setLoading(true);
-    //     try {
-    //         const response = await fetch(
-    //             `/api/groups/${groupId}/chores?week_start=${getWeekStartDate()}`,
-    //             { headers: { Authorization: `Bearer ${token}` }}
-    //         );
-    //         if (!response.ok) {
-    //             setError("Could not load chores. Please try logging in again.");
-    //             return;
-    //         }
-    //         const data = await response.json();
-    //         setChores(groupChoresByDay(data));
-    //     }
-    //     catch (err) {
-    //         console.error("Failed to fetch chores:", err);
-    //     }
-    //     finally {
-    //         setLoading(false);
-    //     }
-    // }
 
     async function handleDelete(day, index, choreId) {
         try {
@@ -334,10 +310,16 @@ export default function Chores() {
                 <p className="chores-week">Week of {start} to {end}</p>
             </header>
             {error && <p className="chores-error">{error}</p>}
-            <WeekView chores={chores} onToggle={handleToggle} onDelete={handleDelete} />
+            <div className="chores-card">
+                <WeekView chores={chores} onToggle={handleToggle} onDelete={handleDelete} />
+            </div>
             <div className="chores-bottom">
-            <YourWeek chores={chores} currentUser={user?.name} onToggle={handleToggle} onDelete={handleDelete} />
-                <AddChore onAddChore={handleAddChore} roommates={roommates} />
+                <div className="chores-card">
+                    <YourWeek chores={chores} currentUser={user?.name} onToggle={handleToggle} onDelete={handleDelete} />
+                </div>
+                <div className="chores-card">
+                    <AddChore onAddChore={handleAddChore} roommates={roommates} />
+                </div>
             </div>
         </div>
     );

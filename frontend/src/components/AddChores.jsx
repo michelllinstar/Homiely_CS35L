@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./AddChores.css";
+import Button from "./Button";
 
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -36,7 +37,7 @@ export default function AddChores({ onAddChore, roommates = [] }) {
 
     return (
         <div>
-            <button onClick={() => setOpen(!open)}>Add Chore</button>
+            <Button label="Add Chore" onClick={() => setOpen(!open)} />
 
             {open && (
                 <div>
@@ -84,8 +85,8 @@ export default function AddChores({ onAddChore, roommates = [] }) {
                         </select>
                     </div>
 
-                    <button onClick={handleSubmit}>Add</button>
-                    <button onClick={() => setOpen(false)}>Cancel</button>
+                    <Button label="Add" onClick={handleSubmit} />
+                    <Button label="Cancel" onClick={() => setOpen(false)} />
                 </div>
             )}
         </div>
