@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback } from "react";
+import { createContext, useContext, useState, useCallback, useEffect } from "react";
 
 const AuthContext = createContext(null);
 
@@ -14,6 +14,15 @@ export function AuthProvider({ children }) {
     localStorage.getItem("refresh_token")
   );
 
+  const clearAuth = useCallback(() => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("user");
+    setUser(null);
+    setAccessToken(null);
+    setRefreshToken(null);
+  }, []);
+
   const login = useCallback((userData, nextAccessToken, nextRefreshToken) => {
     localStorage.setItem("access_token", nextAccessToken);
     localStorage.setItem("refresh_token", nextRefreshToken);
@@ -25,20 +34,46 @@ export function AuthProvider({ children }) {
 
   const logout = useCallback(async () => {
     const token = localStorage.getItem("access_token");
-    await fetch("/api/logout", {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    localStorage.clear();
-    setUser(null);
-    setAccessToken(null);
-    setRefreshToken(null);
-  }, []);
+    if (token) {
+      await fetch("/api/logout", {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    }
+    clearAuth();
+  }, [clearAuth]);
 
   const updateUser = useCallback((userData) => {
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
   }, []);
+
+  useEffect(() => {
+    async function syncUserFromBackend() {
+      if (!accessToken) {
+        clearAuth();
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/me", {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+
+        if (!res.ok) {
+          clearAuth();
+          return;
+        }
+
+        const currentUser = await res.json();
+        updateUser(currentUser);
+      } catch (err) {
+        console.log("Could not sync saved login:", err);
+      }
+    }
+
+    syncUserFromBackend();
+  }, [accessToken, clearAuth, updateUser]);
 
   return (
     <AuthContext.Provider value={{ user, accessToken, refreshToken, login, logout, updateUser }}>
