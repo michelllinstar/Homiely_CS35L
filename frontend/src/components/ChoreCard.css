@@ -1,3 +1,6 @@
+/* [GenAI Use] Prompt: "Looks good. For the ChoreCards (and the corresponding references in WeekView/YourWeek), I'd like to make them more visually appealing. For overdue chores, make the card background a pale (or other nice shade) of red; for otherwise incomplete chores, make the card background a pale yellow, and for completed chores, amke the card background a pale green.
+Here is ChoreCards.css at the moment:
+
 .chore-card {
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -27,6 +30,244 @@
 .chore-description {
     font-size: 0.95rem;
     margin: 0 0 4px 0;
+}
+
+.chore-time {
+    font-size: 0.75rem;
+    color: #999;
+    margin: 0;
+}
+
+.chore-delete {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: #ccc;
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 0 4px;
+}
+
+.chore-delete:hover {
+    color: #e57373;
+}" 
+
+As well as the attached files, ChoresCard.jsx, WeekView.jsx, and YourWeek.jsx. */
+/* [GenAI Use] LLM Response Start
+This requires updating four files. ChoreCard needs a day prop to compute whether it's overdue, and WeekView/YourWeek need to pass it down.
+ChoreCard.css:
+.chore-card {
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 8px;
+    border: 1px solid transparent;
+}
+
+.chore-card-completed {
+    background: #e4f4e4;
+    border-color: #a8d5a8;
+}
+
+.chore-card-overdue {
+    background: #fdecea;
+    border-color: #f5c6c3;
+}
+
+.chore-card-pending {
+    background: #fef9e7;
+    border-color: #f5e6a3;
+}
+
+.chore-card-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.chore-checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #5b8c5a;
+}
+
+.chore-assignee {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.chore-description {
+    font-size: 0.95rem;
+    margin: 0 0 4px 0;
+}
+
+.chore-description-completed {
+    text-decoration: line-through;
+    color: #aaa;
+}
+
+.chore-time {
+    font-size: 0.75rem;
+    color: #999;
+    margin: 0;
+}
+
+.chore-delete {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: #ccc;
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 0 4px;
+}
+
+.chore-delete:hover {
+    color: #e57373;
+}
+
+ChoreCard.jsx:
+import "./ChoreCard.css";
+
+const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+function isOverdue(day, timeOfDay, checked) {
+    if (checked) return false;
+
+    const todayIndex = new Date().getDay();
+    const choreDayIndex = DAYS.indexOf(day);
+
+    // Day has already passed this week
+    if (choreDayIndex < todayIndex) return true;
+
+    // Same day — check if the specific time has passed
+    if (choreDayIndex === todayIndex && timeOfDay !== "Due anytime") {
+        const now = new Date();
+        const currentMinutes = now.getHours() * 60 + now.getMinutes();
+        const match = timeOfDay.match(/Due (\d+):(\d+) (AM|PM)/);
+        if (match) {
+            let [_, hour, minutes, period] = match;
+            hour = parseInt(hour);
+            minutes = parseInt(minutes);
+            if (period === "PM" && hour !== 12) hour += 12;
+            if (period === "AM" && hour === 12) hour = 0;
+            if (currentMinutes > hour * 60 + minutes) return true;
+        }
+    }
+
+    return false;
+}
+
+export default function ChoreCard({ assignee, description, timeOfDay = "Due anytime", checked, onToggle, onDelete, day }) {
+    const overdue = isOverdue(day, timeOfDay, checked);
+
+    const cardClass = checked
+        ? "chore-card chore-card-completed"
+        : overdue
+        ? "chore-card chore-card-overdue"
+        : "chore-card chore-card-pending";
+
+    return (
+        <div className={cardClass}>
+            <div className="chore-card-top">
+                <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={onToggle}
+                    className="chore-checkbox"
+                />
+                <span className="chore-assignee">{assignee}</span>
+                {onDelete && (
+                    <button className="chore-delete" onClick={onDelete}>✕</button>
+                )}
+            </div>
+            <p className={`chore-description ${checked ? "chore-description-completed" : ""}`}>
+                {description}
+            </p>
+            <p className="chore-time">{timeOfDay}</p>
+        </div>
+    );
+}
+
+WeekView.jsx — pass day to ChoreCard:
+<ChoreCard
+    key={i}
+    assignee={chore.assignee}
+    description={chore.description}
+    timeOfDay={chore.timeOfDay}
+    checked={chore.checked}
+    day={day}
+    onToggle={() => onToggle(day, i)}
+    onDelete={() => onDelete(day, i, chore.id)}
+/>
+
+YourWeek.jsx — same addition:
+<ChoreCard
+    key={realIndex}
+    assignee={chore.assignee}
+    description={chore.description}
+    timeOfDay={chore.timeOfDay}
+    checked={chore.checked}
+    day={day}
+    onToggle={() => onToggle(day, realIndex)}
+    onDelete={() => onDelete(day, realIndex, chore.id)}
+/>
+
+LLM Response End */
+/* [GenAI Use] Reflection: I think AI use was very helpful here--rather than going through a ton of different color shades manually, Claude was able to quickly pick them out. However, I didn't expect so many changes to be required. I think if I tried it as I originally would have intended, I would have been stuck debugging for a while; this prompt seems to have been correct from visual inspection. However, I had to manually parse the response since it removed my original comments that I found helpful. */
+
+.chore-card {
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 8px;
+    border: 1px solid transparent;
+}
+
+.chore-card-completed {
+    background: #e4f4e4;
+    border-color: #a8d5a8;
+}
+
+.chore-card-overdue {
+    background: #fdecea;
+    border-color: #f5c6c3;
+}
+
+.chore-card-pending {
+    background: #fef9e7;
+    border-color: #f5e6a3;
+}
+
+.chore-card-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.chore-checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #5b8c5a;
+}
+
+.chore-assignee {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.chore-description {
+    font-size: 0.95rem;
+    margin: 0 0 4px 0;
+}
+
+.chore-description-completed {
+    text-decoration: line-through;
+    color: #aaa;
 }
 
 .chore-time {

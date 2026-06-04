@@ -39,12 +39,12 @@ export default function AddChores({ onAddChore, roommates = [] }) {
         <div>
             <Button label="Add Chore" onClick={() => setOpen(!open)} />
 
+            {/* [GenAI Use] Refer to AddChores.css for prompt and reflection. */}
             {open && (
-                <div>
+                <div className="add-chores-form">
                     <h3>Add a new chore</h3>
 
-                    {/* Chore name */}
-                    <div>
+                    <div className="add-chores-field">
                         <label>Chore</label>
                         <input
                             type="text"
@@ -55,7 +55,7 @@ export default function AddChores({ onAddChore, roommates = [] }) {
                     </div>
 
                     {/* Roommate dropdown */}
-                    <div>
+                    <div className="add-chores-field">
                         <label>Assign to</label>
                         <select value={assignee} onChange={(e) => setAssignee(e.target.value)}>
                             <option value="">Select a roommate</option>
@@ -66,7 +66,7 @@ export default function AddChores({ onAddChore, roommates = [] }) {
                     </div>
 
                     {/* Day dropdown */}
-                    <div>
+                    <div className="add-chores-field">
                         <label>Day</label>
                         <select value={day} onChange={(e) => setDay(e.target.value)}>
                             {DAYS.map((d) => (
@@ -76,7 +76,7 @@ export default function AddChores({ onAddChore, roommates = [] }) {
                     </div>
 
                     {/* Time dropdown */}
-                    <div>
+                    <div className="add-chores-field">
                         <label>Time</label>
                         <select value={timeOfDay} onChange={(e) => setTimeOfDay(e.target.value)}>
                             {TIMES.map((t) => (
@@ -85,8 +85,10 @@ export default function AddChores({ onAddChore, roommates = [] }) {
                         </select>
                     </div>
 
-                    <Button label="Add" onClick={handleSubmit} />
-                    <Button label="Cancel" onClick={() => setOpen(false)} />
+                    <div className="add-chores-buttons">
+                        <Button label="Add" onClick={handleSubmit} />
+                        <Button label="Cancel" onClick={() => setOpen(false)} />
+                    </div>
                 </div>
             )}
         </div>

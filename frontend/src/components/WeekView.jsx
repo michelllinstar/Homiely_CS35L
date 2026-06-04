@@ -11,15 +11,16 @@ export default function YourWeek({ chores = {}, currentUser, onToggle, onDelete 
                     <h3>{day}</h3>
 
                 {(chores[day] || []).map((chore, i) => (
+                    // [GenAI Use] Refer to ChoreCard.css for prompt and reflection.
                     <ChoreCard
                         key={i}
                         assignee={chore.assignee}
                         description={chore.description}
                         timeOfDay={chore.timeOfDay}
                         checked={chore.checked}
+                        day={day}
                         onToggle={() => onToggle(day, i)}
                         onDelete={() => onDelete(day, i, chore.id)}
-
                     />
                 ))}
 

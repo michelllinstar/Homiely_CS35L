@@ -1,0 +1,171 @@
+/* [GenAI Use] Prompt: "I want to add padding between the buttons on this page and the text preceding it. Here is my code:
+.add-chores-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.add-chores-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.add-chores-field label {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #3e5240;
+}
+
+.add-chores-field input,
+.add-chores-field select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.add-chores-field input:focus,
+.add-chores-field select:focus {
+    border-color: #5b8c5a;
+}
+
+.add-chores-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+    
+Here is AddChores.jsx attached as well." */
+/* [GenAI Use] LLM Response Start
+For AddChores.css spacing:
+.add-chores-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.add-chores-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.add-chores-field label {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #3e5240;
+}
+
+.add-chores-field input,
+.add-chores-field select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.add-chores-field input:focus,
+.add-chores-field select:focus {
+    border-color: #5b8c5a;
+}
+
+.add-chores-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+Then in AddChores.jsx apply the new classes:
+{open && (
+    <div className="add-chores-form">
+        <h3>Add a new chore</h3>
+
+        <div className="add-chores-field">
+            <label>Chore</label>
+            <input
+                type="text"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="e.g. Vacuum living room"
+            />
+        </div>
+
+        <div className="add-chores-field">
+            <label>Assign to</label>
+            <select value={assignee} onChange={(e) => setAssignee(e.target.value)}>
+                <option value="">Select a roommate</option>
+                {roommates.map((r) => (
+                    <option key={r.id} value={r.id}>{r.name}</option>
+                ))}
+            </select>
+        </div>
+
+        <div className="add-chores-field">
+            <label>Day</label>
+            <select value={day} onChange={(e) => setDay(e.target.value)}>
+                {DAYS.map((d) => (
+                    <option key={d} value={d}>{d}</option>
+                ))}
+            </select>
+        </div>
+
+        <div className="add-chores-field">
+            <label>Time</label>
+            <select value={timeOfDay} onChange={(e) => setTimeOfDay(e.target.value)}>
+                {TIMES.map((t) => (
+                    <option key={t} value={t}>{t}</option>
+                ))}
+            </select>
+        </div>
+
+        <div className="add-chores-buttons">
+            <Button label="Add" onClick={handleSubmit} />
+            <Button label="Cancel" onClick={() => setOpen(false)} />
+        </div>
+    </div>
+)}
+[GenAI Use] LLM Response End */
+/* [GenAI Use] Reflection: In my opinion, Claude was very useful here in making tedious manual visual edits that simply drain time. Again, it also picked up on the need for additional changes in AddChores.jsx, which I did not anticipate. Looking at the website now, I think the changes it made are good. */
+.add-chores-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.add-chores-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.add-chores-field label {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #3e5240;
+}
+
+.add-chores-field input,
+.add-chores-field select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.add-chores-field input:focus,
+.add-chores-field select:focus {
+    border-color: #5b8c5a;
+}
+
+.add-chores-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
