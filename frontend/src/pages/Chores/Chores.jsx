@@ -8,6 +8,7 @@ import YourWeek from "../../components/YourWeek";
 import AddChore from "../../components/AddChores";
 import AppNavbar from "../../components/Home_components/AppNavbar";
 import Button from "../../components/Button";
+import { getWeekStartDate } from "../../utils/chores";
 
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -42,14 +43,6 @@ function getWeekRange() {
     const format = (d) => d.toLocaleDateString("en-US", { month: "long", day: "numeric" });
 
     return { start: format(sunday), end: format(saturday) };
-}
-
-/* Computes date of most recent Sunday, which is sent to the backend as the week_start and week_start_date query parameters when fetching and creating chores. */
-function getWeekStartDate() {
-    const today = new Date();
-    const sunday = new Date(today);
-    sunday.setDate(today.getDate() - today.getDay());
-    return sunday.toISOString().split("T")[0];          // Formatted as "YYYY-MM-DD"
 }
 
 /* Since the backend returns a flat array, group by day for the WeekView component. */
