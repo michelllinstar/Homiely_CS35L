@@ -40,26 +40,16 @@
   line-height: 1.5;
 }
 
-.hero-buttons {
-  display: flex;
-  gap: 14px;
-  margin-top: 24px;
-}
-
-.hero-buttons button {
-  padding: 15px 24px;
+.group-setup-button {
+  margin-top: 18px;
+  padding: 14px 22px;
   border: none;
   border-radius: 999px;
   background: #5b8c5a;
   color: white;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 8px 0 rgba(45, 58, 46, 0.25);
-}
-
-.secondary-button {
-  background: #fff7ee !important;
-  color: #2d3a2e !important;
+  box-shadow: 0 8px 0 rgba(45, 58, 46, 0.22);
 }
 
 .house-card {
@@ -81,7 +71,7 @@
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
   margin-bottom: 22px;
 }
@@ -112,10 +102,6 @@
   font-size: 14px;
 }
 
-.peach {
-  background: rgba(255, 214, 195, 0.55);
-}
-
 .blue {
   background: rgba(218, 230, 255, 0.55);
 }
@@ -124,8 +110,6 @@
   background: rgba(255, 224, 188, 0.55);
 }
 
-.bottom-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 18px;
+.empty-group-panel p {
+  margin: 8px 0 0;
 }

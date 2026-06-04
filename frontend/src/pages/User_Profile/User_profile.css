@@ -1,4 +1,11 @@
 /* User_profile.css */
+@font-face {
+  font-family: 'Homiely';
+  src: url('../../assets/qlarendon.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .profile-page {
   min-height: 100vh;
   background: linear-gradient(
@@ -14,7 +21,7 @@
   align-items: center;
   
   padding: 40px 20px;
-  font-family: Arial, sans-serif;
+  font-family: 'Homiely', Arial, sans-serif;
   color: #2d3a2e;
 }
 
@@ -109,7 +116,7 @@
   border: none;
   border-radius: 999px;
   font-size: 15px;
-  font-family: Arial, sans-serif;
+  font-family: 'Homiely', Arial, sans-serif;
   color: #2d3a2e;
   background: white;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
@@ -133,27 +140,32 @@
 
 .edit-btn,
 .save-btn,
-.cancel-btn {
-  padding: 14px 28px;
-  border: none;
+.cancel-btn,
+.logout-btn,
+.leave-group-btn {
+  min-height: 52px;
+  padding: 14px 30px;
+  border: 2px solid rgba(45, 58, 46, 0.08);
   border-radius: 999px;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 900;
+  letter-spacing: 0;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: Arial, sans-serif;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  font-family: 'Homiely', Arial, sans-serif;
+  text-align: center;
 }
 
 .edit-btn {
   grid-column: 1 / -1;
-  background: linear-gradient(135deg, #a9d2ec, #d8ecdb);
+  background: linear-gradient(135deg, #d8ecdb, #a9d2ec);
   color: #2d3a2e;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 0 rgba(45, 58, 46, 0.14), 0 18px 28px rgba(45, 58, 46, 0.1);
   margin-bottom: 12px;
 }
 
 .edit-btn:hover {
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+  box-shadow: 0 8px 0 rgba(45, 58, 46, 0.16), 0 16px 26px rgba(45, 58, 46, 0.14);
   transform: translateY(-2px);
 }
 
@@ -164,15 +176,16 @@
 
 .logout-btn {
   grid-column: 1 / -1;
-  background: #c41c3b;
+  background: #b9354b;
   color: white;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 0 rgba(122, 20, 38, 0.2), 0 18px 28px rgba(196, 28, 59, 0.16);
+  width: 100%;
 }
 
 .logout-btn:hover {
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+  box-shadow: 0 8px 0 rgba(122, 20, 38, 0.24), 0 16px 26px rgba(196, 28, 59, 0.22);
   transform: translateY(-2px);
-  background: #a41530;
+  background: #9f263c;
 }
 
 .logout-btn:disabled {
@@ -180,14 +193,34 @@
   cursor: not-allowed;
 }
 
+.leave-group-btn {
+  width: 100%;
+  margin-top: 14px;
+  background: #fff3df;
+  color: #6f3b08;
+  border-color: rgba(111, 59, 8, 0.12);
+  box-shadow: 0 8px 0 rgba(111, 59, 8, 0.12), 0 16px 24px rgba(122, 60, 0, 0.1);
+}
+
+.leave-group-btn:hover:not(:disabled) {
+  background: #ffe1b5;
+  box-shadow: 0 6px 0 rgba(111, 59, 8, 0.14), 0 14px 22px rgba(122, 60, 0, 0.16);
+  transform: translateY(-2px);
+}
+
+.leave-group-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .save-btn {
-  background: linear-gradient(135deg, #a9d2ec, #d8ecdb);
+  background: linear-gradient(135deg, #d8ecdb, #a9d2ec);
   color: #2d3a2e;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 0 rgba(45, 58, 46, 0.14), 0 16px 24px rgba(45, 58, 46, 0.1);
 }
 
 .save-btn:hover:not(:disabled) {
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+  box-shadow: 0 6px 0 rgba(45, 58, 46, 0.16), 0 14px 22px rgba(45, 58, 46, 0.14);
   transform: translateY(-2px);
 }
 
@@ -197,13 +230,14 @@
 }
 
 .cancel-btn {
-  background: #e0e0e0;
+  background: #f0eee6;
   color: #2d3a2e;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 0 rgba(45, 58, 46, 0.1), 0 16px 24px rgba(45, 58, 46, 0.08);
 }
 
 .cancel-btn:hover:not(:disabled) {
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+  background: #e7e2d7;
+  box-shadow: 0 6px 0 rgba(45, 58, 46, 0.12), 0 14px 22px rgba(45, 58, 46, 0.12);
   transform: translateY(-2px);
 }
 
@@ -316,28 +350,4 @@
   margin: 0;
   font-size: 13px;
   color: #666;
-}
-
-.logout-btn {
-  width: 48px;
-  height: 48px;
-  min-width: 48px;
-  border-radius: 12px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #c41c3b;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 20px;
-  box-shadow: 0 10px 24px rgba(196, 28, 59, 0.3);
-  transition: all 0.3s ease;
-}
-
-.logout-btn:hover {
-  background: #a41530;
-  transform: translateY(-2px);
-  box-shadow: 0 14px 28px rgba(196, 28, 59, 0.4);
 }

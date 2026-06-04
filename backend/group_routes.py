@@ -108,6 +108,29 @@ def my_group():
     })
 
 
+@groups_bp.route("/api/groups/me", methods=["DELETE"])
+@jwt_required()
+def leave_my_group():
+    user_id = int(get_jwt_identity())
+    user = User.query.get(user_id)
+
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    membership = get_user_group(user_id)
+
+    if not membership:
+        return jsonify({"message": "User is not in a roommate group"}), 400
+
+    db.session.delete(membership)
+    db.session.commit()
+
+    return jsonify({
+        "message": "Left roommate group",
+        "user": user_to_json(user)
+    })
+
+
 @groups_bp.route("/api/groups/<int:group_id>/members", methods=["GET"])
 @jwt_required()
 def get_group_members(group_id):
