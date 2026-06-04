@@ -222,30 +222,6 @@ return (
     margin-bottom: 0;
 }
 
-/* Button override to match expenses style */
-.chores-page .button {
-    padding: 12px 28px;
-    border: none;
-    border-radius: 999px;
-    font-size: 15px;
-    font-weight: bold;
-    font-family: Arial, sans-serif;
-    cursor: pointer;
-    background: #5b8c5a;
-    color: white;
-    box-shadow: 0 8px 20px rgba(45, 58, 46, 0.18);
-    transition: all 0.2s ease;
-}
-
-.chores-page .button:hover {
-    background: #4f7d4e;
-    transform: translateY(-3px);
-}
-
-.chores-page .button:active {
-    transform: translateY(0);
-}
-
 @media (max-width: 768px) {
     .chores-bottom {
         flex-direction: column;

@@ -169,3 +169,25 @@ Then in AddChores.jsx apply the new classes:
     gap: 8px;
     margin-top: 4px;
 }
+
+.add-chores-buttons .button {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    background: #5b8c5a;
+    color: white;
+    box-shadow: 0 8px 20px rgba(45, 58, 46, 0.18);
+    transition: all 0.2s ease;
+}
+
+.add-chores-buttons .button:hover {
+    background: #4f7d4e;
+    transform: translateY(-3px);
+}
+
+.add-chores-buttons .button:active {
+    transform: translateY(0);
+}
