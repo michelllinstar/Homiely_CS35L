@@ -158,6 +158,7 @@ return (
 [GenAI Use] LLM Response End */
 /* [GenAI Use] Reflection: I tried my own CSS styling, as shown in the prompt, but it looked pretty ugly. My teammates created a nice looking theme for their pages, so to be consistent (and make the project visually appealing) in addition to saving time implementing more useful features, I gave Claude a "template" from Expenses.css to base this off of. I took a look and I liked what I saw. */
 
+/* [GenAI Use] Generated code start */
 /* Page frame matches .availability-page so Chores, Expenses, and Availability
    share the same gradient, sizing, padding, and scroll behavior. */
 .chores-page {
@@ -244,6 +245,7 @@ return (
         padding: calc(80px + 1rem) 20px 32px;
     }
 }
+/* [GenAI Use] Generated code end */
 
 /* [GenAI Use] Prompt: Write me CSS for the Chores.jsx file attached's new toggle function. */
 /* [GenAI Use] LLM Response Start
@@ -273,14 +275,17 @@ Add to Chores.css:
 [GenAI Use] LLM Response End */
 /* [GenAI Use] Reflection: This use of Claude worked in saving me time making the components look nice. I think it would have taken me a lot of time to do this manually; additionally, since this is a last-minute addition, I am better off working on other parts of the project.*/
 
+/* [GenAI Use] Generated code start */
 .chores-header-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
+/* [GenAI Use] Generated code end */
 
 /* [GenAI Use] Prompt: "Style the Chores week/month toggle to match the Availability page's segmented .toggleview control, and place it below the 'Week of' line, left-aligned and only as wide as its buttons." */
 /* [GenAI Use] Reflection: The response gave me a clean copy of Availability's .toggleview styles, which was good for keeping the look consistent across pages. It wasn't complete though — once the toggle moved out of the flex header row, the block-level container stretched across the whole page width, which looked wrong. The model's first version didn't account for that, so I added width: fit-content to shrink it to its buttons and margin-top to space it below the week label. I verified in the browser that it now renders compact and left-aligned. A future improvement would be to factor these shared toggle styles into a common stylesheet instead of duplicating them in both Chores.css and Availability.css. */
+/* [GenAI Use] Generated code start */
 /* Segmented view toggle matches the Availability page's .toggleview control. */
 .toggleview {
     display: flex;
@@ -312,3 +317,4 @@ Add to Chores.css:
     color: #2d3a2e;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+/* [GenAI Use] Generated code end */

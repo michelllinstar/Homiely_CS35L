@@ -1,5 +1,5 @@
 // [GenAI Use] Prompt: "Rename the Calendar page to Availability and show the shared EmptyState prompting the user to create/join a roommate group when they have none."
-// [GenAI Use] Reflection: The response was good and notably careful about hook ordering — it kept the hooks above the early return so the new group guard doesn't violate rules-of-hooks, a common mistake. I verified the rename is complete and that the guard renders before the availability grid. No fixes needed beyond confirming the hook placement.
+// [GenAI Use] Reflection: The response was good and notably careful about hook ordering. It kept the hooks above the early return so the new group guard doesn't violate rules-of-hooks, a common mistake. I verified the rename is complete and that the guard renders before the availability grid. No fixes needed beyond confirming the hook placement.
 
 import "./Availability.css";
 import Button from "../../components/Button";
@@ -27,8 +27,8 @@ export default function Availability() {
 
     const [activeView, setActiveView] = useState('Day');
     const [editMode, setEditMode] = useState(false);
-    const [sleepStart, setSleepStart] = useState('22');
-    const [sleepEnd, setSleepEnd] = useState('8');
+    const [sleepStart, setSleepStart] = useState('0');
+    const [sleepEnd, setSleepEnd] = useState('7');
     const [sleepSaved, setSleepSaved] = useState(false);
     const confirmRef = useRef(null);
     const sleepRef = useRef(null);
@@ -52,40 +52,56 @@ export default function Availability() {
         setEditMode(false);
     };
 
+    // Returns the list of hours covered by a sleep schedule, handling overnight wraparound.
+    const sleepHoursBetween = (start, end) => {
+        const hours = [];
+        if (start <= end) {
+            for (let h = start; h < end; h++) hours.push(h);
+        } else {
+            for (let h = start; h < 24; h++) hours.push(h);
+            for (let h = 0; h < end; h++) hours.push(h);
+        }
+        return hours;
+    };
+
     const handleSaveSleep = async () => {
         const start = parseInt(sleepStart);
         const end = parseInt(sleepEnd);
+
+        // Capture the previously-saved schedule before overwriting it so we can
+        // clear hours that used to be sleep but no longer are.
+        const prev = sleepRef.current;
         sleepRef.current = { start, end };
 
         const token = localStorage.getItem('access_token');
 
-        // Build list of sleep hours handling overnight wraparound
-        const sleepHours = [];
-        if (start <= end) {
-            for (let h = start; h < end; h++) sleepHours.push(h);
-        } else {
-            for (let h = start; h < 24; h++) sleepHours.push(h);
-            for (let h = 0; h < end; h++) sleepHours.push(h);
-        }
+        const sleepHours = sleepHoursBetween(start, end);
 
-        // Write private for each sleep hour for every day this week
+        // Hours that were sleep under the previous schedule but aren't anymore —
+        // reset these back to available so the old schedule doesn't linger.
+        const clearedHours = prev
+            ? sleepHoursBetween(prev.start, prev.end).filter(h => !sleepHours.includes(h))
+            : [];
+
+        const postStatus = (dateStr, hour, status) =>
+            fetch('/api/availability/me', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ date: dateStr, hour, status }),
+            });
+
+        // Write private for each new sleep hour and available for each cleared
+        // hour, for every day this week.
         // POST /api/availability/me only writes for the JWT identity —
         // the backend enforces that no other user's data can be modified
         const writes = [];
         for (let i = 0; i < 7; i++) {
             const dateStr = dateForDayIndex(i);
-            sleepHours.forEach(hour => {
-                writes.push(
-                    fetch('/api/availability/me', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: `Bearer ${token}`,
-                        },
-                        body: JSON.stringify({ date: dateStr, hour, status: 'private' }),
-                    })
-                );
-            });
+            sleepHours.forEach(hour => writes.push(postStatus(dateStr, hour, 'private')));
+            clearedHours.forEach(hour => writes.push(postStatus(dateStr, hour, 'available')));
         }
 
         await Promise.all(writes);
@@ -104,6 +120,7 @@ export default function Availability() {
         return h < 12 ? `${h} AM` : `${h - 12} PM`;
     };
 
+    // [GenAI Use] Generated code start
     // A shared availability calendar only makes sense within a roommate group.
     // If the user has not joined one yet, prompt them to set one up.
     if (!groupId) {
@@ -119,6 +136,7 @@ export default function Availability() {
             </div>
         );
     }
+    // [GenAI Use] Generated code end
 
     return (
         <div className="availability-page">

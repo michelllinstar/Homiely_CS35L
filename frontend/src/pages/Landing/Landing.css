@@ -1,6 +1,8 @@
 /* [GenAI Use] Prompt: "Unify every font on the site to the 'Homily' brand font and standardize all border-radius values to 16px." */
 /* [GenAI Use] Reflection: The response handled this well — unifying the font and border-radius is repetitive, multi-file work that the AI applied consistently and faster than I could by hand. It wasn't perfect, though: I had to check it didn't flatten radii that were intentionally different on a few elements, and that the 'Homily' font actually loads rather than silently falling back. After confirming the font and 16px corners render consistently site-wide, the change was good to keep. */
 
+/* [GenAI Use] Generated code start */
+
 @font-face {
     font-family: 'Homily'; 
     src: url('../../assets/qlarendon.otf') format('opentype'); 
@@ -370,3 +372,5 @@ body {
     width: 100%;
   }
 }
+
+/* [GenAI Use] Generated code end */

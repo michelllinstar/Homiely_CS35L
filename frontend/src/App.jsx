@@ -8,7 +8,9 @@ import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import Verification from "./pages/Verification/Verification";
 import Home from "./pages/Home/Home";
+// [GenAI Use] Generated code start
 import Availability from "./pages/Availability/Availability";
+// [GenAI Use] Generated code end
 import Expenses from "./pages/Expenses/Expenses"
 import { AuthProvider } from "./pages/AuthContext";
 import Chores from "./pages/Chores/Chores";
@@ -57,11 +59,13 @@ function App() {
               <Chores />
             </ProtectedRoute>
           } />
+          {/* [GenAI Use] Generated code start */}
           <Route path="/availability" element={
             <ProtectedRoute>
               <Availability />
             </ProtectedRoute>
           } />
+          {/* [GenAI Use] Generated code end */}
           <Route path="/expenses" element={
             <ProtectedRoute>
               <Expenses />

@@ -1,5 +1,5 @@
 // [GenAI Use] Prompt: "Rename the brand to Homily and the Calendar nav link to Availability (pointing at /availability)."
-// [GenAI Use] Reflection: The response handled the rename reliably, updating both the brand text and the nav link target in one pass. I confirmed the link points at /availability and matches the renamed route so navigation doesn't 404. Straightforward and correct — no fixes needed beyond that check.
+// [GenAI Use] Reflection: The response handled the rename reliably, updating both the brand text and the nav link target in one pass. I confirmed the link points at /availability and matches the renamed route so navigation doesn't 404. Straightforward and correct.
 
 import "./AppNavbar.css";
 import Button from "../Button";
@@ -13,14 +13,18 @@ export default function AppNavbar() {
     <nav className="app-navbar">
       <div className="brand">
           <img src={jerry} alt="House" style={{ width: '40px', height: '60px', objectFit: 'contain', borderRadius: '12px' }} />
+        {/* [GenAI Use] Generated code start */}
         <h2>Homily</h2>
+        {/* [GenAI Use] Generated code end */}
       </div>
 
       <div className="nav-links">
         <Button label="Home" to="/home" />
         <Button label="Chores" to="/chores" />
         <Button label="Expenses" to="/expenses" />
+        {/* [GenAI Use] Generated code start */}
         <Button label="Availability" to="/availability" />
+        {/* [GenAI Use] Generated code end */}
       </div>
 
       {/* 6/3 12:48 am: added user profile button to link to profile page */}

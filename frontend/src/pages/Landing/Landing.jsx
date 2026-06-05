@@ -10,7 +10,9 @@ import { useEffect, useState } from "react";
 const features = [
   { bg: '#EAF3DE', icon: '🧹', title: 'Chores', desc: 'Add chores for the week and mark them done when someone finishes them.' },
   { bg: '#fbeaf0', icon: '🧾', title: 'Expenses', desc: 'Keep track of shared stuff like groceries, paper towels, or rent extras.' },
+  /* [GenAI Use] Generated code start */
   { bg: '#E6F1FB', icon: '📅', title: 'Availability', desc: "See when people are free, busy, or just don't want to be bothered." },
+  /* [GenAI Use] Generated code end */
   { bg: '#FAEEDA', icon: '🔔', title: 'House info', desc: 'Keep the important roommate things in one place instead of losing them in texts.' },
 ];
 

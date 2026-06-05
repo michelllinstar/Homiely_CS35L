@@ -1,6 +1,8 @@
 /* [GenAI Use] Prompt: "Match the Expenses page to the Availability page (full-screen frame, tan #faefd8 cards, translucent-white inputs, left-aligned title) and let buttons use the shared Button component." */
 /* [GenAI Use] Reflection: The response did this consistency pass well, bringing the cards, inputs, and buttons in line with the Availability page without me restyling each by hand. I confirmed they render consistently with the other pages and that buttons still use the shared component styles. Solid; no rework needed. */
 
+/* [GenAI Use] Generated code start */
+
 /* Expenses.css */
 
 /* Page frame matches .availability-page so Expenses, Chores, and Availability
@@ -365,3 +367,5 @@
 .add-expense-form .checkbox-group input[type="checkbox"] {
   display: none;
 }
+
+/* [GenAI Use] Generated code end */

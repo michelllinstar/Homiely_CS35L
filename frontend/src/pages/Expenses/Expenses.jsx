@@ -99,6 +99,7 @@ export default function Expenses() {
 
   if (loading) return <div className="expenses-page"><p>Loading...</p></div>;
 
+  // [GenAI Use] Generated code start
   if (!user) {
     return (
       <div className="expenses-page">
@@ -130,6 +131,7 @@ export default function Expenses() {
       </div>
     );
   }
+  // [GenAI Use] Generated code end
 
   return (
    <div>

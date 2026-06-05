@@ -136,6 +136,7 @@ Then in AddChores.jsx apply the new classes:
 )}
 [GenAI Use] LLM Response End */
 /* [GenAI Use] Reflection: In my opinion, Claude was very useful here in making tedious manual visual edits that simply drain time. Again, it also picked up on the need for additional changes in AddChores.jsx, which I did not anticipate. Looking at the website now, I think the changes it made are good. */
+/* [GenAI Use] Generated code start */
 .add-chores-form {
     display: flex;
     flex-direction: column;
@@ -197,3 +198,4 @@ Then in AddChores.jsx apply the new classes:
 .add-chores-buttons .button:active {
     transform: translateY(0);
 }
+/* [GenAI Use] Generated code end */

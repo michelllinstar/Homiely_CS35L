@@ -6,7 +6,7 @@ const AVATAR_COLORS = ['#a8d5a8','#8ab4d6','#f0a89e','#f4c542','#c9a8f0','#f0d08
 function buildUsers(members, currentUserId) {
     return members.map((m, i) => ({
         id: m.id,
-        name: m.id === currentUserId ? 'You' : m.name,
+        name: m.name,
         initials: m.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase(),
         avatarColor: AVATAR_COLORS[i % AVATAR_COLORS.length],
         isMe: m.id === currentUserId,
@@ -394,7 +394,7 @@ function DayView({
                                         </span>
                                         <div className="cam-day-cell-text">
                                             <div className="cam-day-cell-name">
-                                                {u.name}{u.isMe ? ' (you)' : ''}
+                                                {u.isMe ? 'You' : u.name}
                                             </div>
                                             <div className="cam-day-cell-status">{statusLabel(s)}</div>
                                         </div>
