@@ -7,7 +7,7 @@ import WeekView from "../../components/WeekView";
 import YourWeek from "../../components/YourWeek";
 import AddChore from "../../components/AddChores";
 import AppNavbar from "../../components/Home_components/AppNavbar";
-import Button from "../../components/Button";
+import EmptyState from "../../components/EmptyState";
 import { getWeekStartDate } from "../../utils/chores";
 
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -278,9 +278,12 @@ export default function Chores() {
     if (!user) {
         return (
             <div className="chores-page">
-                <h1>Chores</h1>
-                <p>Please log in to view chores.</p>
-                <Button to="/login" label="Log in" />
+                <EmptyState
+                    title="Chores"
+                    message="Please log in to view chores."
+                    actionLabel="Log in"
+                    actionTo="/login"
+                />
             </div>
         );
     }
@@ -289,9 +292,13 @@ export default function Chores() {
     if (!groupId) {
         return (
             <div className="chores-page">
-                <h1>Chores</h1>
-                <p>You need to create or join a roommate group before tracking chores.</p>
-                <Button to="/group-setup" label="Set up roommate group" />
+                <AppNavbar />
+                <EmptyState
+                    title="Chores"
+                    message="You need to create or join a roommate group before tracking chores."
+                    actionLabel="Set up roommate group"
+                    actionTo="/group-setup"
+                />
             </div>
         );
     }

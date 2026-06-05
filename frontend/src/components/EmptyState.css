@@ -1,0 +1,23 @@
+/* Mirrors the Calendar empty-state layout so every page that lacks content
+   (no roommate group, logged out, etc.) is centered and styled identically. */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 14px;
+    flex: 1;
+    min-height: 70vh;
+}
+
+.empty-state-title {
+    margin: 0;
+    line-height: 1;
+}
+
+.empty-state-message {
+    margin: 0;
+    max-width: 420px;
+    line-height: 1.5;
+}

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../AuthContext";
-import Button from "../../components/Button";
 import AddExpenseForm from "./AddExpenseForm";
 import ExpenseList from "./ExpenseList";
 import BalanceSummary from "./BalanceSummary";
@@ -8,6 +7,7 @@ import ExpensesSlider from "./ExpensesSlider";
 import "./Expenses.css";
 
 import AppNavbar from "../../components/Home_components/AppNavbar";
+import EmptyState from "../../components/EmptyState";
 // import App from "../../app";
 
 
@@ -99,19 +99,31 @@ export default function Expenses() {
   if (!user) {
     return (
       <div className="expenses-page">
-        <h1>Expenses</h1>
-        <p>Please log in to view expenses.</p>
-        <Button to="/login" label="Log in" />
+        <EmptyState
+          title="Expenses"
+          message="Please log in to view expenses."
+          actionLabel="Log in"
+          actionTo="/login"
+        />
       </div>
     );
   }
 
   if (!groupId) {
     return (
-      <div className="expenses-page">
-        <h1>Expenses</h1>
-        <p>You need to create or join a roommate group before tracking expenses.</p>
-        <Button to="/group-setup" label="Set up roommate group" />
+      <div>
+        {/* Keep AppNavbar outside .expenses-page — the page's descendant
+            styles (.expenses-page .button, h2, etc.) would otherwise clobber
+            the navbar. This mirrors the main render below. */}
+        <AppNavbar />
+        <div className="expenses-page">
+          <EmptyState
+            title="Expenses"
+            message="You need to create or join a roommate group before tracking expenses."
+            actionLabel="Set up roommate group"
+            actionTo="/group-setup"
+          />
+        </div>
       </div>
     );
   }
@@ -121,8 +133,10 @@ export default function Expenses() {
     {/* 6/3 12:48 am: added navbar to expenses page */}
     <AppNavbar />
     <div className="expenses-page">
-      
-      <h1>Expenses</h1>
+      <header className="expenses-header">
+        <h1 className="expenses-title">Expenses</h1>
+        <p className="expenses-subtitle">Track shared costs with your roommates</p>
+      </header>
       {error && <p className="expenses-error">{error}</p>}
       <div className="expenses-grid">
         <div className="expenses-col">

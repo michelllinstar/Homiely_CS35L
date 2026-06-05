@@ -3,6 +3,8 @@ import Button from "../../components/Button";
 import CalendarAvailMo from "../../components/CalendarAvailMo";
 import { useState, useRef } from "react";
 import AppNavbar from "../../components/Home_components/AppNavbar";
+import EmptyState from "../../components/EmptyState";
+import { useAuth } from "../AuthContext";
 
 function dateForDayIndex(dayIndex) {
     const now = new Date();
@@ -14,6 +16,9 @@ function dateForDayIndex(dayIndex) {
 }
 
 export default function Calendar() {
+    const { user } = useAuth();
+    const groupId = user?.roommate_group_id;
+
     const now = new Date();
     const monthYear = now.toLocaleString('default', { month: 'long', year: 'numeric' });
 
@@ -95,6 +100,22 @@ export default function Calendar() {
         if (h === 12) return '12 PM';
         return h < 12 ? `${h} AM` : `${h - 12} PM`;
     };
+
+    // A shared availability calendar only makes sense within a roommate group.
+    // If the user has not joined one yet, prompt them to set one up.
+    if (!groupId) {
+        return (
+            <div className="calendar-page">
+                <AppNavbar />
+                <EmptyState
+                    title="Availability"
+                    message="You need to create or join a roommate group before sharing a calendar."
+                    actionLabel="Set up roommate group"
+                    actionTo="/group-setup"
+                />
+            </div>
+        );
+    }
 
     return (
         <div className="calendar-page">

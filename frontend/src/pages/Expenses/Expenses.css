@@ -1,5 +1,7 @@
 /* Expenses.css */
 
+/* Page frame mirrors .chores-page so Expenses, Chores, and Availability share
+   the same wide, centered container, spacing, and header treatment. */
 .expenses-page {
   min-height: 100vh;
   background: linear-gradient(
@@ -8,20 +10,36 @@
     #d8ecdb 55%,
     #a9d2ec 100%
   );
+  max-width: 1400px;
+  margin: 0 auto;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
   color: #2d3a2e;
   font-family: Arial, sans-serif;
-  padding: 80px 20px 40px;
+  padding: 80px 48px 48px;
+  padding-top: calc(80px + 2rem);
 }
 
-.expenses-page h1 {
+/* Title + subtitle header, matching .chores-header / .chores-title / .chores-week. */
+.expenses-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.expenses-title {
   font-size: 48px;
   font-weight: bold;
   letter-spacing: -1.5px;
-  margin: 0 0 32px;
-  text-align: center;
+  margin: 0 0 8px 0;
+  color: #2d3a2e;
+}
+
+.expenses-subtitle {
+  font-size: 16px;
+  color: #3e5240;
+  margin: 0;
 }
 
 .expenses-page h2 {
@@ -47,6 +65,8 @@
   background: rgba(255, 220, 210, 0.65);
   color: #7a3a2e;
   font-size: 14px;
+  margin-bottom: 1rem;
+  text-align: center;
 }
 
 .expenses-page h3 {
