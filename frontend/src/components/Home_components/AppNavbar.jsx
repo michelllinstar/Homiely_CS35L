@@ -1,5 +1,6 @@
 import "./AppNavbar.css";
 import Button from "../Button";
+import jerry from "../../assets/jerry.png";
 import { useAuth } from "../../pages/AuthContext";
 
 export default function AppNavbar() {
@@ -8,7 +9,7 @@ export default function AppNavbar() {
   return (
     <nav className="app-navbar">
       <div className="brand">
-        <span>🏠</span>
+          <img src={jerry} alt="House" style={{ width: '40px', height: '60px', objectFit: 'contain', borderRadius: '12px' }} />
         <h2>Homily</h2>
       </div>
 
@@ -16,7 +17,7 @@ export default function AppNavbar() {
         <Button label="Home" to="/home" />
         <Button label="Chores" to="/chores" />
         <Button label="Expenses" to="/expenses" />
-        <Button label="Calendar" to="/calendar" />
+        <Button label="Availability" to="/availability" />
       </div>
 
       {/* 6/3 12:48 am: added user profile button to link to profile page */}

@@ -1,8 +1,10 @@
-import "./Calendar.css";
+import "./Availability.css";
 import Button from "../../components/Button";
 import CalendarAvailMo from "../../components/CalendarAvailMo";
 import { useState, useRef } from "react";
 import AppNavbar from "../../components/Home_components/AppNavbar";
+import EmptyState from "../../components/EmptyState";
+import { useAuth } from "../AuthContext";
 
 function dateForDayIndex(dayIndex) {
     const now = new Date();
@@ -13,11 +15,14 @@ function dateForDayIndex(dayIndex) {
     return target.toISOString().slice(0, 10);
 }
 
-export default function Calendar() {
+export default function Availability() {
+    const { user } = useAuth();
+    const groupId = user?.roommate_group_id;
+
     const now = new Date();
     const monthYear = now.toLocaleString('default', { month: 'long', year: 'numeric' });
 
-    const [activeView, setActiveView] = useState('Month');
+    const [activeView, setActiveView] = useState('Day');
     const [editMode, setEditMode] = useState(false);
     const [sleepStart, setSleepStart] = useState('22');
     const [sleepEnd, setSleepEnd] = useState('8');
@@ -96,12 +101,28 @@ export default function Calendar() {
         return h < 12 ? `${h} AM` : `${h - 12} PM`;
     };
 
+    // A shared availability calendar only makes sense within a roommate group.
+    // If the user has not joined one yet, prompt them to set one up.
+    if (!groupId) {
+        return (
+            <div className="availability-page">
+                <AppNavbar />
+                <EmptyState
+                    title="Availability"
+                    message="You need to create or join a roommate group before sharing a calendar."
+                    actionLabel="Set up roommate group"
+                    actionTo="/group-setup"
+                />
+            </div>
+        );
+    }
+
     return (
-        <div className="calendar-page">
+        <div className="availability-page">
             <AppNavbar />
             <div className="vstack">
-                <h1 className="calendar-title">Availability</h1>
-                <p className="calendar-subtitle">Shared schedule · {monthYear}</p>
+                <h1 className="availability-title">Availability</h1>
+                <p className="availability-subtitle">Shared schedule · {monthYear}</p>
             </div>
 
             <div className="vstack">

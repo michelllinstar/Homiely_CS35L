@@ -69,7 +69,7 @@ export default function Signup() {
 
   return (
     <div className="signup-page">
-      <h1>Sign Up for Homiely</h1>
+      <h1>Sign Up for Homily</h1>
       <div className="signup-form">
         <div>
           <label>First Name</label>
@@ -123,14 +123,23 @@ export default function Signup() {
             onChange={(e) => setDropdown1(e.target.value)}
             className="signup-dropdown"
           >
-            <option value="">Select your residence</option>
+            <option value="Centennial">Centennial</option>
             <option value="De Neve">De Neve</option>
-            <option value="Sproul">Sproul</option>
-            <option value="Rieber">Rieber</option>
-            <option value="Hedrick">Hedrick</option>
             <option value="Dykstra">Dykstra</option>
-            <option value="Covel">Covel</option>
+            <option value="Gardenia">Gardenia</option>
+            <option value="Hedrick">Hedrick</option>
+            <option value="Hedrick Summit">Hedrick Summit</option>
             <option value="Hitch">Hitch</option>
+            <option value="Holly">Holly</option>
+            <option value="Olympic">Olympic</option>
+            <option value="Rieber">Rieber</option>
+            <option value="Rieber Terrace">Rieber Terrace</option>
+            <option value="Rieber Vista">Rieber Vista</option>
+            <option value="Saxon">Saxon</option>
+            <option value="Sproul">Sproul</option>
+            <option value="Sproul Cove">Sproul Cove</option>
+            <option value="Sproul Landing">Sproul Landing</option>
+            <option value="Sunset Village">Sunset Village</option>
           </select>
         </div>
         <div className="signup-form-full">

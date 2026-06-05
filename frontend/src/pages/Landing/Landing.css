@@ -1,12 +1,12 @@
 @font-face {
-    font-family: 'Homiely'; 
+    font-family: 'Homily'; 
     src: url('../../assets/qlarendon.otf') format('opentype'); 
     font-weight: normal;
     font-style: normal;
 }
 
 body {
-    font-family: 'Homiely', 'Helvetica', 'Arial', sans-serif; 
+    font-family: 'Homily', 'Helvetica', 'Arial', sans-serif; 
 }
 
 .landing-page {
@@ -336,42 +336,6 @@ body {
   color: #888;
   margin: 0;
   line-height: 1.5;
-}
-
-/* ── About stats ── */
-.about-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-  width: min(100%, 700px);
-  margin: 0 auto;
-  text-align: left;
-}
-
-.about-stat {
-  background: #fff;
-  border: 0.5px solid #e5e5e5;
-  border-radius: 12px;
-  padding: 1.25rem;
-}
-
-.about-stat-number {
-  font-size: 2rem;
-  font-weight: 500;
-  margin-bottom: 4px;
-}
-
-.about-stat p {
-  font-size: 13px;
-  color: #888;
-  margin: 0;
-  line-height: 1.5;
-}
-
-.about-footnote {
-  font-size: 13px;
-  color: #aaa;
-  margin-top: 2.5rem;
 }
 
 /* Move the hero subtitle out of inline styles */

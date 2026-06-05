@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./AddChores.css";
+import Button from "./Button";
 
-const ROOMMATES = ["HD", "SM", "AA"];
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 function generateTimes() {
@@ -17,19 +17,19 @@ function generateTimes() {
 
 const TIMES = generateTimes();
 
-export default function AddChores({ onAddChore }) {
+export default function AddChores({ onAddChore, roommates = [] }) {
     const [open, setOpen] = useState(false);
     const [description, setDescription] = useState("");
-    const [assignee, setAssignee] = useState(ROOMMATES[0]);
+    const [assignee, setAssignee] = useState("");
     const [day, setDay] = useState("Sunday");
     const [timeOfDay, setTimeOfDay] = useState("Due anytime");
 
     function handleSubmit() {
-        if (!description) return;
+        if (!description || !assignee) return;
         onAddChore({ description, assignee, day, timeOfDay, checked: false });
         // Reset form
         setDescription("");
-        setAssignee(ROOMMATES[0]);
+        setAssignee("");
         setDay("Sunday");
         setTimeOfDay("Due anytime");
         setOpen(false);
@@ -37,14 +37,14 @@ export default function AddChores({ onAddChore }) {
 
     return (
         <div>
-            <button onClick={() => setOpen(!open)}>Add Chore</button>
+            <Button label="Add Chore" onClick={() => setOpen(!open)} />
 
+            {/* [GenAI Use] Refer to AddChores.css for prompt and reflection. */}
             {open && (
-                <div>
+                <div className="add-chores-form">
                     <h3>Add a new chore</h3>
 
-                    {/* Chore name */}
-                    <div>
+                    <div className="add-chores-field">
                         <label>Chore</label>
                         <input
                             type="text"
@@ -55,17 +55,18 @@ export default function AddChores({ onAddChore }) {
                     </div>
 
                     {/* Roommate dropdown */}
-                    <div>
+                    <div className="add-chores-field">
                         <label>Assign to</label>
                         <select value={assignee} onChange={(e) => setAssignee(e.target.value)}>
-                            {ROOMMATES.map((r) => (
-                                <option key={r} value={r}>{r}</option>
+                            <option value="">Select a roommate</option>
+                            {roommates.map((r) => (
+                                <option key={r.id} value={r.id}>{r.name}</option>
                             ))}
                         </select>
                     </div>
 
                     {/* Day dropdown */}
-                    <div>
+                    <div className="add-chores-field">
                         <label>Day</label>
                         <select value={day} onChange={(e) => setDay(e.target.value)}>
                             {DAYS.map((d) => (
@@ -75,7 +76,7 @@ export default function AddChores({ onAddChore }) {
                     </div>
 
                     {/* Time dropdown */}
-                    <div>
+                    <div className="add-chores-field">
                         <label>Time</label>
                         <select value={timeOfDay} onChange={(e) => setTimeOfDay(e.target.value)}>
                             {TIMES.map((t) => (
@@ -84,8 +85,10 @@ export default function AddChores({ onAddChore }) {
                         </select>
                     </div>
 
-                    <button onClick={handleSubmit}>Add</button>
-                    <button onClick={() => setOpen(false)}>Cancel</button>
+                    <div className="add-chores-buttons">
+                        <Button label="Add" onClick={handleSubmit} />
+                        <Button label="Cancel" onClick={() => setOpen(false)} />
+                    </div>
                 </div>
             )}
         </div>

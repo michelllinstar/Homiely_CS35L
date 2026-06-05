@@ -1,31 +1,57 @@
 import "./Home.css";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import AppNavbar from "../../components/Home_components/AppNavbar";
 import HomeTabs from "../../components/Home_components/HomeTabs";
+import { getAmountOwedToUser } from "../../utils/balances";
+import { getOpenChoresCount, getWeekStartDate } from "../../utils/chores";
+import jerry from "../../assets/jerry.png";
 
+// -----------------------------------------------------------------------------------------------------------------------
+// Home is the main dashboard page after login
+// Whenever React loads /home, it will check if the user is authenticated (via ProtectedRoute in app.jsx). If so, this component will render and pull in the user's group and home stats to display.
+// -----------------------------------------------------------------------------------------------------------------------
 export default function Home() {
+  // ProtectedRoute makes sure user exists before this page renders.
   const { user, accessToken } = useAuth();
-
+  const navigate = useNavigate();
+  // -----------------------------------------------------------------------------------------------------------------------
+  // useState to track the main pieces of data we need: group info and the stats for the cards. Each has its own loading state so we can show partial data as it comes in.
+  // Group data controls most of the page.
+  // -----------------------------------------------------------------------------------------------------------------------
   const [group, setGroup] = useState(null);
   const [loadingGroup, setLoadingGroup] = useState(true);
 
+  // These cards come from chores and expenses.
+  const [homeStats, setHomeStats] = useState({
+    // Initial value
+    openChores: 0,
+    owedToMe: 0,
+  });
+  const [loadingStats, setLoadingStats] = useState(false);
+
+  // Get the user's roommate group first. Other home data depends on it
+  // useEffect runs code when component loads or when dependencies change
   useEffect(() => {
     async function fetchGroup() {
+      // If there's no user or access token, we can't fetch group data
       if (!user || !accessToken) {
         setLoadingGroup(false);
         return;
       }
 
+      // Call to backend
+      // If the user is in a group, we'll get the group data. If not, we'll just show the empty state.
       try {
         const res = await fetch("/api/groups/me", {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-
+        // Backend sends group data if user is in a group, or 404 if not. Both are expected, so we handle them gracefully
         const data = await res.json();
-
+        // If the user is in a group, store it. Otherwise we'll show the empty state 
         if (data.has_roommate_group) {
           setGroup(data.group);
         }
@@ -35,21 +61,55 @@ export default function Home() {
         setLoadingGroup(false);
       }
     }
-
     fetchGroup();
   }, [user, accessToken]);
 
-  if (!user) {
-    return (
-      <div className="home-page">
-        <AppNavbar />
-        <main className="home-shell">
-          <h1>No user is currently logged in!</h1>
-        </main>
-      </div>
-    );
-  }
+  // Pull the current week's chores and current expense balances for the cards
+  useEffect(() => {
+    async function fetchHomeStats() {
+      if (!user || !accessToken || !group) return;
+      setLoadingStats(true);
 
+      try {
+        const choresRes = await fetch(
+          `/api/groups/${group.id}/chores?week_start=${getWeekStartDate()}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        const expensesRes = await fetch(`/api/expenses/${group.id}`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+        });
+
+        if (!choresRes.ok || !expensesRes.ok) {
+          console.log("Could not load home stats.");
+          return;
+        }
+
+        const chores = await choresRes.json();
+        const expenses = await expensesRes.json();
+        const userId = Number(user.id);
+
+        // Only count chores assigned to this user that are not done yet.
+        setHomeStats({
+          openChores: getOpenChoresCount(chores, userId),
+          owedToMe: getAmountOwedToUser(expenses, userId),
+        });
+      } catch (err) {
+        console.log("Failed to fetch home stats:", err);
+      } finally {
+        setLoadingStats(false);
+      }
+    }
+
+    fetchHomeStats();
+  }, [user, accessToken, group]);
+
+  // The user can be logged in but still not have a roommate group.
   return (
     <div className="home-page">
       <AppNavbar />
@@ -66,71 +126,71 @@ export default function Home() {
             </h1>
 
             <p className="hero-subtitle">
-              {group
-                ? `${group.name} is cozy — ${group.members.length} roommates are in your group.`
-                : "Loading your roommate group..."}
+              {/* Show the right message for loading, grouped, and no-group states. Nested If-statements*/}
+              {loadingGroup
+                ? "Loading your roommate group..."
+                : group
+                  ? `${group.name} is cozy — ${group.members.length} roommates are in your group.`
+                  : "Join or create a roommate group to set up your home."}
             </p>
 
-            <div className="hero-buttons">
-              <button>See my chores</button>
-              <button className="secondary-button">$49.10 owed to you</button>
-            </div>
           </div>
 
           <div className="house-card">
-            🏡
+            <img src={jerry} alt="House" style={{ width: '180px', height: '200px', objectFit: 'contain', borderRadius: '12px' }} />
             <p>{group ? group.name : "Homily House"}</p>
           </div>
         </section>
 
-        <section className="stats-grid">
-          <div className="stat-card">
-            <p>Today's chores</p>
-            <h2>3</h2>
-            <span>2 still open</span>
-          </div>
+        {/* These cards only make sense after a group exists. */}
+        {group && (
+          <section className="stats-grid">
+            <div className="stat-card green">
+              <p>My open chores</p>
+              <h2>{loadingStats ? "..." : homeStats.openChores}</h2>
+              <span>for this week</span>
+            </div>
 
-          <div className="stat-card peach">
-            <p>Group balance</p>
-            <h2>$49.10</h2>
-            <span>owed to you</span>
-          </div>
+            <div className="stat-card peach">
+              <p>Owed to me</p>
+              <h2>{loadingStats ? "..." : `$${homeStats.owedToMe.toFixed(2)}`}</h2>
+              <span>unpaid group balance</span>
+            </div>
 
-          <div className="stat-card blue">
-            <p>Roommates</p>
-            <h2>{group ? group.members.length : "..."}</h2>
-            <span>{group ? "in your group" : "loading"}</span>
-          </div>
+            <div className="stat-card blue">
+              <p>Roommates</p>
+              <h2>{group.members.length}</h2>
+              <span>in your group</span>
+            </div>
+ 
+            <div className="stat-card orange">
+              <p>Join code</p>
+              <h2>{group.join_code}</h2>
+              <span>share with roommates</span>
+            </div>
+          </section>
+        )}
 
-          <div className="stat-card orange">
-            <p>Join code</p>
-            <h2>{group ? group.join_code : "..."}</h2>
-            <span>share with roommates</span>
-          </div>
-        </section>
-
+        {/* Main content area: loading, roommate list, or setup prompt. */}
         {loadingGroup ? (
           <div className="panel">
             <h2>Loading roommate group...</h2>
           </div>
-        ) : (
+        ) : group ? (
           <HomeTabs group={group} />
+        ) : (
+          <div className="panel empty-group-panel">
+            <h2>No roommate group yet</h2>
+            <p>Create a new group or join an existing one with an invite code.</p>
+            <button
+              className="group-setup-button"
+              type="button"
+              onClick={() => navigate("/group-setup")}
+            >
+              Join or create a group
+            </button>
+          </div>
         )}
-
-        <section className="bottom-grid">
-          <div className="panel">
-            <h2>Around the house</h2>
-            <p>✅ Emma checked off Take out kitchen trash</p>
-            <p>🧾 Thomas added $24.00 — Toilet paper</p>
-            <p>🧹 Jerry completed Vacuum living room</p>
-          </div>
-
-          <div className="panel">
-            <h2>Up next</h2>
-            <p>🧹 Mop kitchen floor</p>
-            <p>Today · 7:00 PM · You</p>
-          </div>
-        </section>
       </main>
     </div>
   );

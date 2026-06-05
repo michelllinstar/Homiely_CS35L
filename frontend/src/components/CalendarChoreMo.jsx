@@ -1,19 +1,8 @@
 import React, { useState } from "react";
-
-const MONTH_NAMES = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December",
-];
+import ChoreCard from "./ChoreCard";
+import "./CalendarAvailMo.css";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-// Sample chore data — replace or load from props/API as needed.
-// Keys are ISO date strings (YYYY-MM-DD) for easy lookup.
-const SAMPLE_CHORES = {
-    "2026-05-10": ["Take out trash", "Water plants"],
-    "2026-05-12": ["Laundry", "Vacuum"],
-    "2026-05-15": ["Grocery shopping"],
-};
 
 function formatDateKey(year, month, day) {
     const m = String(month + 1).padStart(2, "0");
@@ -21,96 +10,61 @@ function formatDateKey(year, month, day) {
     return `${year}-${m}-${d}`;
 }
 
-function DaysGrid({ year, month, chores, completed, onToggleChore }) {
+export default function CalendarChoreMo({ chores = {}, onToggle, onDelete }) {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+
     const firstDayOfMonth = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const today = new Date();
 
     const cells = [];
 
     for (let i = 0; i < firstDayOfMonth; i++) {
-        cells.push(<div key={`empty-${i}`} className="empty"></div>);
+        cells.push(
+            <div key={`empty-${i}`} className="cam-month-cell cam-month-cell-empty" />
+        );
     }
 
+    // Day cells
     for (let day = 1; day <= daysInMonth; day++) {
         const dateKey = formatDateKey(year, month, day);
         const dayChores = chores[dateKey] || [];
-
-        const isToday =
-            day === today.getDate() &&
-            month === today.getMonth() &&
-            year === today.getFullYear();
+        const isToday = day === today.getDate();
 
         cells.push(
-            <div key={day} className={`day ${isToday ? "today" : ""}`}>
-                <div className="day-number">{day}</div>
-                <ul className="chore-list">
-                    {dayChores.map((chore, idx) => {
-                        const choreId = `${dateKey}-${idx}`;
-                        const isDone = completed[choreId] || false;
-                        return (
-                            <li key={choreId} className="chore-item">
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        checked={isDone}
-                                        onChange={() => onToggleChore(choreId)}
-                                    />
-                                    <span className={isDone ? "chore-done" : ""}>
-                                        {chore}
-                                    </span>
-                                </label>
-                            </li>
-                        );
-                    })}
-                </ul>
+            <div
+                key={day}
+                className={`cam-month-cell ${isToday ? "cam-month-cell-today" : ""}`}
+                style={{ aspectRatio: "unset", minHeight: "80px" }}
+            >
+                <div className="cam-month-date">{day}</div>
+                {dayChores.map((chore) => (
+                    <ChoreCard
+                        key={chore.id}
+                        assignee={chore.assignee}
+                        description={chore.description}
+                        timeOfDay={chore.timeOfDay}
+                        checked={chore.checked}
+                        day={chore.day}
+                        onToggle={() => onToggle(chore.id)}
+                        onDelete={() => onDelete(chore.id)}
+                    />
+                ))}
             </div>
         );
     }
 
-    return <div className="days-grid">{cells}</div>;
-}
-
-export default function CalendarChoreMo() {
-    const [currentDate, setCurrentDate] = useState(new Date());
-    const [completed, setCompleted] = useState({});
-
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-
-    const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
-    const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1));
-
-    const toggleChore = (choreId) => {
-        setCompleted((prev) => ({
-            ...prev,
-            [choreId]: !prev[choreId],
-        }));
-    };
-
     return (
-        <div className="calendar">
-            <div className="header">
-                <button onClick={prevMonth}>◀</button>
-                <h2>
-                    {MONTH_NAMES[month]} {year}
-                </h2>
-                <button onClick={nextMonth}>▶</button>
-            </div>
-
-            <div className="weekdays">
+        <div className="cam">
+            <div className="cam-month-header">
                 {WEEKDAYS.map((d) => (
-                    <div key={d}>{d}</div>
+                    <div key={d} className="cam-month-day-label">{d}</div>
                 ))}
             </div>
-
-            <DaysGrid
-                year={year}
-                month={month}
-                chores={SAMPLE_CHORES}
-                completed={completed}
-                onToggleChore={toggleChore}
-            />
+            <div className="cam-month-grid">
+                {cells}
+            </div>
         </div>
     );
 }

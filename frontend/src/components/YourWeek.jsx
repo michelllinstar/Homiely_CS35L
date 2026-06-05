@@ -3,7 +3,7 @@ import "./YourWeek.css";
 
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-export default function YourWeek({ chores = {}, currentUser, onToggle }) {
+export default function YourWeek({ chores = {}, currentUser, onToggle, onDelete }) {
     // Filter down to only days that have chores assigned to the current user
     const myChores = {};
     DAYS.forEach((day) => {
@@ -32,13 +32,16 @@ export default function YourWeek({ chores = {}, currentUser, onToggle }) {
                             // Find this chore's real index in the full day array
                             const realIndex = chores[day].indexOf(chore);
                             return (
+                                // [GenAI Use] Refer to ChoreCard.css for prompt and reflection.
                                 <ChoreCard
                                     key={realIndex}
                                     assignee={chore.assignee}
                                     description={chore.description}
                                     timeOfDay={chore.timeOfDay}
                                     checked={chore.checked}
+                                    day={day}
                                     onToggle={() => onToggle(day, realIndex)}
+                                    onDelete={() => onDelete(day, realIndex, chore.id)}
                                 />
                             );
                         })}
