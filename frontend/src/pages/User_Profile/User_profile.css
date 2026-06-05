@@ -1,6 +1,6 @@
 /* User_profile.css */
 @font-face {
-  font-family: 'Homiely';
+  font-family: 'Homily';
   src: url('../../assets/qlarendon.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
@@ -21,7 +21,7 @@
   align-items: center;
   
   padding: 40px 20px;
-  font-family: 'Homiely', Arial, sans-serif;
+  font-family: 'Homily', Arial, sans-serif;
   color: #2d3a2e;
 }
 
@@ -116,7 +116,7 @@
   border: none;
   border-radius: 999px;
   font-size: 15px;
-  font-family: 'Homiely', Arial, sans-serif;
+  font-family: 'Homily', Arial, sans-serif;
   color: #2d3a2e;
   background: white;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
@@ -152,7 +152,7 @@
   letter-spacing: 0;
   cursor: pointer;
   transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
-  font-family: 'Homiely', Arial, sans-serif;
+  font-family: 'Homily', Arial, sans-serif;
   text-align: center;
 }
 

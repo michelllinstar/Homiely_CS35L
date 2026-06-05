@@ -30,7 +30,7 @@ export default function Landing() {
       <Navbar />
       <div className={`landing-content landing-hero ${isNight ? "night" : ""}`}>
         <p className="hero-eyebrow">For shared apartments and dorms</p>
-        <h1 className="title">Welcome to Homiely</h1>
+        <h1 className="title">Welcome to Homily</h1>
         <p className="hero-subtitle">
           A simple place for roommates to keep track of chores, money, and schedules
           without digging through the group chat.

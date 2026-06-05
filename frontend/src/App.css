@@ -1,6 +1,6 @@
-/* Global styles for the Homiely app */
+/* Global styles for the Homily app */
 @font-face {
-    font-family: 'Homiely'; 
+    font-family: 'Homily'; 
     src: url('../assets/qlarendon.ttf') format('opentype'); 
     font-weight: normal;
     font-style: normal;
@@ -10,11 +10,11 @@
 
 
 body {
-    font-family: 'Homiely', 'Helvetica', 'Arial', sans-serif; 
+    font-family: 'Homily', 'Helvetica', 'Arial', sans-serif; 
 }
 
 h2, h3, p {
-    font-family: 'HomielySubfont', 'Helvetica', 'Arial', sans-serif;
+    font-family: 'HomilySubfont', 'Helvetica', 'Arial', sans-serif;
 }
 
 .landing-page {

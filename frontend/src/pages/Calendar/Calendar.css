@@ -1,5 +1,5 @@
 @font-face {
-    font-family: 'Homiely'; 
+    font-family: 'Homily'; 
     src: url('../../assets/qlarendon.otf') format('opentype'); 
     font-weight: normal;
     font-style: normal;
@@ -7,12 +7,12 @@
 }
 
 body {
-    font-family: 'Homiely', 'Helvetica', 'Arial', sans-serif; 
+    font-family: 'Homily', 'Helvetica', 'Arial', sans-serif; 
     color: #3d2e13;
 }
 
 @font-face {
-    font-family: 'HomielySubfont';
+    font-family: 'HomilySubfont';
     src: url('../../assets/FinkHeavyR.ttf') format('opentype');
     font-weight: normal;
     font-style: normal;
@@ -20,7 +20,7 @@ body {
 }
 
 * {
-    font-family: 'HomielySubfont', 'Helvetica', 'Arial', sans-serif;
+    font-family: 'HomilySubfont', 'Helvetica', 'Arial', sans-serif;
     color: #3d2e13;
 }
 

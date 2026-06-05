@@ -54,7 +54,7 @@ export default function Login() {
     <div>
       <Navbar />
       <div className="login-page">
-      <h1>Log In to Homiely</h1>
+      <h1>Log In to Homily</h1>
 
       <form onSubmit={handleSubmit}>
         <div>

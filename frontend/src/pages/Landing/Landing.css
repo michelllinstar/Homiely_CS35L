@@ -1,12 +1,12 @@
 @font-face {
-    font-family: 'Homiely'; 
+    font-family: 'Homily'; 
     src: url('../../assets/qlarendon.otf') format('opentype'); 
     font-weight: normal;
     font-style: normal;
 }
 
 body {
-    font-family: 'Homiely', 'Helvetica', 'Arial', sans-serif; 
+    font-family: 'Homily', 'Helvetica', 'Arial', sans-serif; 
 }
 
 .landing-page {

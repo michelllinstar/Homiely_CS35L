@@ -69,7 +69,7 @@ export default function Signup() {
 
   return (
     <div className="signup-page">
-      <h1>Sign Up for Homiely</h1>
+      <h1>Sign Up for Homily</h1>
       <div className="signup-form">
         <div>
           <label>First Name</label>

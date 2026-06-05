@@ -20,7 +20,7 @@ def create_app():
     CORS(app)
 
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
-        "DATABASE_URL", "postgresql://user:password@db/homiely"
+        "DATABASE_URL", "postgresql://user:password@db/homily"
     )
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SECRET_KEY"] = "super_secret_ultra_key"
