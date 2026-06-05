@@ -1,8 +1,8 @@
-# Homiely
+# Homily
 
 > Simplify your roommate problems.
 
-Homiely is a roommate management app for reducing household tension through transparent communication and shared accountability. Users track contributions (utilities, shared expenses), manage a chore chart, and view roommate availability — all in one place.
+Homily is a roommate management app for reducing household tension through transparent communication and shared accountability. Users track contributions (utilities, shared expenses), manage a chore chart, and view roommate availability — all in one place.
 
 ---
 
@@ -75,19 +75,19 @@ pip install -r requirements.txt
 By default, the backend connects to:
 
 ```
-postgresql://user:password@db/homiely
+postgresql://user:password@db/homily
 ```
 
 The hostname `db` resolves inside Docker but not on your local machine. Override it with the `DATABASE_URL` environment variable:
 
 ```bash
-export DATABASE_URL=postgresql://user:password@localhost:5432/homiely
+export DATABASE_URL=postgresql://user:password@localhost:5432/homily
 ```
 
 Create the database in Postgres first:
 
 ```bash
-psql -U user -c "CREATE DATABASE homiely;"
+psql -U user -c "CREATE DATABASE homily;"
 ```
 
 Then start the backend. Running via `python app.py` (instead of `flask run`) is required — it triggers `db.create_all()`, seed user creation, and demo group setup:
