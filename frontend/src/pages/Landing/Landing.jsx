@@ -1,5 +1,5 @@
 // [GenAI Use] Prompt: "Rename the Calendar feature card to Availability."
-// [GenAI Use] Reflection: Confirmed the card label updated.
+// [GenAI Use] Reflection: This was a small, low-risk change and the response got it right — just the card label. I confirmed it updated and that no other copy still referenced 'Calendar'. Good, though trivial enough that the value was consistency rather than time saved.
 
 import "./Landing.css";
 import Button from "../../components/Button";

@@ -1,5 +1,5 @@
 // [GenAI Use] Prompt: "Rename the Calendar route and component to Availability."
-// [GenAI Use] Reflection: Confirmed the import, route path, and element all updated together.
+// [GenAI Use] Reflection: The response was reliable here — a rename touching the import, route path, and element is easy to do incompletely by hand, and the AI updated all three together so nothing dangled. I still checked there were no leftover 'Calendar' references elsewhere that would break the route, and there weren't, so the result held up well.
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 

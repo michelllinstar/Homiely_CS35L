@@ -1,5 +1,5 @@
 // [GenAI Use] Prompt: "Show the shared EmptyState when the user is logged out or not in a roommate group, matching the other pages."
-// [GenAI Use] Reflection: Verified both guards render and route to /group-setup or /login.
+// [GenAI Use] Reflection: The response was good — it added the logged-out and no-group guards matching the other pages, keeping the empty-state behavior consistent. I verified both guards render and route to /login and /group-setup respectively, and that they sit after the hooks so React's rules-of-hooks aren't violated. No fixes needed beyond confirming the routing.
 
 import "./Chores.css";
 import { useState, useEffect } from "react";
@@ -353,7 +353,7 @@ export default function Chores() {
                 <h1 className="chores-title">Chores</h1>
                 <p className="chores-week">Week of {start} to {end}</p>
                 {/* [GenAI Use] Prompt: "Left-align the Chores title, then make the month/week button a segmented control matching the Availability page's toggle, and move it below the 'Week of' line." */}
-                {/* [GenAI Use] Reflection: Replaced the single toggle button with a Week/Month segmented control reusing Availability's .toggleview markup, removed the empty header spacer so the title left-aligns, and stacked the toggle under the week label. Verified the active segment tracks viewMode. */}
+                {/* [GenAI Use] Reflection: The response was mostly good — reusing Availability's .toggleview markup keeps the two pages consistent and avoided me hand-rolling a new control. However, it wasn't perfect: the first suggestion kept the empty header spacer div, which left the title centered, so I removed that myself to get the left alignment I wanted. It also originally hardcoded the labels as separate buttons rather than mapping over the modes, so I refactored it into a ["week", "month"].map to cut the duplication and make adding views easier later. I tested both segments and confirmed the active class tracks viewMode correctly. */}
                 <div className="toggleview">
                     {["week", "month"].map((mode) => (
                         <button

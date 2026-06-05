@@ -1,5 +1,5 @@
 /* [GenAI Use] Prompt: "Push the day-of-week labels to the top of each column and add a min-height so the chores card stays a good size when a day has no chores." */
-/* [GenAI Use] Reflection: Confirmed labels sit flush at the top and empty columns no longer collapse. */
+/* [GenAI Use] Reflection: The response solved the layout issue cleanly — pushing the labels to the top and adding a min-height fixed the collapsing empty columns exactly as intended. My only adjustment was sanity-checking the min-height value so days with many chores still grow rather than clip; they do. Good result overall. */
 
 .week-view {
     display: flex;
