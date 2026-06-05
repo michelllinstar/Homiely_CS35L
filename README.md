@@ -98,6 +98,62 @@ python app.py
 
 ---
 
+## Running the End-to-End Tests
+
+The tests use [Playwright](https://playwright.dev/) and run against the full stack. The app must be running before executing the tests.
+
+**Prerequisites:** The full stack must be up (Option A or B above) and the database must be seeded with the test user and demo group. If not done yet:
+
+```bash
+docker compose exec backend python app.py
+```
+
+**Install dependencies (first time only):**
+
+```bash
+cd frontend
+npm install
+npx playwright install chromium
+```
+
+**Run the tests:**
+
+```bash
+cd frontend
+npx playwright test
+```
+
+Playwright will launch a headless Chromium browser, run both tests against `http://localhost:3000`, and report results in the terminal.
+
+**Test files:**
+
+```
+frontend/
+├── playwright.config.js     # Playwright configuration
+└── e2e/
+    └── homiely.spec.js      # End-to-end test suite
+```
+
+**What the tests cover:**
+
+Test 1 — Login flow: navigates to `/login`, submits the test user credentials, and asserts the app redirects to `/home` or `/group-setup`. Covers the full round trip: form submission → `POST /api/login` → JWT issued by Flask → React navigation.
+
+Test 2 — Add a chore: logs in, navigates to `/chores`, opens the Add Chore form, submits a uniquely named chore, and asserts it appears in the list. Covers: JWT-authenticated `POST /api/groups/:id/chores` → SQLAlchemy DB write → re-fetch → React render.
+
+**To see browser output during a run (non-headless):**
+
+```bash
+npx playwright test --headed
+```
+
+**To view the HTML report after a run:**
+
+```bash
+npx playwright show-report
+```
+
+---
+
 ## Environment Variables
 
 The backend reads one environment variable at runtime:
@@ -115,6 +171,7 @@ A test user and demo group are seeded on first startup (`python app.py` or the `
 ```
 Email:    test@example.com
 Password: password123
+Demo group code: DEMO123
 ```
 
 ---

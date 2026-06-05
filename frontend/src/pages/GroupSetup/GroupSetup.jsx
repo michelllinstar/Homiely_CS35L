@@ -3,34 +3,45 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import "./GroupSetup.css";
 
+const DEFAULT_GROUP_NAME = "My Roommate Group";
+const CREATE_GROUP_URL = "/api/groups/create";
+const JOIN_GROUP_URL = "/api/groups/join";
+
 export default function GroupSetup() {
+  // These two pieces of state keep track of what the user types in each form.
   const [groupName, setGroupName] = useState("");
   const [joinCode, setJoinCode] = useState("");
+
+  // loading disables both forms so the user cannot submit twice.
   const [loading, setLoading] = useState(false);
+
+  // error is shared because only one request is happening at a time.
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { accessToken, updateUser } = useAuth();
 
   const saveUserAndGoHome = (user) => {
-    const accessToken = localStorage.getItem("access_token");
-    const refreshToken = localStorage.getItem("refresh_token");
-    login(user, accessToken, refreshToken);
+    // Creating or joining a group changes the user object, not the JWT tokens.
+    // Updating auth context also updates localStorage through AuthContext.
+    updateUser(user);
     navigate("/home");
   };
 
+  // Both forms send almost the same request.
+  // url decides which backend route we call, and body is the form data.
   const submitGroupAction = async (url, body) => {
     setError("");
     setLoading(true);
 
     try {
-      const token = localStorage.getItem("access_token");
       const res = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
+        // fetch needs a string body, so we turn the JS object into JSON.
         body: JSON.stringify(body),
       });
 
@@ -51,30 +62,37 @@ export default function GroupSetup() {
   };
 
   const createGroup = (e) => {
+    // Stop the browser from refreshing the page when the form submits.
     e.preventDefault();
-    submitGroupAction("/api/groups/create", {
-      name: groupName || "My Roommate Group",
+
+    // If the user leaves the field blank, still create a usable group.
+    submitGroupAction(CREATE_GROUP_URL, {
+      name: groupName.trim() || DEFAULT_GROUP_NAME,
     });
   };
 
   const joinGroup = (e) => {
     e.preventDefault();
-    submitGroupAction("/api/groups/join", {
-      join_code: joinCode,
+
+    submitGroupAction(JOIN_GROUP_URL, {
+      join_code: joinCode.trim(),
     });
   };
 
   return (
     <div className="group-setup-page">
       <div className="group-setup-panel">
+        {/* Small eyebrow text makes this feel like a setup step, not a whole new app page. */}
         <p className="group-setup-eyebrow">One last step</p>
         <h1>Set up your home</h1>
         <p className="group-setup-subtitle">
           Create a new roommate group or join one with an invite code.
         </p>
 
+        {/* Show backend errors, like invalid join code or already being in a group. */}
         {error && <p className="group-setup-error">{error}</p>}
 
+        {/* Two cards give create and join equal weight. A user may need either path. */}
         <div className="group-setup-grid">
           <form onSubmit={createGroup} className="group-setup-card">
             <h2>Create a group</h2>
@@ -99,6 +117,7 @@ export default function GroupSetup() {
               type="text"
               placeholder="ABC123"
               value={joinCode}
+              // Join codes are stored uppercase, so make the input match while typing.
               onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
             />
             <button type="submit" disabled={loading || !joinCode}>
