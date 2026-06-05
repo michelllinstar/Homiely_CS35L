@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useAuth } from "../AuthContext";
 
+//all of rthe fields
 export default function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,7 +23,7 @@ export default function Signup() {
     setError('');
     setLoading(true);
 
-    // Validation
+    // Validation to check if all the fields are filledout and if passwords match logic below
     if (!firstName || !lastName || !email || !password || !confirmPassword) {
       setError('Please fill in all fields');
       setLoading(false);
@@ -35,6 +36,7 @@ export default function Signup() {
       return;
     }
 
+    //method of connected to database
     try {
       console.log('attempting signup');
       const res = await fetch('/api/signup', {
@@ -55,11 +57,12 @@ export default function Signup() {
         console.log('signup failed:', data.error);
         return;
       }
-
+//for a correct signup, we log the user in and navigate to the group setup page
       console.log('signup successful');
       login(data.user, data.access_token, data.refresh_token);
       navigate('/group-setup', { state: { email: email } });
     } catch (err) {
+      //otherwise it shows the error message
       setError('Network error. Please try again.');
       console.log(err);
     } finally {
@@ -67,6 +70,7 @@ export default function Signup() {
     }
   };
 
+  //Stuff to make the visual stuff display
   return (
     <div className="signup-page">
       <h1>Sign Up for Homily</h1>
@@ -119,6 +123,7 @@ export default function Signup() {
         <div className="signup-form-full">
           <label>Residence Building</label>
           <select
+          //dropdown for the residence building and restroom types, two dropdowns (ai templated, cited below)
             value={dropdown1}
             onChange={(e) => setDropdown1(e.target.value)}
             className="signup-dropdown"
@@ -166,3 +171,42 @@ export default function Signup() {
     </div>
   );
 }
+
+
+/* 
+AI Citation  (Page ended up being retired and unused )
+[GenAI Use] Prompt: Generate me a template example of two drop down menus for the signup page. 
+One for the "residence building" and "restrool type fields". include blank fields for options.
+[GenAI Use] LLM Response Start
+
+<div className="signup-form-full">
+  <label>Dropdown Label</label>
+  <select
+    value={dropdown1}
+    onChange={(e) => setDropdown1(e.target.value)}
+    className="signup-dropdown"
+  >
+    <option value="Option">Option</option>
+  </select>
+</div>
+
+<div className="signup-form-full">
+  <label>Dropdown Label</label>
+  <select
+    value={dropdown2}
+    onChange={(e) => setDropdown2(e.target.value)}
+    className="signup-dropdown"
+  >
+    <option value="">Select option</option>
+    <option value="Option">Option</option>
+  </select>
+</div>
+
+GenAI Use] LLM Response End
+
+[GenAI Use] Reflection: I learned about how to create a dropdown menu in React using the <select> element 
+and how to manage its state with the useState hook. I also learned how to fill out the dropdown with options and 
+handle changes to the selected value. This was super useful for creating forms that require users to select from a 
+predefined list of options, such as residence buildings or restroom types in our signup page.
+
+*/
