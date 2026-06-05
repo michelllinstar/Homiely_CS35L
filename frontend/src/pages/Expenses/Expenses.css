@@ -10,8 +10,7 @@
     #d8ecdb 55%,
     #a9d2ec 100%
   );
-  max-width: 1400px;
-  margin: 0 auto;
+  width: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -92,6 +91,17 @@
 }
 
 /* ── Add Expense Form ── */
+
+/* Lay the form out as a column so the primary action can center itself
+   (align-self) while the inputs and labels keep their full-width layout. */
+.add-expense-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-expense-form .button {
+  align-self: center;
+}
 
 .add-expense-form input,
 .add-expense-form select {
@@ -276,51 +286,12 @@
   border-radius: 999px;
 }
 
-/* ── Shared button override ── */
-
-.expenses-page .button,
-.add-expense-form .button,
+/* Buttons use the shared Button component look (see components/Button.css).
+   Only layout is set here: keep each item's Delete button compact at the right
+   (the Delete uses the component's built-in `button--danger` variant for color). */
 .expense-item .button {
-  padding: 12px 28px;
-  border: none;
-  border-radius: 999px;
-  font-size: 15px;
-  font-weight: bold;
-  font-family: Arial, sans-serif;
-  cursor: pointer;
-  background: #5b8c5a;
-  color: white;
-  box-shadow: 0 8px 20px rgba(45, 58, 46, 0.18);
-  transition: all 0.2s ease;
-  margin-top: 8px;
-  width: 100%;
-}
-
-.expense-item .button {
-  background: #c0392b;
-  box-shadow: 0 4px 12px rgba(192, 57, 43, 0.2);
-  font-size: 13px;
-  padding: 8px 20px;
-  margin-top: 10px;
-  width: auto;
   align-self: flex-end;
-}
-
-.expense-item .button:hover {
-  background: #a93226;
-  transform: translateY(-2px);
-}
-
-.expenses-page .button:hover,
-.add-expense-form .button:hover {
-  background: #4f7d4e;
-  transform: translateY(-3px);
-}
-
-.expenses-page .button:active,
-.add-expense-form .button:active,
-.expense-item .button:active {
-  transform: translateY(0);
+  margin-top: 4px;
 }
 
 .expenses-grid {
@@ -328,7 +299,6 @@
   grid-template-columns: 1fr 1fr;
   gap: 24px;
   width: 100%;
-  max-width: 1100px;
   align-items: start;
 }
 
