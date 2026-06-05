@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-const TEST_EMAIL    = 'test@example.com';
+const TEST_EMAIL    = 'jerry@example.com';
 const TEST_PASSWORD = 'password123';
 
 // ---------------------------------------------------------------------------
@@ -16,7 +16,7 @@ async function loginAsTestUser(page) {
     await page.goto('/login');
     await page.getByPlaceholder('email@g.ucla.edu').fill(TEST_EMAIL);
     await page.getByPlaceholder('••••••••').fill(TEST_PASSWORD);
-    await page.getByRole('button', { name: 'Log In' }).click();
+    await page.locator('button[type="submit"]').click();
 
     // Wait until navigation away from /login completes.
     await page.waitForURL((url) => !url.pathname.includes('/login'), { timeout: 10000 });
@@ -33,7 +33,7 @@ test('registered user can log in and reach the home page', async ({ page }) => {
     // Fill credentials and submit.
     await page.getByPlaceholder('email@g.ucla.edu').fill(TEST_EMAIL);
     await page.getByPlaceholder('••••••••').fill(TEST_PASSWORD);
-    await page.getByRole('button', { name: 'Log In' }).click();
+    await page.locator('button[type="submit"]').click();
 
     // After a successful login the app navigates to /home or /group-setup.
     // Either destination confirms the backend accepted the credentials.
@@ -66,9 +66,11 @@ test('logged-in user can add a chore and see it in the list', async ({ page }) =
     const choreDescription = `Test chore ${Date.now()}`;
     await page.getByPlaceholder('e.g. Vacuum living room').fill(choreDescription);
 
-    // Submit the form.
-    await page.getByRole('button', { name: 'Add' }).click();
+    // Select the first available roommate from the dropdown.
+    await page.locator('select').first().selectOption({ index: 1 });
 
+    // Submit the form.
+    await page.getByRole('button', { name: 'Add', exact: true }).click();
     // The new chore should appear somewhere on the page.
     await expect(page.getByText(choreDescription)).toBeVisible({ timeout: 8000 });
 });
