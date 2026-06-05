@@ -153,3 +153,83 @@ export default function Verification() {
     </div>
   );
 }
+
+/* 
+AI Citation  (Page ended up being retired and unused )
+[GenAI Use] Prompt: Generate me a template into the backend API for the email verification page. I want to be able to send a verification code and have it check with the backend if it's correct, and then redirect to the home page if it is. I also want a button to resend the verification code, which should call another backend endpoint to resend the code to the user's email. Make sure to handle loading states and error messages appropriately.
+[GenAI Use] LLM Response Start
+
+const handleVerify = async () => {
+  setError('');
+  setSuccess('');
+  setLoading(true);
+
+  try {
+    const res = await fetch('/api/ENDPOINT', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        // payload
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      setError(data.error || 'Action failed');
+      return;
+    }
+
+    setSuccess('Action successful!');
+
+    // Redirect after brief delay
+    setTimeout(() => {
+      navigate('/ROUTE');
+    }, 1500);
+  } catch (err) {
+    setError('Network error. Please try again.');
+    console.log(err);
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handleResend = async () => {
+  setError('');
+  setSuccess('');
+  setResendLoading(true);
+
+  try {
+    const res = await fetch('/api/ENDPOINT', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        // payload
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      setError(data.error || 'Action failed');
+      return;
+    }
+
+    setSuccess('Action successful!');
+  } catch (err) {
+    setError('Network error. Please try again.');
+    console.log(err);
+  } finally {
+    setResendLoading(false);
+  }
+};
+GenAI Use] LLM Response End
+
+[GenAI Use] Reflection: I learned about how the front end connects to the backend to handle this 
+type of function call. I had the ai genreate me a template for the verification page, and I was able to 
+use that template to create the actual page. I also learned about how to handle loading states and error messages appropriately, 
+which is important for a good user experience. I also learned about how to use the useNavigate hook from react-router-dom to redirect the user after a successful action. 
+Overall, this was a helpful example in understanding how the frontend and backend interact in a web application in a practical use case. although we didnt end up 
+doing the backend of this so it's just unused.
+
+*/

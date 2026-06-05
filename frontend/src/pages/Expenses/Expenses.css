@@ -222,11 +222,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #faefd8;
-  border-radius: 16px;
-  padding: 12px 20px;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 14px 18px;
   margin-bottom: 10px;
-  box-shadow: 0 2px 10px rgba(45, 58, 46, 0.06);
+  box-shadow: 0 2px 12px rgba(45, 58, 46, 0.08);
   font-size: 15px;
   color: #2d3a2e;
 }
@@ -242,6 +242,58 @@
   font-weight: bold;
   font-size: 16px;
   padding: 8px 0;
+}
+
+.balance-group {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(45, 58, 46, 0.12);
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 18px;
+}
+
+.balance-group-header {
+  font-size: 14px;
+  font-weight: 700;
+  color: #3e5240;
+  margin-bottom: 12px;
+  letter-spacing: 0.02em;
+}
+
+.balance-group-list {
+  display: grid;
+  gap: 10px;
+}
+
+.balance-summary-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.balance-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(45, 58, 46, 0.12);
+  border-radius: 999px;
+  padding: 10px 16px;
+  color: #2d3a2e;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 18px rgba(45, 58, 46, 0.06);
+}
+
+.balance-filter input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #5b8c5a;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* ── Expenses Slider ── */
@@ -368,4 +420,10 @@
   display: none;
 }
 
-/* [GenAI Use] Generated code end */
+
+/* [GenAI Prompt]  */
+
+/* can you write some aesthetic css for these components based on this css? */
+
+/* [GenAI Use] LLM Response End */
+/* [GenAI Use] Reflection: The CSS is now properly formatted and should apply correctly to the components. The grid layout ensures that the add expense form and expense list are in one column, while the balance summary and expense slider are in another column, creating a 2x2 grid as requested. Although CSS is one of the things that the professor has said can be generated with AI, I still wanted to understand how to write it myself, so I took the time to scan the parameters and figure out what each of them do. */

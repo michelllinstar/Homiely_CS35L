@@ -4,6 +4,7 @@ import { useAuth } from "../AuthContext";
 import { useNavigate } from 'react-router-dom';
 import AppNavbar from "../../components/Home_components/AppNavbar";
 
+//Setup for all the needed elements
 export default function UserProfile() {
   const { user, logout, updateUser } = useAuth();
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ export default function UserProfile() {
     };
   };
 
+  //database interaction with how the userdata is collected and how its formatted
   const [formData, setFormData] = useState(() => {
     const { firstName, lastName } = parseFullName(user?.name);
     return {
@@ -48,6 +50,7 @@ export default function UserProfile() {
     }
   }, [user]);
 
+  //Fetching the members in the group to display all of the members in the side of the profile page
   const fetchUserGroup = async () => {
     setLoadingGroup(true);
     try {
@@ -80,7 +83,7 @@ export default function UserProfile() {
       [name]: value
     }));
   };
-
+//save button stuff
   const handleSave = async (e) => {
     e.preventDefault();
     setError('');
@@ -95,6 +98,7 @@ export default function UserProfile() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
+        //format work for the backend to receive the data and update the user info in the database
         body: JSON.stringify({
           first_name: formData.firstName,
           last_name: formData.lastName,
@@ -109,6 +113,84 @@ export default function UserProfile() {
         return;
       }
 
+      /* 
+AI Citation 
+[GenAI Use] Prompt: Help me generate a template a method of updating the user data after the profile updates their information (name and email). 
+I want to make sure that the new information is reflected in the app immediately after the update.
+[GenAI Use] LLM Response Start
+
+const handleVerify = async () => {
+  setError('');
+  setSuccess('');
+  setLoading(true);
+
+  try {
+    const res = await fetch('/api/ENDPOINT', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        // payload
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      setError(data.error || 'Action failed');
+      return;
+    }
+
+    setSuccess('Action successful!');
+
+    // Redirect after brief delay
+    setTimeout(() => {
+      navigate('/ROUTE');
+    }, 1500);
+  } catch (err) {
+    setError('Network error. Please try again.');
+    console.log(err);
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handleResend = async () => {
+  setError('');
+  setSuccess('');
+  setResendLoading(true);
+
+  try {
+    const res = await fetch('/api/ENDPOINT', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        // payload
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      setError(data.error || 'Action failed');
+      return;
+    }
+
+    setSuccess('Action successful!');
+  } catch (err) {
+    setError('Network error. Please try again.');
+    console.log(err);
+  } finally {
+    setResendLoading(false);
+  }
+};
+GenAI Use] LLM Response End
+
+[GenAI Use] Reflection: I used this template as a guide to create a method for updating the user's data after they input new data into 
+the respective fields and hit the save button. I ran into some issues with the update not reflecting properly in which the ai helped me 
+realize that my original method of updating was incorrect in the way the backend was receiving/sending backout.
+
+*/
+//some error handling
       updateUser(data.user);
       setSuccess('Profile updated successfully!');
       setIsEditing(false);
@@ -120,6 +202,7 @@ export default function UserProfile() {
     }
   };
 
+  //cancel case
   const handleCancel = () => {
     const { firstName, lastName } = parseFullName(user?.name);
     setFormData({
@@ -131,6 +214,7 @@ export default function UserProfile() {
     setError('');
   };
 
+  //logout case and logic
   const handleLogout = async () => {
     await logout();
     navigate('/');
@@ -141,6 +225,7 @@ export default function UserProfile() {
     setSuccess('');
     setLoadingGroup(true);
 
+    //utilizes auth integrated logout method (backend specific i just needed to  call it)
     try {
       const token = localStorage.getItem('access_token');
       const res = await fetch('/api/groups/me', {
@@ -151,7 +236,7 @@ export default function UserProfile() {
       });
 
       const data = await res.json();
-
+      //leaving a group
       if (!res.ok) {
         setError(data.message || 'Could not leave group.');
         return;
@@ -224,6 +309,7 @@ export default function UserProfile() {
               >
                 Edit Profile
               </button>
+
 
               <button
                 className="logout-btn"
