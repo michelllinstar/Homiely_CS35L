@@ -1,3 +1,6 @@
+/* [GenAI Use] Prompt: "Unify fonts to 'Homily', standardize border-radius to 16px, and set input-field backgrounds to rgba(255,255,255,0.75) to match the rest of the site." */
+/* [GenAI Use] Reflection: The response did this consistency pass well — unifying fonts, radii, and the translucent input backgrounds across the form pages is tedious work it handled accurately. What it didn't initially weigh was contrast, so I checked the rgba(255,255,255,0.75) input background still keeps the text readable over the gradient. It did, so the change was good as-is. */
+
 /* [GenAI Use] Prompt: "I want to add padding between the buttons on this page and the text preceding it. Here is my code:
 .add-chores-form {
     display: flex;
@@ -22,8 +25,9 @@
 .add-chores-field select {
     padding: 8px 12px;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 16px;
     font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.75);
     outline: none;
 }
 
@@ -64,8 +68,9 @@ For AddChores.css spacing:
 .add-chores-field select {
     padding: 8px 12px;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 16px;
     font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.75);
     outline: none;
 }
 
@@ -154,8 +159,9 @@ Then in AddChores.jsx apply the new classes:
 .add-chores-field select {
     padding: 8px 12px;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 16px;
     font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.75);
     outline: none;
 }
 
@@ -173,7 +179,7 @@ Then in AddChores.jsx apply the new classes:
 .add-chores-buttons .button {
     padding: 12px 28px;
     border: none;
-    border-radius: 999px;
+    border-radius: 16px;
     font-size: 15px;
     font-weight: bold;
     cursor: pointer;
