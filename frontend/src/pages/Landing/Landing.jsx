@@ -1,3 +1,6 @@
+// [GenAI Use] Prompt: "Rename the Calendar feature card to Availability."
+// [GenAI Use] Reflection: This was a small, low-risk change and the response got it right — just the card label. I confirmed it updated and that no other copy still referenced 'Calendar'. Good, though trivial enough that the value was consistency rather than time saved.
+
 import "./Landing.css";
 import Button from "../../components/Button";
 import Navbar from "../../components/Navbar";
@@ -7,7 +10,7 @@ import { useEffect, useState } from "react";
 const features = [
   { bg: '#EAF3DE', icon: '🧹', title: 'Chores', desc: 'Add chores for the week and mark them done when someone finishes them.' },
   { bg: '#fbeaf0', icon: '🧾', title: 'Expenses', desc: 'Keep track of shared stuff like groceries, paper towels, or rent extras.' },
-  { bg: '#E6F1FB', icon: '📅', title: 'Calendar', desc: "See when people are free, busy, or just don't want to be bothered." },
+  { bg: '#E6F1FB', icon: '📅', title: 'Availability', desc: "See when people are free, busy, or just don't want to be bothered." },
   { bg: '#FAEEDA', icon: '🔔', title: 'House info', desc: 'Keep the important roommate things in one place instead of losing them in texts.' },
 ];
 
@@ -30,7 +33,7 @@ export default function Landing() {
       <Navbar />
       <div className={`landing-content landing-hero ${isNight ? "night" : ""}`}>
         <p className="hero-eyebrow">For shared apartments and dorms</p>
-        <h1 className="title">Welcome to Homiely</h1>
+        <h1 className="title">Welcome to Homily</h1>
         <p className="hero-subtitle">
           A simple place for roommates to keep track of chores, money, and schedules
           without digging through the group chat.

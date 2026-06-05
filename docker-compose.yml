@@ -25,7 +25,7 @@ services:
   db:
     image: postgres:13
     environment:
-      POSTGRES_DB: homiely
+      POSTGRES_DB: homily
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     ports:
@@ -33,7 +33,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d homiely"]
+      test: ["CMD-SHELL", "pg_isready -U user -d homily"]
       interval: 5s
       timeout: 5s
       retries: 10

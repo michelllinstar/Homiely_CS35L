@@ -1,27 +1,49 @@
+/* [GenAI Use] Prompt: "Match the Expenses page to the Availability page (full-screen frame, tan #faefd8 cards, translucent-white inputs, left-aligned title) and let buttons use the shared Button component." */
+/* [GenAI Use] Reflection: The response did this consistency pass well, bringing the cards, inputs, and buttons in line with the Availability page without me restyling each by hand. I confirmed they render consistently with the other pages and that buttons still use the shared component styles. Solid; no rework needed. */
+
 /* Expenses.css */
 
+/* Page frame matches .availability-page so Expenses, Chores, and Availability
+   share the same gradient, sizing, padding, and scroll behavior. */
 .expenses-page {
-  min-height: 100vh;
+  height: 100vh;
   background: linear-gradient(
-    135deg,
+    0deg,
     #f4ead5 0%,
     #d8ecdb 55%,
     #a9d2ec 100%
   );
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
+  width: 100%;
+  padding: 100px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
   color: #2d3a2e;
-  font-family: Arial, sans-serif;
-  padding: 80px 20px 40px;
+  font-family: 'Homily', 'Helvetica', 'Arial', sans-serif;
 }
 
-.expenses-page h1 {
-  font-size: 48px;
-  font-weight: bold;
-  letter-spacing: -1.5px;
-  margin: 0 0 32px;
-  text-align: center;
+/* Header matches the Availability page: left-aligned title at default h1 size. */
+.expenses-header {
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.expenses-title {
+  margin: 0;
+  font-size: 2.5rem;
+  line-height: 1.2;
+  color: #2d3a2e;
+}
+
+.expenses-subtitle {
+  font-size: 16px;
+  color: #3e5240;
+  margin: 0;
+  /* Tall line-height adds space below the title, matching .availability-subtitle. */
+  line-height: 3;
 }
 
 .expenses-page h2 {
@@ -43,10 +65,12 @@
 .expenses-error {
   padding: 10px 18px;
   border: 1px solid rgba(200, 120, 100, 0.3);
-  border-radius: 999px;
+  border-radius: 16px;
   background: rgba(255, 220, 210, 0.65);
   color: #7a3a2e;
   font-size: 14px;
+  margin-bottom: 1rem;
+  text-align: center;
 }
 
 .expenses-page h3 {
@@ -56,16 +80,16 @@
   color: #2d3a2e;
 }
 
-/* shared card style */
+/* shared card style — tan background matches .status-panel on Availability */
 .add-expense-form,
 .expense-list,
 .balance-summary,
 .expenses-slider {
   width: 100%;
   max-width: 560px;
-  background: rgba(255, 255, 255, 0.65);
+  background: #faefd8;
   backdrop-filter: blur(8px);
-  border-radius: 24px;
+  border-radius: 16px;
   padding: 28px 32px;
   margin-bottom: 24px;
   box-shadow: 0 8px 32px rgba(45, 58, 46, 0.08);
@@ -73,17 +97,28 @@
 
 /* ── Add Expense Form ── */
 
+/* Lay the form out as a column so the primary action can center itself
+   (align-self) while the inputs and labels keep their full-width layout. */
+.add-expense-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-expense-form .button {
+  align-self: center;
+}
+
 .add-expense-form input,
 .add-expense-form select {
   width: 100%;
   box-sizing: border-box;
   padding: 13px 16px;
   border: none;
-  border-radius: 999px;
+  border-radius: 16px;
   font-size: 15px;
-  font-family: Arial, sans-serif;
+  font-family: 'Homily', 'Helvetica', 'Arial', sans-serif;
   color: #2d3a2e;
-  background: white;
+  background: rgba(255, 255, 255, 0.75);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
   outline: none;
   margin-bottom: 12px;
@@ -116,8 +151,8 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background: white;
-  border-radius: 999px;
+  background: #faefd8;
+  border-radius: 16px;
   padding: 8px 14px;
   font-size: 14px;
   font-weight: normal;
@@ -152,7 +187,7 @@
 }
 
 .expense-item {
-  background: white;
+  background: #faefd8;
   border-radius: 16px;
   padding: 16px 20px;
   box-shadow: 0 2px 12px rgba(45, 58, 46, 0.07);
@@ -185,8 +220,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: white;
-  border-radius: 999px;
+  background: #faefd8;
+  border-radius: 16px;
   padding: 12px 20px;
   margin-bottom: 10px;
   box-shadow: 0 2px 10px rgba(45, 58, 46, 0.06);
@@ -233,7 +268,7 @@
 .expenses-slider progress {
   width: 100%;
   height: 10px;
-  border-radius: 999px;
+  border-radius: 16px;
   overflow: hidden;
   appearance: none;
   background: rgba(255,255,255,0.6);
@@ -242,65 +277,26 @@
 
 .expenses-slider progress::-webkit-progress-bar {
   background: rgba(255, 255, 255, 0.5);
-  border-radius: 999px;
+  border-radius: 16px;
 }
 
 .expenses-slider progress::-webkit-progress-value {
   background: #5b8c5a;
-  border-radius: 999px;
+  border-radius: 16px;
   transition: width 0.4s ease;
 }
 
 .expenses-slider progress::-moz-progress-bar {
   background: #5b8c5a;
-  border-radius: 999px;
+  border-radius: 16px;
 }
 
-/* ── Shared button override ── */
-
-.expenses-page .button,
-.add-expense-form .button,
+/* Buttons use the shared Button component look (see components/Button.css).
+   Only layout is set here: keep each item's Delete button compact at the right
+   (the Delete uses the component's built-in `button--danger` variant for color). */
 .expense-item .button {
-  padding: 12px 28px;
-  border: none;
-  border-radius: 999px;
-  font-size: 15px;
-  font-weight: bold;
-  font-family: Arial, sans-serif;
-  cursor: pointer;
-  background: #5b8c5a;
-  color: white;
-  box-shadow: 0 8px 20px rgba(45, 58, 46, 0.18);
-  transition: all 0.2s ease;
-  margin-top: 8px;
-  width: 100%;
-}
-
-.expense-item .button {
-  background: #c0392b;
-  box-shadow: 0 4px 12px rgba(192, 57, 43, 0.2);
-  font-size: 13px;
-  padding: 8px 20px;
-  margin-top: 10px;
-  width: auto;
   align-self: flex-end;
-}
-
-.expense-item .button:hover {
-  background: #a93226;
-  transform: translateY(-2px);
-}
-
-.expenses-page .button:hover,
-.add-expense-form .button:hover {
-  background: #4f7d4e;
-  transform: translateY(-3px);
-}
-
-.expenses-page .button:active,
-.add-expense-form .button:active,
-.expense-item .button:active {
-  transform: translateY(0);
+  margin-top: 4px;
 }
 
 .expenses-grid {
@@ -308,7 +304,6 @@
   grid-template-columns: 1fr 1fr;
   gap: 24px;
   width: 100%;
-  max-width: 1100px;
   align-items: start;
 }
 
@@ -346,8 +341,8 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background: white;
-  border-radius: 999px;
+  background: #faefd8;
+  border-radius: 16px;
   padding: 8px 14px;
   font-size: 14px;
   font-weight: normal;
@@ -370,3 +365,438 @@
 .add-expense-form .checkbox-group input[type="checkbox"] {
   display: none;
 }
+
+
+/* [GenAI Prompt]  */
+
+/* can you write some aesthetic css for these components based on this css? */
+
+/* Home.css */
+/* 
+.home-page {
+  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    #f4ead5 0%,
+    #d8ecdb 55%,
+    #a9d2ec 100%
+  );
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+
+  color: #2d3a2e;
+  font-family: Arial, sans-serif;
+
+  padding: 40px;
+}
+
+.home-page h1 {
+  font-size: 48px;
+  font-weight: bold;
+  letter-spacing: -1.5px;
+  margin: 0 0 8px;
+}
+
+.home-page label {
+  display: block;
+  text-align: left;
+  font-size: 13px;
+  font-weight: bold;
+  color: #3e5240;
+  margin-bottom: 6px;
+}
+
+.home-page input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 16px;
+  border: none;
+  border-radius: 999px;
+  font-size: 15px;
+  font-family: Arial, sans-serif;
+  color: #2d3a2e;
+  background: white;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  outline: none;
+  margin-bottom: 1rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.home-page input:focus {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+}
+
+.home-page button {
+  width: 100%;
+  padding: 16px 34px;
+  border: none;
+  border-radius: 999px;
+  font-size: 18px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+  background: #5b8c5a;
+  color: white;
+  box-shadow: 0 12px 24px rgba(45, 58, 46, 0.2);
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.home-page button:hover {
+  background: #4f7d4e;
+  transform: translateY(-3px);
+}
+
+.home-page button:active {
+  transform: translateY(0);
+}
+
+.forest-link {
+  color: #3e5240;
+  font-weight: bold;
+  text-decoration: none;
+  border-bottom: 1.5px solid #5b8c5a;
+  transition: all 0.2s ease;
+}
+
+.forest-link:hover {
+  color: #5b8c5a;
+  border-bottom-color: transparent;
+}
+import "./Expenses.css";
+import { useAuth } from "../AuthContext"
+import Button from "../../components/Button";
+import { useState } from "react";
+import AddExpenseForm from "./AddExpenseForm"
+import ExpenseList from "./ExpenseList"
+import BalanceSummary from "./BalanceSummary"
+import ExpensesSlider from "./ExpensesSlider"
+
+// mock roommates — later replace with useAuth() + group members from backend
+const MOCK_ROOMMATES = [
+  { id: 1, name: "Alice" },
+  { id: 2, name: "Bob" },
+  { id: 3, name: "Emma" },
+];
+
+// mock expenses — later replace with fetch('/api/expenses')
+const MOCK_EXPENSES = [
+  { id: 1, description: "Groceries", amount: 90, paid_by: 1, split_between: [1, 2, 3] },
+  { id: 2, description: "Internet bill", amount: 60, paid_by: 2, split_between: [1, 2, 3] },
+  { id: 3, description: "Cleaning supplies", amount: 30, paid_by: 3, split_between: [2, 3] },
+];
+
+export default function Expenses() {
+  const { user, logout } = useAuth();
+  const [expenses, setExpenses] = useState(MOCK_EXPENSES);
+  const [roommates] = useState(MOCK_ROOMMATES);
+
+  const addExpense = (newExpense) => {
+    setExpenses([...expenses, {...newExpense, id: expenses.length + 1}]);
+    console.log(expenses);
+  }
+
+  const deleteExpense = (id) => {
+    setExpenses(expenses.filter(e => e.id !== id));
+  }
+  
+  return (
+    <div className="expenses-page">
+      <h1>Expenses</h1>
+      <AddExpenseForm roommates={roommates} onAdd={addExpense} />
+      <ExpenseList expenses={expenses} roommates={roommates} onDelete={deleteExpense} />
+      <BalanceSummary expenses={expenses} roommates={roommates} />
+      <ExpensesSlider expenses={expenses} roommates={roommates} />
+    </div>
+  );
+}
+import "./Expenses.css";
+import { useAuth } from "../AuthContext"
+import Button from "../../components/Button";
+import { useState } from "react";
+
+
+export default function ExpensesSlider ({ expenses, roommates }) {
+
+  return (
+    <div className="expenses-slider">
+      <h2>Who Has Contributed What?</h2>
+        <div className="roommate-expense-bar">
+             <ul>
+                {roommates.map(roommate => (
+                  <li key={roommate.id}>
+                    <h3>{roommate.name}</h3>
+                    <p>{expenses.reduce((total, expense) => {
+                        if (expense.paid_by === roommate.id) {
+                            return total + expense.amount;
+                        } return total;
+                        }, 0)} / {expenses.reduce((total, expense) => total + expense.amount, 0)}</p>
+                    <progress value={expenses.reduce((total, expense) => {
+                        if (expense.paid_by === roommate.id) {
+                            return total + expense.amount;
+                        }
+                        return total;
+                    }, 0)} max={expenses.reduce((total, expense) => total + expense.amount, 0)}></progress>
+                  </li>
+                ))}
+             </ul>
+        </div>
+    </div>
+  );
+}
+import "./Expenses.css";
+import { useAuth } from "../AuthContext"
+import Button from "../../components/Button";
+import { useState } from "react";
+
+import setExpenses from "./Expenses"
+
+export default function ExpenseList({expenses, roommates, onDelete}) {
+  
+  
+  return (
+    <div>
+        <h2>Expense List</h2>
+        {expenses.map(e => (
+            <div key={e.id} className="expense-item">
+                <p><strong>{e.description}</strong>: ${e.amount.toFixed(2)}</p>
+                <p>Paid by: {roommates.find(r => r.id === e.paid_by)?.name || "Unknown"}</p>
+                <p>Split between: {e.split_between.map(id => roommates.find(r => r.id === id)?.name || "Unknown").join(", ")}</p>
+                <Button label="Delete" onClick={() => onDelete(e.id)} />
+            </div>
+        ))}
+    </div>
+  );
+}
+import "./Expenses.css";
+import { useAuth } from "../AuthContext"
+import Button from "../../components/Button";
+import { useState } from "react";
+
+
+export default function BalanceSummary({ expenses, roommates }) {
+  const getName = (id) => roommates.find(r => r.id === id)?.name || "Unknown";
+
+  // calculate net balance per pair
+  const balances = {};
+  
+  console.log(balances);
+
+  expenses.forEach(expense => {
+    const share = expense.amount / expense.split_between.length;
+    expense.split_between.forEach(uid => {
+      if (uid === expense.paid_by) return; // payer doesn't owe themselves
+      // uid owes expense.paid_by `share` amount
+      const key = `${uid}-${expense.paid_by}`;
+      const reverseKey = `${expense.paid_by}-${uid}`;
+      if (balances[reverseKey]) {
+        balances[reverseKey] -= share; // offset against what they're already owed
+      } else {
+        balances[key] = (balances[key] || 0) + share;
+      }
+    });
+  });
+
+  const summaries = Object.entries(balances)
+    .filter(([_, amount]) => amount > 0.01) // ignore tiny rounding differences
+    .map(([key, amount]) => {
+      const [owerId, owedId] = key.split("-").map(Number);
+      return { owerId, owedId, amount };
+    });
+
+  return (
+    <div className="balance-summary">
+      <h2>Who Owes What</h2>
+      {summaries.length === 0 ? (
+        <p>All settled up!</p>
+      ) : (
+        summaries.map(({ owerId, owedId, amount }) => (
+          <p key={`${owerId}-${owedId}`}>
+            <strong>{getName(owerId)}</strong> owes <strong>{getName(owedId)}</strong> ${amount.toFixed(2)}
+          </p>
+        ))
+      )}
+    </div>
+  );
+}
+import "./Expenses.css";
+import { useAuth } from "../AuthContext"
+import Button from "../../components/Button";
+import { useState } from "react";
+
+export default function AddExpenseForm({roommates, onAdd}) {
+  
+
+  const { user, logout } = useAuth();
+  const [ description, setDescription ] = useState("");
+  const [ amount, setAmount ] = useState(0);
+  const [ paidBy, setPaidBy ] = useState(roommates[0].id);
+  const [ splitBetween, setSplitBetween ] = useState(roommates.map(r => r.id));
+
+  // if the
+  const toggleSplit = (id) => {
+    setSplitBetween(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+  };
+
+  // return early if details are invalid. else do onAdd and reset fields.
+  const handleSubmit = () => {
+    if (!description || amount <= 0 || splitBetween.length === 0) {
+        return;
+    }
+
+    onAdd({
+        description,
+        amount: parseFloat(amount),
+        paid_by: paidBy, 
+        split_between: splitBetween 
+    });
+
+    setDescription("");
+    setAmount(0);
+  }
+  
+  return (
+    <div className="expenses-page">
+      <h2>Add Expense</h2>
+      <input placeholder="Description of Expense" value={description} onChange={e => setDescription(e.target.value)}/>
+      <input placeholder="Amount" type="number" value={amount} onChange={e => setAmount(e.target.value)} />
+
+      <label>Paid by: </label>
+      <select value={paidBy} onChange={e => setPaidBy(Number(e.target.value))}>{roommates.map(r=> <option key={r.id} value={r.id}>{r.name}</option>)}</select>
+      <label>Split between: </label>
+      {roommates.map(r => (
+        <label key={r.id}>
+            <input type="checkbox" checked={splitBetween.includes(r.id)} onChange={() => toggleSplit(r.id)} />
+            {r.name}
+        </label>
+      ))}
+
+      <Button onClick={handleSubmit} label="Add Expense" />
+    </div>
+  );
+}
+Show more
+May 23
+
+Expenses CSS matching the Home.css aesthetic
+Expenses CSS matching the Home.css aesthetic
+A few small tweaks to your JSX components will make the CSS work properly. Here's what to update:
+
+ExpenseList.jsx — wrap in a ul and add class names:
+
+jsx
+return (
+  <div className="expense-list">
+    <h2>Expense List</h2>
+    <ul>
+      {expenses.map(e => (
+        <li key={e.id} className="expense-item">
+          <span className="expense-description">{e.description}</span>
+          <span className="expense-amount">${e.amount.toFixed(2)}</span>
+          <p>Paid by: {roommates.find(r => r.id === e.paid_by)?.name || "Unknown"}</p>
+          <p>Split: {e.split_between.map(id => roommates.find(r => r.id === id)?.name).join(", ")}</p>
+          <Button label="Delete" onClick={() => onDelete(e.id)} />
+        </li>
+      ))}
+    </ul>
+  </div>
+);
+BalanceSummary.jsx — add class names to each row:
+
+jsx
+return (
+  <div className="balance-summary">
+    <h2>Who Owes What</h2>
+    {summaries.length === 0 ? (
+      <p className="settled">✓ All settled up!</p>
+    ) : (
+      summaries.map(({ owerId, owedId, amount }) => (
+        <div key={`${owerId}-${owedId}`} className="balance-row">
+          <span>{getName(owerId)} owes {getName(owedId)}</span>
+          <span className="balance-amount">${amount.toFixed(2)}</span>
+        </div>
+      ))
+    )}
+  </div>
+);
+AddExpenseForm.jsx — wrap checkboxes in .checkbox-group:
+
+jsx
+<label>Split between:</label>
+<div className="checkbox-group">
+  {roommates.map(r => (
+    <label key={r.id}>
+      <input type="checkbox" checked={splitBetween.includes(r.id)}
+        onChange={() => toggleSplit(r.id)} />
+      {r.name}
+    </label>
+  ))}
+</div>
+
+Presented file
+Presented file
+The CSS matches your existing Home.css aesthetic — same gradient background, pill-shaped inputs, green button style, and font. Key additions specific to the expenses page: frosted glass cards for each section, a red delete button on expense items, green progress bars for the slider, and pill-shaped balance rows.
+
+
+Expenses
+Code · CSS 
+the css isn't being applied to add expense form, what should i do? also, can you format this so that the addexpense component and expenselist component are in one column, and the balance summary and expense slider component are in one column? so its a 2x2 grid
+
+May 23
+Two issues to fix — the CSS class and the layout.
+
+1. CSS not applying to AddExpenseForm
+
+Your AddExpenseForm has className="expenses-page" instead of "add-expense-form":
+
+jsx
+// ❌ wrong class
+<div className="expenses-page">
+
+// ✅ correct
+<div className="add-expense-form">
+2. Two-column grid layout
+
+In Expenses.jsx, wrap the components in a grid:
+
+jsx
+return (
+  <div className="expenses-page">
+    <h1>Expenses</h1>
+    <div className="expenses-grid">
+      <div className="expenses-col">
+        <AddExpenseForm roommates={roommates} onAdd={addExpense} />
+        <ExpenseList expenses={expenses} roommates={roommates} onDelete={deleteExpense} />
+      </div>
+      <div className="expenses-col">
+        <BalanceSummary expenses={expenses} roommates={roommates} />
+        <ExpensesSlider expenses={expenses} roommates={roommates} />
+      </div>
+    </div>
+  </div>
+);
+Then add these classes to Expenses.css:
+
+css
+.expenses-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  width: 100%;
+  max-width: 1100px;
+  align-items: start;
+}
+
+.expenses-col {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* [GenAI Use] LLM Response End
+/* [GenAI Use] Reflection: The CSS is now properly formatted and should apply correctly to the components. The grid layout ensures that the add expense form and expense list are in one column, while the balance summary and expense slider are in another column, creating a 2x2 grid as requested. Although CSS is one of the things that the professor has said can be generated with AI, I still wanted to understand how to write it myself, so I took the time to scan the parameters and figure out what each of them do.

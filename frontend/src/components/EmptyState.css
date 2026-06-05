@@ -1,0 +1,26 @@
+/* [GenAI Use] Prompt: "Style a centered, full-height empty-state shared across pages, mirroring the Availability page's empty-state layout." */
+/* [GenAI Use] Reflection: The response matched the Availability empty-state layout well and saved me from reverse-engineering that centering myself. I did have to confirm it centers inside each page container rather than the viewport, since the pages have different padding — it does. With that checked, the result was good. */
+
+/* Mirrors the Availability empty-state layout so every page that lacks content
+   (no roommate group, logged out, etc.) is centered and styled identically. */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 14px;
+    flex: 1;
+    min-height: 70vh;
+}
+
+.empty-state-title {
+    margin: 0;
+    line-height: 1;
+}
+
+.empty-state-message {
+    margin: 0;
+    max-width: 420px;
+    line-height: 1.5;
+}

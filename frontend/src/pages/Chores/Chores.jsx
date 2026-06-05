@@ -1,3 +1,6 @@
+// [GenAI Use] Prompt: "Show the shared EmptyState when the user is logged out or not in a roommate group, matching the other pages."
+// [GenAI Use] Reflection: The response was good — it added the logged-out and no-group guards matching the other pages, keeping the empty-state behavior consistent. I verified both guards render and route to /login and /group-setup respectively, and that they sit after the hooks so React's rules-of-hooks aren't violated. No fixes needed beyond confirming the routing.
+
 import "./Chores.css";
 import { useState, useEffect } from "react";
 import { useAuth } from "../AuthContext";
@@ -7,8 +10,10 @@ import WeekView from "../../components/WeekView";
 import YourWeek from "../../components/YourWeek";
 import AddChore from "../../components/AddChores";
 import AppNavbar from "../../components/Home_components/AppNavbar";
-import Button from "../../components/Button";
+import EmptyState from "../../components/EmptyState";
 import { getWeekStartDate } from "../../utils/chores";
+import CalendarChoreMo from "../../components/CalendarChoreMo";
+
 
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -144,6 +149,23 @@ function timeToMinutes(timeOfDay) {
     return hour * 60 + minutes;
 }
 
+/* Converts the day-grouped chores state into the date-keyed format CalendarChoreMo expects: { "YYYY-MM-DD": ["description1", "description2"] } */
+function choresToDateKeyed(chores, weekStartDate) {
+    const result = {};
+    const [year, month, day] = weekStartDate.split("-").map(Number);
+
+    DAYS.forEach((dayName, index) => {
+        const date = new Date(year, month - 1, day + index);
+        const dateKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+        const dayChores = chores[dayName] || [];
+        if (dayChores.length > 0) {
+            result[dateKey] = dayChores.map((c) => ({ ...c, day: dayName }));
+        }
+    });
+
+    return result;
+}
+
 export default function Chores() {
     const { start, end } = getWeekRange();      // Week label for header
     const { user } = useAuth();     // Logged-in user from auth context
@@ -151,6 +173,8 @@ export default function Chores() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [roommates, setRoommates] = useState([]);
+    const [viewMode, setViewMode] = useState("week");  // "week" or "month"
+
 
     const token = localStorage.getItem("access_token");     // JWT for authorizing API reqs
     const groupId = user?.roommate_group_id;        // Roommate group
@@ -271,6 +295,26 @@ export default function Chores() {
         }
     }
 
+    async function handleToggleById(choreId) {
+        for (const day of DAYS) {
+            const index = (chores[day] || []).findIndex((c) => c.id === choreId);
+            if (index !== -1) {
+                await handleToggle(day, index);
+                return;
+            }
+        }
+    }
+
+    async function handleDeleteById(choreId) {
+        for (const day of DAYS) {
+            const index = (chores[day] || []).findIndex((c) => c.id === choreId);
+            if (index !== -1) {
+                await handleDelete(day, index, choreId);
+                return;
+            }
+        }
+    }
+
     // Show loading indicator while waiting for API response. */
     if (loading) return <div className="chores-page"><p>Loading...</p></div>;
 
@@ -278,9 +322,12 @@ export default function Chores() {
     if (!user) {
         return (
             <div className="chores-page">
-                <h1>Chores</h1>
-                <p>Please log in to view chores.</p>
-                <Button to="/login" label="Log in" />
+                <EmptyState
+                    title="Chores"
+                    message="Please log in to view chores."
+                    actionLabel="Log in"
+                    actionTo="/login"
+                />
             </div>
         );
     }
@@ -289,9 +336,13 @@ export default function Chores() {
     if (!groupId) {
         return (
             <div className="chores-page">
-                <h1>Chores</h1>
-                <p>You need to create or join a roommate group before tracking chores.</p>
-                <Button to="/group-setup" label="Set up roommate group" />
+                <AppNavbar />
+                <EmptyState
+                    title="Chores"
+                    message="You need to create or join a roommate group before tracking chores."
+                    actionLabel="Set up roommate group"
+                    actionTo="/group-setup"
+                />
             </div>
         );
     }
@@ -301,19 +352,45 @@ export default function Chores() {
             <header className="chores-header">
                 <h1 className="chores-title">Chores</h1>
                 <p className="chores-week">Week of {start} to {end}</p>
+                {/* [GenAI Use] Prompt: "Left-align the Chores title, then make the month/week button a segmented control matching the Availability page's toggle, and move it below the 'Week of' line." */}
+                {/* [GenAI Use] Reflection: The response was mostly good — reusing Availability's .toggleview markup keeps the two pages consistent and avoided me hand-rolling a new control. However, it wasn't perfect: the first suggestion kept the empty header spacer div, which left the title centered, so I removed that myself to get the left alignment I wanted. It also originally hardcoded the labels as separate buttons rather than mapping over the modes, so I refactored it into a ["week", "month"].map to cut the duplication and make adding views easier later. I tested both segments and confirmed the active class tracks viewMode correctly. */}
+                <div className="toggleview">
+                    {["week", "month"].map((mode) => (
+                        <button
+                            key={mode}
+                            className={`toggleview-btn ${viewMode === mode ? "active" : ""}`}
+                            onClick={() => setViewMode(mode)}
+                        >
+                            {mode === "week" ? "Week" : "Month"}
+                        </button>
+                    ))}
+                </div>
             </header>
             {error && <p className="chores-error">{error}</p>}
-            <div className="chores-card">
-                <WeekView chores={chores} onToggle={handleToggle} onDelete={handleDelete} />
-            </div>
-            <div className="chores-bottom">
+
+            {viewMode === "week" ? (
+                <>
+                    <div className="chores-card">
+                        <WeekView chores={chores} onToggle={handleToggle} onDelete={handleDelete} />
+                    </div>
+                    <div className="chores-bottom">
+                        <div className="chores-card">
+                            <YourWeek chores={chores} currentUser={user?.name} onToggle={handleToggle} onDelete={handleDelete} />
+                        </div>
+                        <div className="chores-card">
+                            <AddChore onAddChore={handleAddChore} roommates={roommates} />
+                        </div>
+                    </div>
+                </>
+            ) : (
                 <div className="chores-card">
-                    <YourWeek chores={chores} currentUser={user?.name} onToggle={handleToggle} onDelete={handleDelete} />
+                    <CalendarChoreMo
+                        chores={choresToDateKeyed(chores, getWeekStartDate())}
+                        onToggle={handleToggleById}
+                        onDelete={handleDeleteById}
+                    />
                 </div>
-                <div className="chores-card">
-                    <AddChore onAddChore={handleAddChore} roommates={roommates} />
-                </div>
-            </div>
+            )}
         </div>
     );
 }

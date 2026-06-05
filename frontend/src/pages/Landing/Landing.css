@@ -1,12 +1,15 @@
+/* [GenAI Use] Prompt: "Unify every font on the site to the 'Homily' brand font and standardize all border-radius values to 16px." */
+/* [GenAI Use] Reflection: The response handled this well — unifying the font and border-radius is repetitive, multi-file work that the AI applied consistently and faster than I could by hand. It wasn't perfect, though: I had to check it didn't flatten radii that were intentionally different on a few elements, and that the 'Homily' font actually loads rather than silently falling back. After confirming the font and 16px corners render consistently site-wide, the change was good to keep. */
+
 @font-face {
-    font-family: 'Homiely'; 
+    font-family: 'Homily'; 
     src: url('../../assets/qlarendon.otf') format('opentype'); 
     font-weight: normal;
     font-style: normal;
 }
 
 body {
-    font-family: 'Homiely', 'Helvetica', 'Arial', sans-serif; 
+    font-family: 'Homily', 'Helvetica', 'Arial', sans-serif; 
 }
 
 .landing-page {
@@ -52,7 +55,7 @@ body {
 
   backdrop-filter: blur(14px);
 
-  border-radius: 32px;
+  border-radius: 16px;
 
   padding: 36px;
 
@@ -96,7 +99,7 @@ body {
 .hero-button {
   min-width: 148px;
   padding: 16px 28px;
-  border-radius: 999px;
+  border-radius: 16px;
   font-size: 17px;
   font-weight: 800;
   transition:
@@ -150,7 +153,7 @@ body {
   padding: 18px 22px;
 
   border: none;
-  border-radius: 18px;
+  border-radius: 16px;
 
   font-size: 20px;
   font-weight: 700;
@@ -239,7 +242,7 @@ body {
   font-size: 12px;
   font-weight: 500;
   padding: 4px 14px;
-  border-radius: 999px;
+  border-radius: 16px;
   margin-bottom: 1rem;
 }
 
@@ -269,14 +272,14 @@ body {
 .feature-card {
   background: #fff;
   border: 0.5px solid #e5e5e5;
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 1.25rem;
 }
 
 .feature-card-icon {
   width: 40px;
   height: 40px;
-  border-radius: 8px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -315,7 +318,7 @@ body {
 .step-number {
   width: 32px;
   height: 32px;
-  border-radius: 50%;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;

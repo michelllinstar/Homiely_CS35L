@@ -1,6 +1,9 @@
+/* [GenAI Use] Prompt: "Unify fonts to 'Homily', standardize border-radius to 16px, and set input-field backgrounds to rgba(255,255,255,0.75) to match the rest of the site." */
+/* [GenAI Use] Reflection: The response did this consistency pass well — unifying fonts, radii, and the translucent input backgrounds across the form pages is tedious work it handled accurately. What it didn't initially weigh was contrast, so I checked the rgba(255,255,255,0.75) input background still keeps the text readable over the gradient. It did, so the change was good as-is. */
+
 /* User_profile.css */
 @font-face {
-  font-family: 'Homiely';
+  font-family: 'Homily';
   src: url('../../assets/qlarendon.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
@@ -21,7 +24,7 @@
   align-items: center;
   
   padding: 40px 20px;
-  font-family: 'Homiely', Arial, sans-serif;
+  font-family: 'Homily', Arial, sans-serif;
   color: #2d3a2e;
 }
 
@@ -77,7 +80,7 @@
   color: #2d3a2e;
   padding: 12px 16px;
   background: #f8f8f8;
-  border-radius: 8px;
+  border-radius: 16px;
   margin: 0;
   border: 1px solid #e0e0e0;
 }
@@ -114,11 +117,11 @@
   box-sizing: border-box;
   padding: 13px 16px;
   border: none;
-  border-radius: 999px;
+  border-radius: 16px;
   font-size: 15px;
-  font-family: 'Homiely', Arial, sans-serif;
+  font-family: 'Homily', Arial, sans-serif;
   color: #2d3a2e;
-  background: white;
+  background: rgba(255, 255, 255, 0.75);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
   outline: none;
   margin-bottom: 1rem;
@@ -146,13 +149,13 @@
   min-height: 52px;
   padding: 14px 30px;
   border: 2px solid rgba(45, 58, 46, 0.08);
-  border-radius: 999px;
+  border-radius: 16px;
   font-size: 16px;
   font-weight: 900;
   letter-spacing: 0;
   cursor: pointer;
   transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
-  font-family: 'Homiely', Arial, sans-serif;
+  font-family: 'Homily', Arial, sans-serif;
   text-align: center;
 }
 
@@ -251,7 +254,7 @@
   background-color: #ffe0e0;
   color: #c41c3b;
   padding: 12px 16px;
-  border-radius: 8px;
+  border-radius: 16px;
   margin-bottom: 20px;
   font-size: 14px;
   border-left: 4px solid #c41c3b;
@@ -261,7 +264,7 @@
   background-color: #e0ffe0;
   color: #1b6b1b;
   padding: 12px 16px;
-  border-radius: 8px;
+  border-radius: 16px;
   margin-bottom: 20px;
   font-size: 14px;
   border-left: 4px solid #1b6b1b;
@@ -309,7 +312,7 @@
   padding: 12px;
   background: #fafafa;
   border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: 16px;
 }
 
 .roommates-list::-webkit-scrollbar {
@@ -318,12 +321,12 @@
 
 .roommates-list::-webkit-scrollbar-track {
   background: #f1f1f1;
-  border-radius: 3px;
+  border-radius: 16px;
 }
 
 .roommates-list::-webkit-scrollbar-thumb {
   background: #888;
-  border-radius: 3px;
+  border-radius: 16px;
 }
 
 .roommates-list::-webkit-scrollbar-thumb:hover {
@@ -333,7 +336,7 @@
 .roommate-card {
   background: white;
   border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: 16px;
   padding: 12px 16px;
   text-align: left;
   flex-shrink: 0;
