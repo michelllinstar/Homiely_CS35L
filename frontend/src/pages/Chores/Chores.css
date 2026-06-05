@@ -43,7 +43,7 @@
     padding-top: calc(80px + 2rem);
     box-sizing: border-box;
     color: #2d3a2e;
-    font-family: Arial, sans-serif;
+    font-family: 'Homily', 'Helvetica', 'Arial', sans-serif;
 }
 
 .chores-header {
@@ -68,7 +68,7 @@
 .chores-error {
     padding: 10px 18px;
     border: 1px solid rgba(200, 120, 100, 0.3);
-    border-radius: 999px;
+    border-radius: 16px;
     background: rgba(255, 220, 210, 0.65);
     color: #7a3a2e;
     font-size: 14px;
@@ -79,7 +79,7 @@
 .chores-card {
     background: rgba(255, 255, 255, 0.65);
     backdrop-filter: blur(8px);
-    border-radius: 24px;
+    border-radius: 16px;
     padding: 28px 32px;
     margin-bottom: 24px;
     box-shadow: 0 8px 32px rgba(45, 58, 46, 0.08);
@@ -100,10 +100,10 @@
 .chores-page .button {
     padding: 12px 28px;
     border: none;
-    border-radius: 999px;
+    border-radius: 16px;
     font-size: 15px;
     font-weight: bold;
-    font-family: Arial, sans-serif;
+    font-family: 'Homily', 'Helvetica', 'Arial', sans-serif;
     cursor: pointer;
     background: #5b8c5a;
     color: white;
@@ -155,31 +155,38 @@ return (
 [GenAI Use] LLM Response End */
 /* [GenAI Use] Reflection: I tried my own CSS styling, as shown in the prompt, but it looked pretty ugly. My teammates created a nice looking theme for their pages, so to be consistent (and make the project visually appealing) in addition to saving time implementing more useful features, I gave Claude a "template" from Expenses.css to base this off of. I took a look and I liked what I saw. */
 
+/* Page frame matches .availability-page so Chores, Expenses, and Availability
+   share the same gradient, sizing, padding, and scroll behavior. */
 .chores-page {
-    min-height: 100vh;
+    height: 100vh;
     background: linear-gradient(
-        135deg,
+        0deg,
         #f4ead5 0%,
         #d8ecdb 55%,
         #a9d2ec 100%
     );
-    padding: 80px 48px 48px;
-    padding-top: calc(80px + 2rem);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 32px;
+    width: 100%;
+    padding: 100px;
     box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: auto;
     color: #2d3a2e;
-    font-family: Arial, sans-serif;
+    font-family: 'Homily', 'Helvetica', 'Arial', sans-serif;
 }
 
 .chores-header {
-    text-align: center;
+    text-align: left;
     margin-bottom: 2rem;
 }
 
 .chores-title {
-    font-size: 48px;
-    font-weight: bold;
-    letter-spacing: -1.5px;
-    margin: 0 0 8px 0;
+    margin: 0;
+    font-size: 2.5rem;
+    line-height: 1.2;
     color: #2d3a2e;
 }
 
@@ -187,12 +194,14 @@ return (
     font-size: 16px;
     color: #3e5240;
     margin: 0;
+    /* Tall line-height adds space below the title, matching .availability-subtitle. */
+    line-height: 3;
 }
 
 .chores-error {
     padding: 10px 18px;
     border: 1px solid rgba(200, 120, 100, 0.3);
-    border-radius: 999px;
+    border-radius: 16px;
     background: rgba(255, 220, 210, 0.65);
     color: #7a3a2e;
     font-size: 14px;
@@ -200,11 +209,12 @@ return (
     text-align: center;
 }
 
-/* Card style applied to WeekView and bottom sections */
+/* Card style applied to WeekView and bottom sections.
+   Tan card background matches .status-panel on the Availability page. */
 .chores-card {
-    background: rgba(255, 255, 255, 0.65);
+    background: #faefd8;
     backdrop-filter: blur(8px);
-    border-radius: 24px;
+    border-radius: 16px;
     padding: 28px 32px;
     margin-bottom: 24px;
     box-shadow: 0 8px 32px rgba(45, 58, 46, 0.08);

@@ -16,7 +16,7 @@
   text-align: center;
 
   color: #2d3a2e;
-  font-family: Arial, sans-serif;
+  font-family: 'Homily', 'Helvetica', 'Arial', sans-serif;
 
   padding: 40px;
 }
@@ -55,11 +55,11 @@
   box-sizing: border-box;
   padding: 13px 16px;
   border: none;
-  border-radius: 999px;
+  border-radius: 16px;
   font-size: 15px;
-  font-family: Arial, sans-serif;
+  font-family: 'Homily', 'Helvetica', 'Arial', sans-serif;
   color: #2d3a2e;
-  background: white;
+  background: rgba(255, 255, 255, 0.75);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
   outline: none;
   margin-bottom: 1rem;
@@ -75,9 +75,9 @@
   box-sizing: border-box;
   padding: 13px 16px;
   border: none;
-  border-radius: 999px;
+  border-radius: 16px;
   font-size: 15px;
-  font-family: Arial, sans-serif;
+  font-family: 'Homily', 'Helvetica', 'Arial', sans-serif;
   color: #2d3a2e;
   background: white;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
@@ -95,10 +95,10 @@
   width: 100%;
   padding: 16px 34px;
   border: none;
-  border-radius: 999px;
+  border-radius: 16px;
   font-size: 18px;
   font-weight: bold;
-  font-family: Arial, sans-serif;
+  font-family: 'Homily', 'Helvetica', 'Arial', sans-serif;
   cursor: pointer;
   background: #5b8c5a;
   color: white;
@@ -133,10 +133,10 @@
   color: #7a3a2e;
   background: rgba(255, 220, 210, 0.55);
   border: 1px solid rgba(200, 120, 100, 0.3);
-  border-radius: 999px;
+  border-radius: 16px;
   padding: 10px 20px;
   font-size: 14px;
-  font-family: Arial, sans-serif;
+  font-family: 'Homily', 'Helvetica', 'Arial', sans-serif;
   margin-bottom: 1rem;
   width: 100%;
   box-sizing: border-box;

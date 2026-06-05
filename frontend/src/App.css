@@ -14,7 +14,7 @@ body {
 }
 
 h2, h3, p {
-    font-family: 'HomilySubfont', 'Helvetica', 'Arial', sans-serif;
+    font-family: 'Homily', 'Helvetica', 'Arial', sans-serif;
 }
 
 .landing-page {
@@ -26,7 +26,7 @@ h2, h3, p {
   align-items: center;
   color: #2d3a2e;
   text-align: center;
-  font-family: Arial, sans-serif;
+  font-family: 'Homily', 'Helvetica', 'Arial', sans-serif;
   padding: 40px;
 }
 
@@ -48,7 +48,7 @@ h2, h3, p {
 .enter-button {
   padding: 16px 34px;
   border: none;
-  border-radius: 999px;
+  border-radius: 16px;
   background: #5b8c5a;
   color: white;
   font-size: 18px;

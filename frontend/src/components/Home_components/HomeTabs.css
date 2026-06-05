@@ -1,7 +1,7 @@
 .home-tabs {
   background: rgba(255, 252, 244, 0.5);
   border: 2px solid rgba(255, 255, 255, 0.65);
-  border-radius: 20px;
+  border-radius: 16px;
   padding: 24px;
   margin-bottom: 20px;
   box-shadow: 0 14px 30px rgba(45, 58, 46, 0.1);
@@ -42,7 +42,7 @@
 .circle {
   width: 46px;
   height: 46px;
-  border-radius: 50%;
+  border-radius: 16px;
   background: #a8d5a2;
   display: flex;
   align-items: center;

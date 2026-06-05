@@ -52,7 +52,7 @@ body {
 
   backdrop-filter: blur(14px);
 
-  border-radius: 32px;
+  border-radius: 16px;
 
   padding: 36px;
 
@@ -96,7 +96,7 @@ body {
 .hero-button {
   min-width: 148px;
   padding: 16px 28px;
-  border-radius: 999px;
+  border-radius: 16px;
   font-size: 17px;
   font-weight: 800;
   transition:
@@ -150,7 +150,7 @@ body {
   padding: 18px 22px;
 
   border: none;
-  border-radius: 18px;
+  border-radius: 16px;
 
   font-size: 20px;
   font-weight: 700;
@@ -239,7 +239,7 @@ body {
   font-size: 12px;
   font-weight: 500;
   padding: 4px 14px;
-  border-radius: 999px;
+  border-radius: 16px;
   margin-bottom: 1rem;
 }
 
@@ -269,14 +269,14 @@ body {
 .feature-card {
   background: #fff;
   border: 0.5px solid #e5e5e5;
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 1.25rem;
 }
 
 .feature-card-icon {
   width: 40px;
   height: 40px;
-  border-radius: 8px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -315,7 +315,7 @@ body {
 .step-number {
   width: 32px;
   height: 32px;
-  border-radius: 50%;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;

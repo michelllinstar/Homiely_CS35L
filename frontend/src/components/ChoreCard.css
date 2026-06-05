@@ -3,7 +3,7 @@ Here is ChoreCards.css at the moment:
 
 .chore-card {
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 16px;
     padding: 10px;
     margin-bottom: 8px;
 }
@@ -57,7 +57,7 @@ As well as the attached files, ChoresCard.jsx, WeekView.jsx, and YourWeek.jsx. *
 This requires updating four files. ChoreCard needs a day prop to compute whether it's overdue, and WeekView/YourWeek need to pass it down.
 ChoreCard.css:
 .chore-card {
-    border-radius: 8px;
+    border-radius: 16px;
     padding: 10px;
     margin-bottom: 8px;
     border: 1px solid transparent;
@@ -219,7 +219,7 @@ LLM Response End */
 /* [GenAI Use] Reflection: I think AI use was very helpful here--rather than going through a ton of different color shades manually, Claude was able to quickly pick them out. However, I didn't expect so many changes to be required. I think if I tried it as I originally would have intended, I would have been stuck debugging for a while; this prompt seems to have been correct from visual inspection. However, I had to manually parse the response since it removed my original comments that I found helpful. */
 
 .chore-card {
-    border-radius: 8px;
+    border-radius: 16px;
     padding: 10px;
     margin-bottom: 8px;
     border: 1px solid transparent;

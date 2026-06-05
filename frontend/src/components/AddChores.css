@@ -22,8 +22,9 @@
 .add-chores-field select {
     padding: 8px 12px;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 16px;
     font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.75);
     outline: none;
 }
 
@@ -64,8 +65,9 @@ For AddChores.css spacing:
 .add-chores-field select {
     padding: 8px 12px;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 16px;
     font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.75);
     outline: none;
 }
 
@@ -154,8 +156,9 @@ Then in AddChores.jsx apply the new classes:
 .add-chores-field select {
     padding: 8px 12px;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 16px;
     font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.75);
     outline: none;
 }
 
@@ -173,7 +176,7 @@ Then in AddChores.jsx apply the new classes:
 .add-chores-buttons .button {
     padding: 12px 28px;
     border: none;
-    border-radius: 999px;
+    border-radius: 16px;
     font-size: 15px;
     font-weight: bold;
     cursor: pointer;
