@@ -24,7 +24,7 @@ body {
     color: #3d2e13;
 }
 
-.calendar-page {
+.availability-page {
   height: 100vh;
   background: linear-gradient(
     0deg,
@@ -85,18 +85,18 @@ body {
     width: 100%;
 }
 
-.calendar-container {
+.availability-container {
     flex: 1;
     max-width: 70%;    
     overflow-y: auto;
     align-self: center;
 }
-.calendar-title {
+.availability-title {
     margin: 0;
     line-height: 1;
 }
 
-.calendar-subtitle {
+.availability-subtitle {
     margin: 0;
     line-height: 3;
 }

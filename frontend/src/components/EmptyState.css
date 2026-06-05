@@ -1,4 +1,4 @@
-/* Mirrors the Calendar empty-state layout so every page that lacks content
+/* Mirrors the Availability empty-state layout so every page that lacks content
    (no roommate group, logged out, etc.) is centered and styled identically. */
 .empty-state {
     display: flex;

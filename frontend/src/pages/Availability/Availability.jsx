@@ -1,4 +1,4 @@
-import "./Calendar.css";
+import "./Availability.css";
 import Button from "../../components/Button";
 import CalendarAvailMo from "../../components/CalendarAvailMo";
 import { useState, useRef } from "react";
@@ -15,7 +15,7 @@ function dateForDayIndex(dayIndex) {
     return target.toISOString().slice(0, 10);
 }
 
-export default function Calendar() {
+export default function Availability() {
     const { user } = useAuth();
     const groupId = user?.roommate_group_id;
 
@@ -105,7 +105,7 @@ export default function Calendar() {
     // If the user has not joined one yet, prompt them to set one up.
     if (!groupId) {
         return (
-            <div className="calendar-page">
+            <div className="availability-page">
                 <AppNavbar />
                 <EmptyState
                     title="Availability"
@@ -118,11 +118,11 @@ export default function Calendar() {
     }
 
     return (
-        <div className="calendar-page">
+        <div className="availability-page">
             <AppNavbar />
             <div className="vstack">
-                <h1 className="calendar-title">Availability</h1>
-                <p className="calendar-subtitle">Shared schedule · {monthYear}</p>
+                <h1 className="availability-title">Availability</h1>
+                <p className="availability-subtitle">Shared schedule · {monthYear}</p>
             </div>
 
             <div className="vstack">

@@ -17,8 +17,8 @@
   align-items: center;
   color: #2d3a2e;
   font-family: Arial, sans-serif;
-  padding: 80px 48px 48px;
-  padding-top: calc(80px + 2rem);
+  /* 72px navbar + 24px breathing room, so the title sits just below the nav. */
+  padding: 96px 48px 48px;
 }
 
 /* Title + subtitle header, matching .chores-header / .chores-title / .chores-week. */

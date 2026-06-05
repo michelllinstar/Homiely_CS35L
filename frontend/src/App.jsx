@@ -5,7 +5,7 @@ import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import Verification from "./pages/Verification/Verification";
 import Home from "./pages/Home/Home";
-import Calendar from "./pages/Calendar/Calendar";
+import Availability from "./pages/Availability/Availability";
 import Expenses from "./pages/Expenses/Expenses"
 import { AuthProvider } from "./pages/AuthContext";
 import Chores from "./pages/Chores/Chores";
@@ -54,9 +54,9 @@ function App() {
               <Chores />
             </ProtectedRoute>
           } />
-          <Route path="/calendar" element={
+          <Route path="/availability" element={
             <ProtectedRoute>
-              <Calendar />
+              <Availability />
             </ProtectedRoute>
           } />
           <Route path="/expenses" element={

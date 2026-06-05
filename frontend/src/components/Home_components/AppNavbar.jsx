@@ -17,7 +17,7 @@ export default function AppNavbar() {
         <Button label="Home" to="/home" />
         <Button label="Chores" to="/chores" />
         <Button label="Expenses" to="/expenses" />
-        <Button label="Calendar" to="/calendar" />
+        <Button label="Availability" to="/availability" />
       </div>
 
       {/* 6/3 12:48 am: added user profile button to link to profile page */}
