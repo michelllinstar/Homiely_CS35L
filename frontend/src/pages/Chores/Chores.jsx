@@ -350,18 +350,20 @@ export default function Chores() {
         <div className="chores-page">
             <AppNavbar />
             <header className="chores-header">
-                <div className="chores-header-row">
-                    <div />
-                    <div>
-                        <h1 className="chores-title">Chores</h1>
-                        <p className="chores-week">Week of {start} to {end}</p>
-                    </div>
-                    <button
-                        className="chores-view-toggle"
-                        onClick={() => setViewMode(viewMode === "week" ? "month" : "week")}
-                    >
-                        {viewMode === "week" ? "Month view" : "Week view"}
-                    </button>
+                <h1 className="chores-title">Chores</h1>
+                <p className="chores-week">Week of {start} to {end}</p>
+                {/* [GenAI Use] Prompt: "Left-align the Chores title, then make the month/week button a segmented control matching the Availability page's toggle, and move it below the 'Week of' line." */}
+                {/* [GenAI Use] Reflection: Replaced the single toggle button with a Week/Month segmented control reusing Availability's .toggleview markup, removed the empty header spacer so the title left-aligns, and stacked the toggle under the week label. Verified the active segment tracks viewMode. */}
+                <div className="toggleview">
+                    {["week", "month"].map((mode) => (
+                        <button
+                            key={mode}
+                            className={`toggleview-btn ${viewMode === mode ? "active" : ""}`}
+                            onClick={() => setViewMode(mode)}
+                        >
+                            {mode === "week" ? "Week" : "Month"}
+                        </button>
+                    ))}
                 </div>
             </header>
             {error && <p className="chores-error">{error}</p>}
