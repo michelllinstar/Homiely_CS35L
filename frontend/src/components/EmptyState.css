@@ -1,3 +1,6 @@
+/* [GenAI Use] Prompt: "Style a centered, full-height empty-state shared across pages, mirroring the Availability page's empty-state layout." */
+/* [GenAI Use] Reflection: Checked it centers correctly inside each page container. */
+
 /* Mirrors the Availability empty-state layout so every page that lacks content
    (no roommate group, logged out, etc.) is centered and styled identically. */
 .empty-state {

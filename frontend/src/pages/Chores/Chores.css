@@ -1,3 +1,6 @@
+/* [GenAI Use] Prompt: "Match the Chores page frame to the Availability page (gradient, sizing, padding, scroll), use tan cards, left-align the title, and add spacing so content is not shoved to the top." */
+/* [GenAI Use] Reflection: Edited the active rule (older copies live inside existing GenAI comment blocks); confirmed spacing and tan cards render. */
+
 /* [GenAI Use] Prompt: "The visuals (css) looks alright but let's improve it. I want to base these off the UI and style in this Expenses.css file attached. Here is the Chores CSS file I want to modify to be consistent:
 
 .chores-page {

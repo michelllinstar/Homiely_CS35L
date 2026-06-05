@@ -1,3 +1,6 @@
+// [GenAI Use] Prompt: "Show the shared EmptyState when the user is logged out or not in a roommate group, matching the other pages."
+// [GenAI Use] Reflection: Verified both guards render and route to /group-setup or /login.
+
 import "./Chores.css";
 import { useState, useEffect } from "react";
 import { useAuth } from "../AuthContext";

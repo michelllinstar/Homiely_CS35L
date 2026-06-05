@@ -1,3 +1,6 @@
+// [GenAI Use] Prompt: "Use the shared Button component's built-in danger variant for the Delete button instead of a CSS override."
+// [GenAI Use] Reflection: Confirmed Delete stays red via the component variant.
+
 import "./Expenses.css";
 import Button from "../../components/Button";
 

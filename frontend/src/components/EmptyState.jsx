@@ -1,3 +1,6 @@
+// [GenAI Use] Prompt: "Create a reusable EmptyState component (title, message, optional action button) so Availability, Chores, and Expenses share one empty-state instead of each duplicating markup."
+// [GenAI Use] Reflection: Reviewed the generated component, kept it prop-driven, and confirmed it renders identically across the three pages.
+
 import Button from "./Button";
 import "./EmptyState.css";
 

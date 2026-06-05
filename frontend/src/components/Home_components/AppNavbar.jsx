@@ -1,3 +1,6 @@
+// [GenAI Use] Prompt: "Rename the brand to Homily and the Calendar nav link to Availability (pointing at /availability)."
+// [GenAI Use] Reflection: Confirmed the link target matches the renamed route.
+
 import "./AppNavbar.css";
 import Button from "../Button";
 import jerry from "../../assets/jerry.png";

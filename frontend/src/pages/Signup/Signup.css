@@ -1,3 +1,6 @@
+/* [GenAI Use] Prompt: "Unify fonts to 'Homily', standardize border-radius to 16px, and set input-field backgrounds to rgba(255,255,255,0.75) to match the rest of the site." */
+/* [GenAI Use] Reflection: Confirmed inputs are readable and consistent across pages. */
+
 /* Signup.css */
 .signup-page {
   min-height: 100vh;

@@ -1,3 +1,6 @@
+// [GenAI Use] Prompt: "Rename the Calendar feature card to Availability."
+// [GenAI Use] Reflection: Confirmed the card label updated.
+
 import "./Landing.css";
 import Button from "../../components/Button";
 import Navbar from "../../components/Navbar";

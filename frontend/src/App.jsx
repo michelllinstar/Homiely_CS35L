@@ -1,3 +1,6 @@
+// [GenAI Use] Prompt: "Rename the Calendar route and component to Availability."
+// [GenAI Use] Reflection: Confirmed the import, route path, and element all updated together.
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Landing from "./pages/Landing/Landing";

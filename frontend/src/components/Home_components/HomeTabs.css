@@ -1,3 +1,6 @@
+/* [GenAI Use] Prompt: "Unify every font on the site to the 'Homily' brand font and standardize all border-radius values to 16px." */
+/* [GenAI Use] Reflection: Confirmed the site-wide font and corner radius are now consistent. */
+
 .home-tabs {
   background: rgba(255, 252, 244, 0.5);
   border: 2px solid rgba(255, 255, 255, 0.65);

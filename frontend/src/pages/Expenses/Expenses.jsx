@@ -1,3 +1,6 @@
+// [GenAI Use] Prompt: "Show the shared EmptyState when logged out or not in a roommate group, keeping AppNavbar outside the page container so its styles are not clobbered."
+// [GenAI Use] Reflection: Verified the navbar renders correctly and the empty states route appropriately.
+
 import { useEffect, useState } from "react";
 import { useAuth } from "../AuthContext";
 import AddExpenseForm from "./AddExpenseForm";

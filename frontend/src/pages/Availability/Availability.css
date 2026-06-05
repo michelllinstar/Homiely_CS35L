@@ -1,3 +1,6 @@
+/* [GenAI Use] Prompt: "Rename Calendar CSS classes to Availability, standardize the page title size, and unify the font and border-radius with the rest of the site." */
+/* [GenAI Use] Reflection: Confirmed the renamed classes match the JSX and the page looks unchanged apart from the intended title/spacing. */
+
 @font-face {
     font-family: 'Homily'; 
     src: url('../../assets/qlarendon.otf') format('opentype'); 
@@ -93,7 +96,9 @@ body {
 }
 .availability-title {
     margin: 0;
-    line-height: 1;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    color: #2d3a2e;
 }
 
 .availability-subtitle {
