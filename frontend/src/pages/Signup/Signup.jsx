@@ -174,7 +174,7 @@ export default function Signup() {
 
 
 /* 
-AI Citation  (Page ended up being retired and unused )
+AI Citation 
 [GenAI Use] Prompt: Generate me a template example of two drop down menus for the signup page. 
 One for the "residence building" and "restrool type fields". include blank fields for options.
 [GenAI Use] LLM Response Start
