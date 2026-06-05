@@ -14,7 +14,7 @@ export default function ExpensesSlider ({ expenses, roommates }) {
                         if (expense.paid_by === roommate.id) {
                             return total + expense.amount;
                         } return total;
-                        }, 0)} / {expenses.reduce((total, expense) => total + expense.amount, 0)}</p>
+                        }, 0).toFixed(2)} / {expenses.reduce((total, expense) => total + expense.amount, 0).toFixed(2)}</p>
                     <progress value={expenses.reduce((total, expense) => {
                         if (expense.paid_by === roommate.id) {
                             return total + expense.amount;
