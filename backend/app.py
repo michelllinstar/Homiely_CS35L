@@ -1,32 +1,23 @@
-from datetime import timedelta
-import os
-
 from flask import Flask
 from flask_cors import CORS
 
+from config import Config
 from routes.auth_routes import auth_bp
 from routes.expense_routes import expenses_bp
 from routes.group_routes import groups_bp
 from routes.test_routes import test_bp
 from routes.signup_routes import signup_bp
 from routes.chore_routes import chores_bp
+from routes.availability_routes import availability_bp
 from extensions import db, jwt
 from seed import seed_demo_group, seed_test_user
-from availability import bp as availability_bp
 
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
-        "DATABASE_URL", "postgresql://user:password@db/homily"
-    )
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["SECRET_KEY"] = "super_secret_ultra_key"
-    app.config["JWT_SECRET_KEY"] = "super_secret_ultra_key"
-    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=24)
-    app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
+    app.config.from_object(Config)
 
     db.init_app(app)
     jwt.init_app(app)

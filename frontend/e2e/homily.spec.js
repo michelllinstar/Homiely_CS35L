@@ -1,3 +1,29 @@
+// [GenAI Use] Prompt: "Write two end-to-end tests using Playwright to verify the login flow and chore creation flow, covering the full frontend-backend round trip for each. For the first test, create a login flow and the second test should use the login helper to navigate to /chores and complete the flow: 
+/*TEST 1 — Login flow:
+    GET /login
+    FILL email field WITH TEST_EMAIL
+    FILL password field WITH TEST_PASSWORD
+    CLICK submit button
+    WAIT UNTIL URL contains "/home" OR "/group-setup"
+    ASSERT current pathname IN ["/home", "/group-setup"]
+
+
+TEST 2 — Add a chore:
+    CALL loginAsTestUser
+    GET /chores
+    WAIT FOR network idle
+
+    CLICK button "Add Chore"
+    SET choreDescription = "Test chore " + current timestamp
+    FILL chore input WITH choreDescription
+    SELECT option at index 1 FROM first <select>
+    CLICK button "Add"
+    ASSERT choreDescription IS visible on page
+    */
+
+// [GenAI Use] Reflection: The tests are well-structured and cover the intended flows comprehensively. The login test verifies form submission, backend authentication, and redirection, while the chore creation test confirms the full cycle from form input to UI update. I reviewed the selectors for robustness and the assertions for correctness, and both tests look solid with no needed fixes.
+
+
 const { test, expect } = require('@playwright/test');
 
 const TEST_EMAIL    = 'jerry@example.com';

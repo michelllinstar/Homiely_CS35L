@@ -6,10 +6,10 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 from extensions import db
 from models import Availability
 
-bp = Blueprint('availability', __name__, url_prefix='/api/availability')
+availability_bp = Blueprint('availability', __name__, url_prefix='/api/availability')
 
 
-@bp.route('/', methods=['GET'])
+@availability_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_availability():
     """
@@ -34,7 +34,7 @@ def get_availability():
     ])
 
 
-@bp.route('/me', methods=['GET'])
+@availability_bp.route('/me', methods=['GET'])
 @jwt_required()
 def get_my_availability():
     """
@@ -52,7 +52,7 @@ def get_my_availability():
     return jsonify([{'hour': r.hour, 'status': r.status} for r in rows])
 
 
-@bp.route('/me', methods=['POST'])
+@availability_bp.route('/me', methods=['POST'])
 @jwt_required()
 def set_my_availability():
     """
