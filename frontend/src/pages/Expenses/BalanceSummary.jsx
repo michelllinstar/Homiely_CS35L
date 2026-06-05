@@ -46,7 +46,7 @@ export default function BalanceSummary({ expenses, roommates }) {
         summaryGroups.map(({ owedId, items }) => (
           <div key={owedId} className="balance-group">
             <div className="balance-group-header">
-              Money owed to {getName(owedId)}
+              Money owed by {getName(owedId)}
             </div>
             <div className="balance-group-list">
               {items.map(({ owerId, owedId: groupOwedId, amount }) => (

@@ -3,6 +3,74 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import "./GroupSetup.css";
 
+
+// [GenAI Use] Prompt: "Role: React tutor. Context: My app lets logged-in users create a roommate group or join one with a code. Task: Give me a fill-in React template for this GroupSetup component, not final code. Criteria: Include TODO placeholders for route names, request bodies, state names, auth update logic, and navigation; add beginner-friendly comments explaining form submit and fetch syntax."
+// [GenAI Use] LLM Response Start
+/* Fill-in template:
+    export default function GroupSetup() {
+        // TODO: use state for each form input.
+        const [createInput, setCreateInput] = useState("");
+        const [joinInput, setJoinInput] = useState("");
+
+        // TODO: use state for request status and errors.
+        const [loading, setLoading] = useState(false);
+        const [error, setError] = useState("");
+
+        // TODO: get token/auth updater from context and navigate from router.
+        const { accessToken, updateUser } = useAuth();
+        const navigate = useNavigate();
+
+        async function submitGroupAction(url, body) {
+            setError("");
+            setLoading(true);
+
+            try {
+                const res = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                    // fetch cannot send a JS object directly, so stringify it.
+                    body: JSON.stringify(body),
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    // TODO: show the backend error message.
+                    setError(data.message || "TODO_ERROR_MESSAGE");
+                    return;
+                }
+
+                // TODO: save the updated user and route to the next page.
+                updateUser(data.user);
+                navigate("TODO_SUCCESS_ROUTE");
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        function handleCreate(e) {
+            // Prevents the browser's default full-page form refresh.
+            e.preventDefault();
+            submitGroupAction(CREATE_ROUTE, {
+                // TODO: fill in the backend's expected create payload.
+                name: createInput,
+            });
+        }
+
+        function handleJoin(e) {
+            e.preventDefault();
+            submitGroupAction(JOIN_ROUTE, {
+                // TODO: fill in the backend's expected join payload.
+                join_code: joinInput,
+            });
+        }
+    } */
+// [GenAI Use] LLM Response End
+// [GenAI Use] Reflection: I used this as a planning template instead of copying it directly. I filled in Homiely's real API routes, request bodies, auth update logic, navigation path, and form names.
+
 const DEFAULT_GROUP_NAME = "My Roommate Group";
 const CREATE_GROUP_URL = "/api/groups/create";
 const JOIN_GROUP_URL = "/api/groups/join";

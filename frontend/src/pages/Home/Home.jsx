@@ -8,6 +8,71 @@ import { getAmountOwedToUser } from "../../utils/balances";
 import { getOpenChoresCount, getWeekStartDate } from "../../utils/chores";
 import jerry from "../../assets/jerry.png";
 
+// [GenAI Use] Prompt: "Role: React tutor. Context: My Home page should show a logged-in user's roommate group, current open chores, and amount owed to them from shared expenses. Task: Give me a fill-in React template for this component, not final code. Criteria: Include TODO placeholders for route names, helper functions, and state names; avoid Promise.all; add beginner-friendly comments explaining less common React/JavaScript syntax."
+// [GenAI Use] LLM Response Start
+/* Fill-in template:
+    // TODO: import any helper functions that do repeated math or date work.
+    // Example: import { someHelper } from "../../utils/someFile";
+
+    export default function Home() {
+        // TODO: get the logged-in user and token from your auth context.
+        const { user, accessToken } = useAuth();
+
+        // TODO: store data that comes from the backend.
+        // useState returns an array: [currentValue, functionToUpdateValue].
+        const [group, setGroup] = useState(null);
+        const [stats, setStats] = useState({
+            // TODO: replace these keys with the cards you want to show.
+            firstCardValue: 0,
+            secondCardValue: 0,
+        });
+
+        // First effect: fetch the group.
+        // useEffect runs after render and reruns when the dependency array changes.
+        useEffect(() => {
+            async function fetchGroup() {
+                // TODO: fetch the route that returns the current user's group.
+                const res = await fetch("TODO_GROUP_ROUTE", {
+                    headers: {
+                        // Bearer token tells the backend who is logged in.
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+
+                const data = await res.json();
+                // TODO: store the group if the backend says one exists.
+                setGroup(data.group);
+            }
+
+            fetchGroup();
+        }, [user, accessToken]);
+
+        // Second effect: fetch data that depends on the group.
+        useEffect(() => {
+            async function fetchStats() {
+                if (!group) return;
+
+                // TODO: fetch chores first.
+                const choresRes = await fetch("TODO_CHORES_ROUTE");
+                const chores = await choresRes.json();
+
+                // TODO: fetch expenses second.
+                const expensesRes = await fetch("TODO_EXPENSES_ROUTE");
+                const expenses = await expensesRes.json();
+
+                setStats({
+                    // TODO: call helper functions or write calculations here.
+                    firstCardValue: TODO_CHORE_HELPER(chores, user.id),
+                    secondCardValue: TODO_EXPENSE_HELPER(expenses, user.id),
+                });
+            }
+
+            fetchStats();
+        }, [group, user, accessToken]);
+    } */
+// [GenAI Use] LLM Response End
+// [GenAI Use] Reflection: I used this as a planning template instead of copying it directly. I filled in our real routes, helper functions, state names, loading states, and JSX layout for Homiely.
+
 // -----------------------------------------------------------------------------------------------------------------------
 // Home is the main dashboard page after login
 // Whenever React loads /home, it will check if the user is authenticated (via ProtectedRoute in app.jsx). If so, this component will render and pull in the user's group and home stats to display.

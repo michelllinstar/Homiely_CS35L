@@ -1,3 +1,6 @@
+// [GenAI Use] Prompt: "Rename the Calendar page to Availability and show the shared EmptyState prompting the user to create/join a roommate group when they have none."
+// [GenAI Use] Reflection: The response was good and notably careful about hook ordering — it kept the hooks above the early return so the new group guard doesn't violate rules-of-hooks, a common mistake. I verified the rename is complete and that the guard renders before the availability grid. No fixes needed beyond confirming the hook placement.
+
 import "./Availability.css";
 import Button from "../../components/Button";
 import CalendarAvailMo from "../../components/CalendarAvailMo";
