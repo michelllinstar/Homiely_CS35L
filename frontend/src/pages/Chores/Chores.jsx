@@ -9,6 +9,8 @@ import AddChore from "../../components/AddChores";
 import AppNavbar from "../../components/Home_components/AppNavbar";
 import EmptyState from "../../components/EmptyState";
 import { getWeekStartDate } from "../../utils/chores";
+import CalendarChoreMo from "../../components/CalendarChoreMo";
+
 
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -144,6 +146,23 @@ function timeToMinutes(timeOfDay) {
     return hour * 60 + minutes;
 }
 
+/* Converts the day-grouped chores state into the date-keyed format CalendarChoreMo expects: { "YYYY-MM-DD": ["description1", "description2"] } */
+function choresToDateKeyed(chores, weekStartDate) {
+    const result = {};
+    const [year, month, day] = weekStartDate.split("-").map(Number);
+
+    DAYS.forEach((dayName, index) => {
+        const date = new Date(year, month - 1, day + index);
+        const dateKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+        const dayChores = chores[dayName] || [];
+        if (dayChores.length > 0) {
+            result[dateKey] = dayChores.map((c) => ({ ...c, day: dayName }));
+        }
+    });
+
+    return result;
+}
+
 export default function Chores() {
     const { start, end } = getWeekRange();      // Week label for header
     const { user } = useAuth();     // Logged-in user from auth context
@@ -151,6 +170,8 @@ export default function Chores() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [roommates, setRoommates] = useState([]);
+    const [viewMode, setViewMode] = useState("week");  // "week" or "month"
+
 
     const token = localStorage.getItem("access_token");     // JWT for authorizing API reqs
     const groupId = user?.roommate_group_id;        // Roommate group
@@ -271,6 +292,26 @@ export default function Chores() {
         }
     }
 
+    async function handleToggleById(choreId) {
+        for (const day of DAYS) {
+            const index = (chores[day] || []).findIndex((c) => c.id === choreId);
+            if (index !== -1) {
+                await handleToggle(day, index);
+                return;
+            }
+        }
+    }
+
+    async function handleDeleteById(choreId) {
+        for (const day of DAYS) {
+            const index = (chores[day] || []).findIndex((c) => c.id === choreId);
+            if (index !== -1) {
+                await handleDelete(day, index, choreId);
+                return;
+            }
+        }
+    }
+
     // Show loading indicator while waiting for API response. */
     if (loading) return <div className="chores-page"><p>Loading...</p></div>;
 
@@ -306,21 +347,45 @@ export default function Chores() {
         <div className="chores-page">
             <AppNavbar />
             <header className="chores-header">
-                <h1 className="chores-title">Chores</h1>
-                <p className="chores-week">Week of {start} to {end}</p>
+                <div className="chores-header-row">
+                    <div />
+                    <div>
+                        <h1 className="chores-title">Chores</h1>
+                        <p className="chores-week">Week of {start} to {end}</p>
+                    </div>
+                    <button
+                        className="chores-view-toggle"
+                        onClick={() => setViewMode(viewMode === "week" ? "month" : "week")}
+                    >
+                        {viewMode === "week" ? "Month view" : "Week view"}
+                    </button>
+                </div>
             </header>
             {error && <p className="chores-error">{error}</p>}
-            <div className="chores-card">
-                <WeekView chores={chores} onToggle={handleToggle} onDelete={handleDelete} />
-            </div>
-            <div className="chores-bottom">
+
+            {viewMode === "week" ? (
+                <>
+                    <div className="chores-card">
+                        <WeekView chores={chores} onToggle={handleToggle} onDelete={handleDelete} />
+                    </div>
+                    <div className="chores-bottom">
+                        <div className="chores-card">
+                            <YourWeek chores={chores} currentUser={user?.name} onToggle={handleToggle} onDelete={handleDelete} />
+                        </div>
+                        <div className="chores-card">
+                            <AddChore onAddChore={handleAddChore} roommates={roommates} />
+                        </div>
+                    </div>
+                </>
+            ) : (
                 <div className="chores-card">
-                    <YourWeek chores={chores} currentUser={user?.name} onToggle={handleToggle} onDelete={handleDelete} />
+                    <CalendarChoreMo
+                        chores={choresToDateKeyed(chores, getWeekStartDate())}
+                        onToggle={handleToggleById}
+                        onDelete={handleDeleteById}
+                    />
                 </div>
-                <div className="chores-card">
-                    <AddChore onAddChore={handleAddChore} roommates={roommates} />
-                </div>
-            </div>
+            )}
         </div>
     );
 }

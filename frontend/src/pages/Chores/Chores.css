@@ -231,3 +231,54 @@ return (
         padding: calc(80px + 1rem) 20px 32px;
     }
 }
+
+/* [GenAI Use] Prompt: Write me CSS for the Chores.jsx file attached's new toggle function. */
+/* [GenAI Use] LLM Response Start
+Add to Chores.css:
+.chores-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chores-view-toggle {
+    padding: 10px 20px;
+    border-radius: 999px;
+    border: 1px solid #5b8c5a;
+    background: white;
+    color: #5b8c5a;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chores-view-toggle:hover {
+    background: #5b8c5a;
+    color: white;
+}
+[GenAI Use] LLM Response End */
+/* [GenAI Use] Reflection: This use of Claude worked in saving me time making the components look nice. I think it would have taken me a lot of time to do this manually; additionally, since this is a last-minute addition, I am better off working on other parts of the project.*/
+
+.chores-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chores-view-toggle {
+    padding: 10px 20px;
+    border-radius: 999px;
+    border: 1px solid #5b8c5a;
+    background: white;
+    color: #5b8c5a;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chores-view-toggle:hover {
+    background: #5b8c5a;
+    color: white;
+}
