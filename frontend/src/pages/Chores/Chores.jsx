@@ -39,7 +39,7 @@ const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", 
 /* Returns display-formatted start and end of the current week for header subtitle. */
 function getWeekRange() {
     const today = new Date();
-    const day = today.getDay();
+    const day = today.getDay();         // 0 = sunday, 6 = saturday
     const sunday = new Date(today);
     sunday.setDate(today.getDate() - day);      // Math to figure out how many days ago was Sunday
     const saturday = new Date(sunday);
@@ -136,7 +136,7 @@ jsxfunction groupChoresByDay(choresArray, roommates) {
 // [GenAI Use] Reflection: When visually testing my work, I realized that the chores only show up below each day in the order they were created, not in the order they are due (earliest to latest), which is less user-friendly. Given this is mostly a visual change, I have more pressing things to work on, and I was a little stuck on how to implement this, I asked Claude to help out with this one. I think I understand the code after looking through it, and I will test it before using it for certain.
 
 
-// "Due anytime" sorts last; "Due 7:00 AM" etc. convert to minutes since midnight
+// "Due anytime" sorts last; "Due 7:00 AM" etc. convert to minutes since midnight; used later for ordering chores as they can now be compared numerically
 function timeToMinutes(timeOfDay) {
     if (!timeOfDay || timeOfDay === "Due anytime") return Infinity;
     const match = timeOfDay.match(/Due (\d+):(\d+) (AM|PM)/);
@@ -149,17 +149,24 @@ function timeToMinutes(timeOfDay) {
     return hour * 60 + minutes;
 }
 
-/* Converts the day-grouped chores state into the date-keyed format CalendarChoreMo expects: { "YYYY-MM-DD": ["description1", "description2"] } */
+/* Formats a local Date object as "YYYY-MM-DD" to be a calendar lookup key. */
+function toDateKey(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
+/* Converts day-grouped chores into date-keyed chores for CalendarChoreMo. */
 function choresToDateKeyed(chores, weekStartDate) {
-    const result = {};
     const [year, month, day] = weekStartDate.split("-").map(Number);
+    const result = {};
 
     DAYS.forEach((dayName, index) => {
         const date = new Date(year, month - 1, day + index);
-        const dateKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
         const dayChores = chores[dayName] || [];
+
         if (dayChores.length > 0) {
-            result[dateKey] = dayChores.map((c) => ({ ...c, day: dayName }));
+            result[toDateKey(date)] = dayChores.map((chore) => ({ ...chore, day: dayName }));
         }
     });
 
