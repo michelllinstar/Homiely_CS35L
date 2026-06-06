@@ -118,3 +118,70 @@ def get_group_stats(group_id):
             "assigned": assigned
         })
     return jsonify(stats)
+
+
+
+# [GenAI Use] Prompt: give me some suggestions on how to implement the chores endpoints GET /api/groups/<int:group_id>/chores POST /api/groups/<int:group_id>/chores
+# [GenAI Use] LLM Response Start
+# 11:54 PM
+# Here are some design decisions and suggestions for each endpoint:
+
+# GET /api/groups/<int:group_id>/chores
+
+# The main question is what data the frontend needs. A minimal response might just be:
+
+# json
+# [
+#   {
+#     "id": 1,
+#     "name": "Vacuum living room",
+#     "assigned_to": 2,
+#     "assigned_to_name": "Bob",
+#     "due_date": "2026-05-28",
+#     "is_complete": false
+#   }
+# ]
+# Some design decisions to think through:
+
+# Do you want to return all chores for the group, or filter by status (incomplete only, or this week's chores)?
+# Should you include the assigned user's name in the response, or just their id and let the frontend look it up from the members list it already has?
+# Do chores recur (every Monday, Bob vacuums) or are they one-off tasks? Recurring chores significantly complicate the data model.
+# Do you want categories (cleaning, groceries, trash) or just free-text names?
+# POST /api/groups/<int:group_id>/chores
+
+# The request body would look something like:
+
+# json
+# {
+#   "name": "Vacuum living room",
+#   "assigned_to": 2,
+#   "due_date": "2026-05-28"
+# }
+# Some design decisions:
+
+# Should any group member be able to create a chore and assign it to anyone, or only assign to themselves?
+# Is due_date required or optional?
+# When a chore is created, does it auto-rotate assignment between roommates, or does the creator manually pick who does it?
+# Additional endpoints worth considering alongside these two:
+
+# PATCH /api/groups/<int:group_id>/chores/<int:chore_id>   — mark complete, reassign, change due date
+# DELETE /api/groups/<int:group_id>/chores/<int:chore_id>  — delete a chore
+# The PATCH is probably the most important one — without it your frontend has no way to mark a chore as done.
+
+# Suggested data model:
+
+# python
+# class Chore(db.Model):
+#     id          = db.Column(db.Integer, primary_key=True)
+#     group_id    = db.Column(db.Integer, db.ForeignKey('group.id'), nullable=False)
+#     name        = db.Column(db.String(100), nullable=False)
+#     assigned_to = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+#     due_date    = db.Column(db.Date, nullable=True)
+#     is_complete = db.Column(db.Boolean, default=False)
+#     created_by  = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+#     created_at  = db.Column(db.DateTime, default=db.func.now())
+# The most important question to answer before building is whether chores recur or not — if they do, you'll want a recurrence field (e.g. "weekly", "monthly") and logic to auto-generate the next chore when one is completed. If they're one-off tasks, the model above is sufficient and straightforward to implement.
+
+
+# [GenAI Use] LLM Response End
+# [GenAI Use] Reflection: Although it's easy to use LLMs for all code, we found it helpful to prompt it to give design advice, since it allowed us to reflect on our design decisions. We also appreciated that it pointed out some important questions to answer before building, such as whether chores recur or not, since that has a big impact on the data model and implementation complexity. 
