@@ -195,4 +195,12 @@ Demo group code: DEMO123
 
 ---
 
+## UML Diagrams
+**PostgreSQL Model Class Diagram**
+<img width="946" height="707" alt="CS35L Model Class Diagram" src="https://github.com/user-attachments/assets/320d174b-f552-4744-b585-e5d6213176c7" />
+
+
+**Login Process Sequence Diagram**
+<img width="2182" height="1870" alt="CS35L Sequence Diagram" src="https://github.com/user-attachments/assets/35e7fe15-3b8d-42a3-9eb2-b2bac2af1373" />
+
 Built for CS35L — UCLA Systems Programming.
