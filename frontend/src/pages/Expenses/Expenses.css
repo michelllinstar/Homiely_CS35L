@@ -220,11 +220,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #faefd8;
-  border-radius: 16px;
-  padding: 12px 20px;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 14px 18px;
   margin-bottom: 10px;
-  box-shadow: 0 2px 10px rgba(45, 58, 46, 0.06);
+  box-shadow: 0 2px 12px rgba(45, 58, 46, 0.08);
   font-size: 15px;
   color: #2d3a2e;
 }
@@ -240,6 +240,58 @@
   font-weight: bold;
   font-size: 16px;
   padding: 8px 0;
+}
+
+.balance-group {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(45, 58, 46, 0.12);
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 18px;
+}
+
+.balance-group-header {
+  font-size: 14px;
+  font-weight: 700;
+  color: #3e5240;
+  margin-bottom: 12px;
+  letter-spacing: 0.02em;
+}
+
+.balance-group-list {
+  display: grid;
+  gap: 10px;
+}
+
+.balance-summary-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.balance-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(45, 58, 46, 0.12);
+  border-radius: 999px;
+  padding: 10px 16px;
+  color: #2d3a2e;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 18px rgba(45, 58, 46, 0.06);
+}
+
+.balance-filter input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #5b8c5a;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* ── Expenses Slider ── */
