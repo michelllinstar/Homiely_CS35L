@@ -14,6 +14,7 @@ from models import User
 
 signup_bp = Blueprint("signup", __name__)
 
+# this route we based strongly off of the login route in auth_routes.py, as there are some pretty big similarities. however, the main differences lie in the fact that signup uses POST commands to add to the database. comparing /signup and /login, we can pretty easily see how the two relate to each other. the process involves parsing the json into individual variables, searching for the user, then (and this is where it differs from login) adding the user to the database and committing. then, we create auth tokens like we did with login. a similar feature results in a similar endpoint. maybe there's a way to reduce redundancy here?
 
 @signup_bp.route("/api/signup", methods=["POST"])
 def signup():
