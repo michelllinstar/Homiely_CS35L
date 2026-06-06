@@ -88,3 +88,40 @@ def set_my_availability():
 
     db.session.commit()
     return jsonify({'date': str(target_date), 'hour': hour, 'status': status}), 200
+
+
+#  [GenAI Use] Prompt: "Can you help me brainstorm some ways I could implement some Flask endpoints for our project's availability page? Our current endpoints we're thinking about right now are GET 'api/availability' , GET 'api/availablity/me' and POST 'api/availability/me'."
+
+#  [GenAI Use] LLM Response Start
+
+# Claude responded: Sure!Sure! Let me think through what each endpoint needs and some design decisions for each.
+# GET /api/availability — everyone's availability in the group
+# The main question here is what format to return. A few options:
+
+# Return a flat list of all availability entries for everyone in the group, and let the frontend compute overlaps
+# Return a pre-computed overlap showing which time slots everyone is free simultaneously
+# Return a nested structure grouped by user, then by day/time
+
+# The flat list is simplest to implement and gives the frontend flexibility to display it however you want. You'd filter by group_id from the logged-in user's group.
+# GET /api/availability/me — current user's own availability
+# This is straightforward — just return the logged-in user's saved availability slots. The main decision is the data format for time slots. Some options:
+
+# Store as day + start time + end time (e.g. "Monday", "09:00", "17:00")
+# Store as a bitmask (each bit = 30 min slot) — very compact but harder to read
+# Store as ISO datetime ranges — most precise but overkill for weekly recurring schedules
+
+# For a roommate app, day + start/end time is probably the most natural fit since availability is likely recurring weekly rather than specific dates.
+# POST /api/availability/me — save current user's availability
+# The key decision here is whether this replaces or merges availability. Replacing is simpler — just delete all existing slots for the user and insert the new ones. Merging is more complex but lets users add individual slots without overwriting everything.
+# Replacing is recommended for a weekly availability UI where users submit their whole schedule at once.
+# A few things worth thinking through before building:
+
+# Is availability recurring weekly ("I'm free every Monday 9-5") or specific dates ("I'm free Dec 3rd")? This changes your data model significantly.
+# Do you need a DELETE /api/availability/me to clear availability, or does the POST replace handle that?
+# Will you need overlap detection on the backend, or is the frontend handling that?
+# Should availability be scoped to the group, or is it per-user globally?
+
+# What's the actual use case for the availability page — finding times when all roommates are home, or scheduling something specific?
+
+#  [GenAI Use] LLM Response End
+#  [GenAI Use] Reflection: Claude's response helped us shape these endpoints into what we wanted them to be. We wanted to be concise while also covering all of our bases. Because we were all beginners, we didn't want to go overboard with the number of endpoints we were working with. For that reason, we came up with three endpoints and asked the LLM what it thought. This allowed us to formulate what each endpoint would return, and because availablity was implemented after other features, we already had a good idea about how to properly retrive data from the database. Therefore, these prompting questions helped a lot in affirming our assumptions about what we planned to do.
