@@ -8,7 +8,7 @@ import "./EmptyState.css";
 // for example when the user hasn't joined a roommate group. Keeping this in one
 // place means Availability, Chores, and Expenses all share the exact same empty-state
 // look instead of each page styling its own headings and copy.
-// [GenAI Use] Generated code start
+// [GenAI Use] LLM Response Start
 export default function EmptyState({ title, message, actionLabel, actionTo }) {
     return (
         <div className="empty-state">
@@ -18,4 +18,4 @@ export default function EmptyState({ title, message, actionLabel, actionTo }) {
         </div>
     );
 }
-// [GenAI Use] Generated code end
+// [GenAI Use] LLM Response End

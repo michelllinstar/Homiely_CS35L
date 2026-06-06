@@ -36,7 +36,7 @@ const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", 
 // [GenAI Use] LLM Response End
 // [GenAI Use] Reflection: This will help me with the interface for the chores tracker that displays the current week we're on for the user to navigate between weeks of chores. I'm using generative AI here as I'm unfamiliar with JS's built-in timekeeping abilities, and I wanted help with the math to figure out the start and end of the week. I will update this code using clearer variable names and helpful comments.
 
-// [GenAI Use] Generated code start
+// [GenAI Use] LLM Response Start
 /* Returns display-formatted start and end of the current week for header subtitle. */
 function getWeekRange() {
     const today = new Date();
@@ -50,7 +50,7 @@ function getWeekRange() {
 
     return { start: format(sunday), end: format(saturday) };
 }
-// [GenAI Use] Generated code end
+// [GenAI Use] LLM Response End
 
 /* Since the backend returns a flat array, group by day for the WeekView component. */
 function groupChoresByDay(choresArray, roommates) {
@@ -69,12 +69,12 @@ function groupChoresByDay(choresArray, roommates) {
         }
     });
 
-    // [GenAI Use] Generated code start
+    // [GenAI Use] LLM Response Start
     // Sort each day's chores by time due, with "Due anytime" last
     DAYS.forEach((day) => {
         grouped[day].sort((a, b) => timeToMinutes(a.timeOfDay) - timeToMinutes(b.timeOfDay));
     });
-    // [GenAI Use] Generated code end
+    // [GenAI Use] LLM Response End
 
     return grouped;
 }
@@ -140,7 +140,7 @@ jsxfunction groupChoresByDay(choresArray, roommates) {
 // [GenAI Use] Reflection: When visually testing my work, I realized that the chores only show up below each day in the order they were created, not in the order they are due (earliest to latest), which is less user-friendly. Given this is mostly a visual change, I have more pressing things to work on, and I was a little stuck on how to implement this, I asked Claude to help out with this one. I think I understand the code after looking through it, and I will test it before using it for certain.
 
 
-// [GenAI Use] Generated code start
+// [GenAI Use] LLM Response Start
 // "Due anytime" sorts last; "Due 7:00 AM" etc. convert to minutes since midnight
 function timeToMinutes(timeOfDay) {
     if (!timeOfDay || timeOfDay === "Due anytime") return Infinity;
@@ -153,7 +153,7 @@ function timeToMinutes(timeOfDay) {
     if (period === "AM" && hour === 12) hour = 0;
     return hour * 60 + minutes;
 }
-// [GenAI Use] Generated code end
+// [GenAI Use] LLM Response End
 
 /* Converts the day-grouped chores state into the date-keyed format CalendarChoreMo expects: { "YYYY-MM-DD": ["description1", "description2"] } */
 function choresToDateKeyed(chores, weekStartDate) {
@@ -324,7 +324,7 @@ export default function Chores() {
     // Show loading indicator while waiting for API response. */
     if (loading) return <div className="chores-page"><p>Loading...</p></div>;
 
-    // [GenAI Use] Generated code start
+    // [GenAI Use] LLM Response Start
     // Authentication guard.
     if (!user) {
         return (
@@ -353,7 +353,7 @@ export default function Chores() {
             </div>
         );
     }
-    // [GenAI Use] Generated code end
+    // [GenAI Use] LLM Response End
     return (
         <div className="chores-page">
             <AppNavbar />
@@ -362,7 +362,7 @@ export default function Chores() {
                 <p className="chores-week">Week of {start} to {end}</p>
                 {/* [GenAI Use] Prompt: "Left-align the Chores title, then make the month/week button a segmented control matching the Availability page's toggle, and move it below the 'Week of' line." */}
                 {/* [GenAI Use] Reflection: The response was mostly good — reusing Availability's .toggleview markup keeps the two pages consistent and avoided me hand-rolling a new control. However, it wasn't perfect: the first suggestion kept the empty header spacer div, which left the title centered, so I removed that myself to get the left alignment I wanted. It also originally hardcoded the labels as separate buttons rather than mapping over the modes, so I refactored it into a ["week", "month"].map to cut the duplication and make adding views easier later. I tested both segments and confirmed the active class tracks viewMode correctly. */}
-                {/* [GenAI Use] Generated code start */}
+                {/* [GenAI Use] LLM Response Start */}
                 <div className="toggleview">
                     {["week", "month"].map((mode) => (
                         <button
@@ -374,7 +374,7 @@ export default function Chores() {
                         </button>
                     ))}
                 </div>
-                {/* [GenAI Use] Generated code end */}
+                {/* [GenAI Use] LLM Response End */}
             </header>
             {error && <p className="chores-error">{error}</p>}
 

@@ -1,7 +1,7 @@
 /* [GenAI Use] Prompt: "Unify every font on the site to the 'Homily' brand font and standardize all border-radius values to 16px. Match it to an animal crossing style." */
 /* [GenAI Use] Reflection: The response handled this well. It unifies the font and border-radius is repetitive, multi-file work that the AI applied consistently and faster than I could by hand. It wasn't perfect, though: I had to check it didn't flatten radii that were intentionally different on a few elements, and that the 'Homily' font actually loads rather than silently falling back. After confirming the font and 16px corners render consistently site-wide, the change was good to keep. */
 
-/* [GenAI Use] Generated code start */
+/* [GenAI Use] LLM Response Start */
 
 .cam {
     flex: 1;
@@ -84,4 +84,4 @@
     outline: 2px solid #f4c542;
 }
 
-/* [GenAI Use] Generated code end */
+/* [GenAI Use] LLM Response End */

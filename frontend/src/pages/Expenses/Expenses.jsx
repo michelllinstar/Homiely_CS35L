@@ -99,7 +99,7 @@ export default function Expenses() {
 
   if (loading) return <div className="expenses-page"><p>Loading...</p></div>;
 
-  // [GenAI Use] Generated code start
+  // [GenAI Use] LLM Response Start
   if (!user) {
     return (
       <div className="expenses-page">
@@ -131,7 +131,7 @@ export default function Expenses() {
       </div>
     );
   }
-  // [GenAI Use] Generated code end
+  // [GenAI Use] LLM Response End
 
   return (
    <div>

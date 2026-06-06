@@ -1,7 +1,7 @@
 /* [GenAI Use] Prompt: "Rename Calendar CSS classes to Availability, standardize the page title size, and unify the font and border-radius with the rest of the site." */
 /* [GenAI Use] Reflection: The response handled the class rename and font/radius unification well. I confirmed the renamed classes still match the JSX and that the page looks unchanged apart from the intended title-size and spacing tweaks. The only risk was a missed class reference, and there were none. */
 
-/* [GenAI Use] Generated code start */
+/* [GenAI Use] LLM Response Start */
 @font-face {
     font-family: 'Homily'; 
     src: url('../../assets/qlarendon.otf') format('opentype'); 
@@ -271,4 +271,4 @@ body {
     transform: translateY(3px);
     box-shadow: 0 1px 0 #2a4e29;
 }
-/* [GenAI Use] Generated code end */
+/* [GenAI Use] LLM Response End */

@@ -13,18 +13,18 @@ export default function AppNavbar() {
     <nav className="app-navbar">
       <div className="brand">
           <img src={jerry} alt="House" style={{ width: '40px', height: '60px', objectFit: 'contain', borderRadius: '12px' }} />
-        {/* [GenAI Use] Generated code start */}
+        {/* [GenAI Use] LLM Response Start */}
         <h2>Homily</h2>
-        {/* [GenAI Use] Generated code end */}
+        {/* [GenAI Use] LLM Response End */}
       </div>
 
       <div className="nav-links">
         <Button label="Home" to="/home" />
         <Button label="Chores" to="/chores" />
         <Button label="Expenses" to="/expenses" />
-        {/* [GenAI Use] Generated code start */}
+        {/* [GenAI Use] LLM Response Start */}
         <Button label="Availability" to="/availability" />
-        {/* [GenAI Use] Generated code end */}
+        {/* [GenAI Use] LLM Response End */}
       </div>
 
       {/* 6/3 12:48 am: added user profile button to link to profile page */}

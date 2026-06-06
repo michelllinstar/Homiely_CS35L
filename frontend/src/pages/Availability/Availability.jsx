@@ -120,7 +120,7 @@ export default function Availability() {
         return h < 12 ? `${h} AM` : `${h - 12} PM`;
     };
 
-    // [GenAI Use] Generated code start
+    // [GenAI Use] LLM Response Start
     // A shared availability calendar only makes sense within a roommate group.
     // If the user has not joined one yet, prompt them to set one up.
     if (!groupId) {
@@ -136,7 +136,7 @@ export default function Availability() {
             </div>
         );
     }
-    // [GenAI Use] Generated code end
+    // [GenAI Use] LLM Response End
 
     return (
         <div className="availability-page">

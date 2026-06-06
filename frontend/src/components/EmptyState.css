@@ -1,7 +1,7 @@
 /* [GenAI Use] Prompt: "Style a centered, full-height empty-state shared across pages, mirroring the Availability page's empty-state layout." */
 /* [GenAI Use] Reflection: The response matched the Availability empty-state layout well and saved me from reverse-engineering that centering myself. I did have to confirm it centers inside each page container rather than the viewport, since the pages have different padding. With that checked, the result was good. */
 
-/* [GenAI Use] Generated code start */
+/* [GenAI Use] LLM Response Start */
 
 /* Mirrors the Availability empty-state layout so every page that lacks content
    (no roommate group, logged out, etc.) is centered and styled identically. */
@@ -27,4 +27,4 @@
     line-height: 1.5;
 }
 
-/* [GenAI Use] Generated code end */
+/* [GenAI Use] LLM Response End */

@@ -17,9 +17,9 @@ export default function ExpenseList({expenses, roommates, onDelete}) {
           <span className="expense-amount">${e.amount.toFixed(2)}</span>
           <p>Paid by: {roommates.find(r => r.id === e.paid_by)?.name || "Unknown"}</p>
           <p>Split: {e.split_between.map(id => roommates.find(r => r.id === id)?.name).join(", ")}</p>
-          {/* [GenAI Use] Generated code start */}
+          {/* [GenAI Use] LLM Response Start */}
           <Button label="Delete" className="button--danger" onClick={() => onDelete(e.id)} />
-          {/* [GenAI Use] Generated code end */}
+          {/* [GenAI Use] LLM Response End */}
         </li>
       ))}
     </ul>
