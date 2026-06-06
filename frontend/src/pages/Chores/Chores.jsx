@@ -155,21 +155,31 @@ function timeToMinutes(timeOfDay) {
 }
 // [GenAI Use] LLM Response End
 
-/* Converts the day-grouped chores state into the date-keyed format CalendarChoreMo expects: { "YYYY-MM-DD": ["description1", "description2"] } */
+/* Formats a local Date object as "YYYY-MM-DD" to be a calendar lookup key. */
+function toDateKey(date) {
+   const year = date.getFullYear();
+   const month = String(date.getMonth() + 1).padStart(2, "0");
+   const day = String(date.getDate()).padStart(2, "0");
+   return `${year}-${month}-${day}`;
+}
+/* Converts day-grouped chores into date-keyed chores for CalendarChoreMo. */
 function choresToDateKeyed(chores, weekStartDate) {
-    const result = {};
-    const [year, month, day] = weekStartDate.split("-").map(Number);
+   const [year, month, day] = weekStartDate.split("-").map(Number);
+   const result = {};
 
-    DAYS.forEach((dayName, index) => {
-        const date = new Date(year, month - 1, day + index);
-        const dateKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-        const dayChores = chores[dayName] || [];
-        if (dayChores.length > 0) {
-            result[dateKey] = dayChores.map((c) => ({ ...c, day: dayName }));
-        }
-    });
 
-    return result;
+   DAYS.forEach((dayName, index) => {
+       const date = new Date(year, month - 1, day + index);
+       const dayChores = chores[dayName] || [];
+
+
+       if (dayChores.length > 0) {
+           result[toDateKey(date)] = dayChores.map((chore) => ({ ...chore, day: dayName }));
+       }
+   });
+
+
+   return result;
 }
 
 export default function Chores() {
