@@ -1,3 +1,56 @@
+// [GenAI Use] Prompt: "Help me generate base code to start a calendar availability grid component in React that lays out hour labels for a day/week, maps each label to an hour 0-23, and cycles a slot's status through available/busy/private on click."
+// [GenAI Use] LLM Response Start
+// import { useState } from 'react';
+// import './CalendarAvailMo.css';
+//
+// const TIMES = ['12a','1a','2a','3a','4a','5a','6a','7a','8a','9a','10a','11a',
+//                '12p','1p','2p','3p','4p','5p','6p','7p','8p','9p','10p','11p'];
+//
+// // map a label like "3p" to an integer hour
+// const HOUR_MAP = {
+//     '12a': 0, '1a': 1, '2a': 2, '3a': 3, '4a': 4, '5a': 5, '6a': 6,
+//     '7a': 7, '8a': 8, '9a': 9, '10a': 10, '11a': 11, '12p': 12,
+//     '1p': 1, '2p': 2, '3p': 3, '4p': 4, '5p': 5, '6p': 6,
+//     '7p': 7, '8p': 8, '9p': 9, '10p': 10, '11p': 11,
+// };
+//
+// const STATUS_CYCLE = ['available', 'busy', 'private'];
+//
+// export default function CalendarAvailMo() {
+//     const [slots, setSlots] = useState({});
+//
+//     function cycleStatus(time) {
+//         const current = slots[time] || 'available';
+//         const next = STATUS_CYCLE[STATUS_CYCLE.indexOf(current) + 1];
+//         setSlots({ ...slots, [time]: next });
+//     }
+//
+//     function isSleepHour(hour, start, end) {
+//         return hour >= start && hour < end;
+//     }
+//
+//     async function save(time) {
+//         await fetch('/api/availability/me', {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify({ hour: HOUR_MAP[time], status: slots[time] }),
+//         });
+//     }
+//
+//     return (
+//         <div className="calendar-grid">
+//             {TIMES.map(time => (
+//                 <div key={time} className="slot" onClick={() => cycleStatus(time)}>
+//                     {time}: {slots[time]}
+//                 </div>
+//             ))}
+//         </div>
+//     );
+// }
+// [GenAI Use] LLM Response End
+// [GenAI Use] Reflection: The draft was a useful starting point but had a few problems I had to fix. Its HOUR_MAP collided the PM hours with the AM ones (every "Np" mapped to the same value as "Na"), so I rebuilt it to map 12p->12 through 11p->23. The cycleStatus helper indexed STATUS_CYCLE[indexOf + 1] with no wraparound, so the third click returned undefined; I switched ours to modulo so it loops back to 'available'. Its isSleepHour also ignored overnight schedules (start > end), which I handle with a wraparound branch. Finally the save() call sent no auth header and no date, so I wired ours through our authed fetch against /api/availability with the real date per day. I took the HOUR_MAP and STATUS_CYCLE ideas as a clean way to translate display labels into the integer hours the backend expects, but verified a click cycles correctly and persists after a refetch.
+
+
 import { useState, useEffect, useCallback } from 'react';
 import './CalendarAvailMo.css';
 

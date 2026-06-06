@@ -1,4 +1,65 @@
+// [GenAI Use] Prompt: "Help me generate base code to start an Availability page in React with a Day/Week view toggle, an 'edit my status' mode, and a sleep-schedule input that defaults certain hours to private."
+// [GenAI Use] LLM Response Start
+/* You can drive all of that from local component state and toggle the view with buttons. Here's a base skeleton:
+    import { useState } from "react";
+
+    export default function Availability() {
+        const [activeView, setActiveView] = useState("Day");
+        const [editMode, setEditMode] = useState(false);
+        const [sleepStart, setSleepStart] = useState("0");
+        const [sleepEnd, setSleepEnd] = useState("7");
+
+        return (
+            <div className="availability">
+                <div className="view-toggle">
+                    <button onClick={() => setActiveView("Day")}>Day</button>
+                    <button onClick={() => setActiveView("Week")}>Week</button>
+                </div>
+                <button onClick={() => setEditMode(true)}>Edit my status</button>
+                <CalendarAvailMo activeView={activeView} editMode={editMode} />
+            </div>
+        );
+    } */
+// [GenAI Use] LLM Response End
+// [GenAI Use] Reflection: I used the response as a scaffold rather than copying it wholesale. It gave me the useState shape and the overall layout, but I rewrote the handlers myself and wired the refs (confirmRef/sleepRef/refreshRef) so the child CalendarAvailMo could register its fetch/confirm callbacks. I tested each view toggle and the edit flow before keeping it.
+
+// [GenAI Use] Prompt: "Refactor bits and pieces of the sleep schedule logic so overnight wraparound (e.g. 22:00 to 07:00) is handled correctly when computing which hours count as sleep."
+// [GenAI Use] LLM Response Start
+/* The trick is to branch on whether the start hour is before the end hour; if not, the range wraps past midnight so you collect to 24 and then from 0:
+    function sleepHoursBetween(start, end) {
+        const hours = [];
+        if (start <= end) {
+            for (let h = start; h < end; h++) hours.push(h);
+        } else {
+            for (let h = start; h < 24; h++) hours.push(h);
+            for (let h = 0; h < end; h++) hours.push(h);
+        }
+        return hours;
+    } */
+// [GenAI Use] LLM Response End
+// [GenAI Use] Reflection: The suggested branch on start <= end versus the wraparound case was the right idea, so I adapted it into sleepHoursBetween. I added a few manual checks (a normal daytime range, an overnight range, and the edge where start === end) to confirm the hour list came out as expected.
+
 // [GenAI Use] Prompt: "Rename the Calendar page to Availability and show the shared EmptyState prompting the user to create/join a roommate group when they have none."
+// [GenAI Use] LLM Response Start
+/* Keep all the hooks above the early return so you don't break the rules of hooks, then guard on the group id:
+    export default function Availability() {
+        const { user } = useAuth();
+        const groupId = user?.roommate_group_id;
+        // ...all useState / useRef hooks here, before any return...
+
+        if (!groupId) {
+            return (
+                <EmptyState
+                    title="No roommate group yet"
+                    message="Create or join a group to see everyone's availability."
+                />
+            );
+        }
+        return (
+            // ...availability grid...
+        );
+    } */
+// [GenAI Use] LLM Response End
 // [GenAI Use] Reflection: The response was good and notably careful about hook ordering. It kept the hooks above the early return so the new group guard doesn't violate rules-of-hooks, a common mistake. I verified the rename is complete and that the guard renders before the availability grid. No fixes needed beyond confirming the hook placement.
 
 import "./Availability.css";
